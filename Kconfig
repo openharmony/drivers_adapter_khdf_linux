@@ -1,0 +1,13 @@
+
+config DRIVERS_HDF
+    bool "Enable HDF manager"
+    default y
+    help
+      Answer Y to enable Linux support HDF.
+
+source "drivers/hdf/khdf/platform/Kconfig"
+source "drivers/hdf/khdf/test/Kconfig"
+source "drivers/hdf/khdf/model/display/Kconfig"
+source "drivers/hdf/khdf/model/input/Kconfig"
+source "drivers/hdf/khdf/model/network/wifi/Kconfig"
+source "drivers/hdf/khdf/model/sensor/Kconfig"

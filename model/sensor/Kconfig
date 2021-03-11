@@ -1,0 +1,30 @@
+# Copyright (c) 2021 Huawei Device Co., Ltd.
+#
+# This software is licensed under the terms of the GNU General Public
+# License version 2, as published by the Free Software Foundation, and
+# may be copied, distributed, and modified under those terms.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+
+config DRIVERS_HDF_SENSOR
+    bool "Enable HDF sensor driver"
+    default n
+    depends on DRIVERS_HDF
+    help
+      Answer Y to enable HDF sensor driver.
+
+config DRIVERS_HDF_SENSOR_ACCEL
+    bool "Enable HDF accel sensor driver"
+    default n
+    depends on DRIVERS_HDF_SENSOR
+    help
+      Answer Y to enable HDF accel sensor driver.
+config DRIVERS_HDF_SENSOR_GYRO
+    bool "Enable HDF gyro sensor driver"
+    default n
+    depends on DRIVERS_HDF_SENSOR
+    help
+      Answer Y to enable HDF gyro sensor driver.

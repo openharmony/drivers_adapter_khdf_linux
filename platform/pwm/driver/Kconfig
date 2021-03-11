@@ -1,0 +1,5 @@
+config PWM_HI35XX
+    bool "hi35xx pwm driver"
+    depends on PWM
+    help
+      Answer Y to enable hi35xx pwm driver.
