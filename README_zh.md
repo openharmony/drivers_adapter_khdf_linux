@@ -37,10 +37,13 @@
 
 ## 相关仓<a name="section1371113476307"></a>
 
-hmf/drivers/framework
+[驱动子系统](https://gitee.com/openharmony/docs/blob/master/zh-cn/readme/%E9%A9%B1%E5%8A%A8%E5%AD%90%E7%B3%BB%E7%BB%9F.md)
 
-hmf/drivers/adapter\_uhdf
+[drivers\_framework](https://gitee.com/openharmony/drivers_framework/blob/master/README_zh.md)
 
-hmf/drivers/adapter\_khdf\_linux
+[drivers\_adapter\_uhdf](https://gitee.com/openharmony/drivers_adapter_uhdf/blob/master/README_zh.md)
 
-hmf/drivers/adapter\_khdf\_liteos
+drivers\_adapter\_khdf\_linux
+
+[drivers\_adapter\_khdf\_liteos](https://gitee.com/openharmony/drivers_adapter_khdf_liteos/blob/master/README_zh.md)
+
