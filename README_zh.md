@@ -16,23 +16,23 @@
 ├── hcs                  #linux内核下HDF的配置管理目录
 ├── manager              #linux内核下启动适配启动HDF框架代码
 ├── model                #驱动模型适配linux代码
-│   ├── display         #显示驱动模型
-│   ├── input           #输入驱动模型
-│   ├── network         #wifi驱动模型
-│   └── sensor          #传感器驱动模型
-├── network         #适配linux内核网络代码
-├── osal            #适配linux内核的posix接口
+│   ├── display          #显示驱动模型
+│   ├── input            #输入驱动模型
+│   ├── network          #wifi驱动模型
+│   └── sensor           #传感器驱动模型
+├── network              #适配linux内核网络代码
+├── osal                 #适配linux内核的posix接口
 ├── platform             #平台设备接口适配linux内核代码
-│   ├── emmc            #emmc操作接口
-│   ├── gpio            #gpio接口
-│   ├── i2c             #i2c接口
-│   ├── mipi_dsi        #mipi dsi接口
-│   ├── pwm             #pwm接口
-│   ├── rtc             #rtc接口
-│   ├── sdio            #sdio接口
-│   ├── spi             #spi接口
-│   ├── uart            #uart接口
-│   └── watchdog        #watchdog接口
+│   ├── emmc             #emmc操作接口
+│   ├── gpio             #gpio接口
+│   ├── i2c              #i2c接口
+│   ├── mipi_dsi         #mipi dsi接口
+│   ├── pwm              #pwm接口
+│   ├── rtc              #rtc接口
+│   ├── sdio             #sdio接口
+│   ├── spi              #spi接口
+│   ├── uart             #uart接口
+│   └── watchdog         #watchdog接口
 ```
 
 ## 相关仓<a name="section1371113476307"></a>

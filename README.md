@@ -16,23 +16,23 @@ This repository stores the code and compilation scripts for the OpenHarmony driv
 ├── hcs                  # HDF configuration and management
 ├── manager              # Code for starting and adapting to the HDF
 ├── model                # Code for adapting to Linux
-│   ├── display         # Display driver model
-│   ├── input           # Input driver model
-│   ├── network         # WLAN driver model
-│   ├── sensor         # Sensor driver model
-├── network             # Code for adapting to the Linux kernel network
-├── osal                # POSIX APIs for adapting to the Linux kernel
+│   ├── display          # Display driver model
+│   ├── input            # Input driver model
+│   ├── network          # WLAN driver model
+│   ├── sensor           # Sensor driver model
+├── network              # Code for adapting to the Linux kernel network
+├── osal                 # POSIX APIs for adapting to the Linux kernel
 ├── platform             # Code for adapting the platform APIs to the Linux kernel
-│   ├── emmc            # EMMC APIs
-│   ├── gpio            # GPIO APIs
-│   ├── i2c             # I2C APIs
-│   ├── mipi_dsi        # MIPI DSI APIs
-│   ├── pwm             # PWM APIs
-│   ├── rtc             # RTC APIs
-│   ├── sdio            # SDIO APIs
-│   ├── spi             # SPI APIs
-│   ├── uart            # UART APIs
-│   └── watchdog        # WATCHDOG APIs
+│   ├── emmc             # EMMC APIs
+│   ├── gpio             # GPIO APIs
+│   ├── i2c              # I2C APIs
+│   ├── mipi_dsi         # MIPI DSI APIs
+│   ├── pwm              # PWM APIs
+│   ├── rtc              # RTC APIs
+│   ├── sdio             # SDIO APIs
+│   ├── spi              # SPI APIs
+│   ├── uart             # UART APIs
+│   └── watchdog         # WATCHDOG APIs
 ```
 
 ## Repositories Involved<a name="section1371113476307"></a>
