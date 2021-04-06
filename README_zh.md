@@ -6,7 +6,7 @@
 
 ## 简介<a name="section11660541593"></a>
 
-该仓主要存放OpenHarmony驱动子系统适配linux内核的代码和编译脚本，在linux内核中部署鸿蒙驱动框架。
+该仓主要存放OpenHarmony驱动子系统适配linux内核的代码和编译脚本，在linux内核中部署OpenHarmony驱动框架。
 
 ## 目录<a name="section161941989596"></a>
 
