@@ -75,7 +75,7 @@ void *PopQueue(HdfWlanQueue *queue)
     HdfWlanQueueImpl *impl = (HdfWlanQueueImpl *)queue;
     void *result = NULL;
     if (queue == NULL) {
-        return;
+        return NULL;
     }
     ret = OsalMutexLock(&impl->lock);
     if (ret != HDF_SUCCESS) {
