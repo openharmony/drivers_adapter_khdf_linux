@@ -36,5 +36,5 @@ static int __init DeviceManagerInit(void)
     return ret;
 }
 
-module_init(DeviceManagerInit);
+late_initcall(DeviceManagerInit);
 
