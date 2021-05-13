@@ -67,7 +67,7 @@ ccflags-y += -Idrivers/hdf/framework/include \
              -Idrivers/hdf/framework/core/common/include/host \
              -Idrivers/hdf/framework/core/common/include/manager \
              -Idrivers/hdf/framework/core/adapter/vnode/include \
-             -I../../../../third_party/bounds_checking_function/include \
+             -Idrivers/hdf/../../../../../../../../../../../../../third_party/bounds_checking_function/include \
              -Idrivers/hdf/framework/ability/config/hcs_parser/include \
              -Idrivers/hdf/framework/test/unittest/config \
              -Idrivers/hdf/framework/test/unittest/ability/config/hcs_parser/unittest \

@@ -54,7 +54,7 @@ HDF_WIFI_ADAPTER_INC := \
     -Idrivers/hdf/khdf/network/include
 
 HDF_WIFI_VENDOR_INC := \
-    -I../../../../device/hisilicon/drivers/huawei_proprietary/wifi/driver/core
+    -I../../../../../../../../../../../device/hisilicon/drivers/huawei_proprietary/wifi/driver/core
 
 SECURE_LIB_INC := \
-    -I../../../../third_party/bounds_checking_function/include
+    -Iinclude/../drivers/hdf/../../../../../../../../../../../../../third_party/bounds_checking_function/include
