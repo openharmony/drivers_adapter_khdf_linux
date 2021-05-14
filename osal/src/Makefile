@@ -18,4 +18,4 @@ ccflags-y += -Iinclude/hdf \
 			 -Iinclude/hdf/osal \
 			 -Iinclude/hdf/utils \
 			 -Idrivers/hdf/khdf/osal/include \
-			 -Iinclude/../drivers/hdf/../../../../../../../../../../../../../third_party/bounds_checking_function/include
+			 -I../../../../third_party/bounds_checking_function/include
