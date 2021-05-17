@@ -26,6 +26,7 @@ obj-y += \
               ../../../../framework/utils/src/hdf_slist.o \
               ../../../../framework/utils/src/hdf_sref.o \
               ../../../../framework/ability/sbuf/src/hdf_sbuf.o \
+	      ../../../../framework/ability/sbuf/src/hdf_sbuf_impl_raw.o \
               ../../../../framework/core/host/src/devhost_service.o \
               ../../../../framework/core/host/src/devmgr_service_clnt.o \
               ../../../../framework/core/host/src/devsvc_manager_clnt.o \
