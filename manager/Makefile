@@ -25,9 +25,9 @@ obj-y += \
               ../../../../framework/utils/src/hdf_cstring.o \
               ../../../../framework/utils/src/hdf_slist.o \
               ../../../../framework/utils/src/hdf_sref.o \
-	      ../../../../framework/utils/src/hdf_map.o \
+              ../../../../framework/utils/src/hdf_map.o \
               ../../../../framework/ability/sbuf/src/hdf_sbuf.o \
-	      ../../../../framework/ability/sbuf/src/hdf_sbuf_impl_raw.o \
+              ../../../../framework/ability/sbuf/src/hdf_sbuf_impl_raw.o \
               ../../../../framework/core/host/src/devhost_service.o \
               ../../../../framework/core/host/src/devmgr_service_clnt.o \
               ../../../../framework/core/host/src/devsvc_manager_clnt.o \
@@ -74,9 +74,10 @@ ccflags-y += -Iinclude/../drivers/hdf/framework/include \
              -Iinclude/../drivers/hdf/framework/core/common/include/host \
              -Iinclude/../drivers/hdf/framework/core/common/include/manager \
              -Iinclude/../drivers/hdf/framework/core/adapter/vnode/include \
-             -I../../../../third_party/bounds_checking_function/include \
+             -I$(PROJECT_ROOT)/third_party/bounds_checking_function/include \
              -Iinclude/../drivers/hdf/framework/ability/config/hcs_parser/include \
              -Iinclude/../drivers/hdf/framework/include/config \
              -Iinclude/../drivers/hdf/framework/ability/config/hcs_parser/include \
              -Iinclude/../drivers/hdf/khdf/osal/include \
              -Iinclude/uapi/linux
+
