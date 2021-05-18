@@ -45,5 +45,5 @@ ccflags-y += -Iinclude/../drivers/hdf/framework/model/input/driver \
              -Iinclude/../drivers/hdf/framework/core/host/include \
              -Iinclude/../drivers/hdf/framework/core/shared/include \
              -Iinclude/../drivers/hdf/khdf/osal/include \
-             -I../../../../third_party/bounds_checking_function/include \
-             -I../../../../third_party/FreeBSD/sys/dev/evdev
+             -I$(PROJECT_ROOT)/third_party/bounds_checking_function/include \
+             -I$(PROJECT_ROOT)/third_party/FreeBSD/sys/dev/evdev
