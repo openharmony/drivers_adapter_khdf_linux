@@ -30,4 +30,4 @@ ccflags-$(CONFIG_DRIVERS_HDF_PLATFORM) += -Idrivers/hdf/framework/include/platfo
     -Idrivers/hdf/framework/core/common/include/host \
     -Idrivers/hdf/framework/ability/sbuf/include \
     -Idrivers/hdf/framework/utils/include \
-    -Iinclude/../../../../../../third_party/bounds_checking_function/include
+    -I$(PROJECT_ROOT)/third_party/bounds_checking_function/include
