@@ -31,7 +31,7 @@
 #include "watchdog_core.h"
 
 #define HDF_LOG_TAG hdf_watchdog_adapter
-#define UART_NAME_LEN 20
+#define WATCHDOG_NAME_LEN 20
 
 static int WdtAdapterIoctlInner(struct file *fp, unsigned cmd, unsigned long arg)
 {
@@ -49,14 +49,14 @@ static int WdtAdapterIoctlInner(struct file *fp, unsigned cmd, unsigned long arg
 
 static int32_t WdtOpenFile(struct WatchdogCntlr *wdt)
 {
-    char name[UART_NAME_LEN] = {0};
+    char name[WATCHDOG_NAME_LEN] = {0};
     struct file *fp = NULL;
     mm_segment_t oldfs;
 
     if (wdt == NULL) {
         return HDF_FAILURE;
     }
-    if (sprintf_s(name, UART_NAME_LEN - 1, "/dev/watchdog%d", wdt->wdtId) < 0) {
+    if (sprintf_s(name, WATCHDOG_NAME_LEN - 1, "/dev/watchdog%d", wdt->wdtId) < 0) {
         return HDF_FAILURE;
     }
     oldfs = get_fs();
@@ -74,14 +74,13 @@ static int32_t WdtOpenFile(struct WatchdogCntlr *wdt)
 
 static void WdtAdapterClose(struct WatchdogCntlr *wdt)
 {
-    int32_t ret;
     mm_segment_t oldfs;
     struct file *fp = (struct file *)wdt->priv;
 
     oldfs = get_fs();
     set_fs(KERNEL_DS);
     if (!IS_ERR(fp) && fp) {
-        ret = filp_close(fp, NULL);
+        (void)filp_close(fp, NULL);
     }
     set_fs(oldfs);
     wdt->priv = NULL;
@@ -240,11 +239,14 @@ static int32_t HdfWdtBind(struct HdfDeviceObject *obj)
     drsOps = DeviceResourceGetIfaceInstance(HDF_CONFIG_SOURCE);
     if (drsOps == NULL || drsOps->GetUint32 == NULL) {
         HDF_LOGE("%s: invalid drs ops!", __func__);
+        OsalMemFree(wdt);
         return HDF_FAILURE;
     }
     ret = drsOps->GetUint16(obj->property, "id", &wdt->wdtId, 0);
     if (ret != HDF_SUCCESS) {
         HDF_LOGE("%s: read wdtId fail, ret %d!", __func__, ret);
+        OsalMemFree(wdt);
+        return ret;
     }
     wdt->ops = &g_wdtMethod;
     wdt->device = obj;

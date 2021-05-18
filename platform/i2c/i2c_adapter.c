@@ -1,5 +1,5 @@
 /*
- * i2c_adatper.h
+ * i2c_adapter.h
  *
  * i2c driver adapter of linux
  *
@@ -61,7 +61,7 @@ static int32_t LinuxI2cTransfer(struct I2cCntlr *cntlr, struct I2cMsg *msgs, int
         return HDF_ERR_INVALID_OBJECT;
     }
     if (msgs == NULL || count <= 0) {
-        HDF_LOGE("%s: err parms! count:%d", __func__, count);
+        HDF_LOGE("%s: err params! count:%d", __func__, count);
         return HDF_ERR_INVALID_PARAM;
     }
 

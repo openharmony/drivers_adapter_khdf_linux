@@ -1,5 +1,5 @@
 /*
- * emmc_adatper.c
+ * emmc_adapter.c
  *
  * hi35xx linux emmc driver implement.
  *
@@ -18,9 +18,9 @@
 
 #include <linux/mmc/card.h>
 #include <linux/mmc/host.h>
-#include <securec.h>
 #include "emmc_core.h"
 #include "hdf_log.h"
+#include "securec.h"
 
 #define HDF_LOG_TAG emmc_adapter_c
 
@@ -86,8 +86,11 @@ static int32_t Hi35xxLinuxEmmcBind(struct HdfDeviceObject *device)
         HDF_LOGE("Hi35xxLinuxEmmcBind: Fail, device is NULL.");
         return HDF_ERR_INVALID_OBJECT;
     }
-    HDF_LOGD("Hi35xxLinuxEmmcBind: Success.");
-    return (EmmcCntlrCreateAndBind(device) == NULL) ? HDF_FAILURE : HDF_SUCCESS;
+    if (EmmcCntlrCreateAndBind(device) == NULL) {
+        return HDF_FAILURE;
+    }
+    HDF_LOGI("Hi35xxLinuxEmmcBind: Success.");
+    return HDF_SUCCESS;
 }
 
 static int32_t Hi35xxLinuxEmmcInit(struct HdfDeviceObject *device)
@@ -114,7 +117,7 @@ static int32_t Hi35xxLinuxEmmcInit(struct HdfDeviceObject *device)
 
     cntlr->priv = (void *)himci_get_mmc_host(cntlr->configData.hostId);
     cntlr->method = &g_emmcMethod;
-    HDF_LOGD("Hi35xxLinuxEmmcInit: Success!");
+    HDF_LOGI("Hi35xxLinuxEmmcInit: Success!");
     return HDF_SUCCESS;
 }
 

@@ -11,5 +11,8 @@
 # GNU General Public License for more details.
 #
 #
+include drivers/hdf/khdf/platform/platform.mk
 
-obj-y += adapter/
+obj-$(CONFIG_DRIVERS_HDF_PLATFORM_PWM) += $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/pwm_core.o \
+          pwm_adapter.o
+obj-$(CONFIG_PWM_HI35XX) += pwm_hi35xx_linux.o

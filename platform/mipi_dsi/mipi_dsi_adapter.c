@@ -3,7 +3,7 @@
  *
  * Mipi dsi adapter driver.
  *
- * Copyright (C) Huawei Device Co., Ltd. 2020-2021. All rights reserved.
+ * Copyright (c) Huawei Device Co., Ltd. 2020-2021. All rights reserved.
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -73,14 +73,14 @@ int MipiDsiRegisterDevice(const char *name, uint32_t id, unsigned short mode, st
     dev->mode = mode;
     error = misc_register(dev);
     if (error < 0) {
-        printk("%s: id %u cannot register miscdev on minor=%d (err=%d)\n",
+        printk("%s: id %u cannot register miscdev on minor=%d (err=%d)",
             __func__, id, MISC_DYNAMIC_MINOR, error);
         OsalMemFree((char *)dev->name);
         OsalMemFree(dev);
         return error;
     }
     g_mipiDsiMiscdev[id] = dev;
-    printk("mipi_dsi:create inode ok %s %d\n", dev->name, dev->minor);
+    printk("mipi_dsi:create inode ok %s %d", dev->name, dev->minor);
     return 0;
 }
 
@@ -102,12 +102,12 @@ int MipiDsiProcRegister(const char *name, uint32_t id, unsigned short mode, cons
         ret = snprintf_s(procName, NAME_LEN + 1, NAME_LEN, "%s", name);
     }
     if (ret < 0) {
-        printk(KERN_ERR "%s: procName %s snprintf_s fail\n", __func__, procName);
+        printk(KERN_ERR "%s: procName %s snprintf_s fail", __func__, procName);
         return -1;
     }
     err = proc_create(procName, mode, NULL, ops);
     if (err == NULL) {
-        printk(KERN_ERR "%s: proc_create name %s fail\n", __func__, procName);
+        printk(KERN_ERR "%s: proc_create name %s fail", __func__, procName);
         return -1;
     }
     return 0;
@@ -133,14 +133,16 @@ void MipiDsiProcUnregister(const char *name, uint32_t id)
     if (id >= MAX_CNTLR_CNT) {
         return;
     }
-    memset_s(procName, NAME_LEN + 1, 0, NAME_LEN + 1);
+    if (memset_s(procName, NAME_LEN + 1, 0, NAME_LEN + 1) != EOK) {
+        return;
+    }
     if (id != 0) {
         ret = snprintf_s(procName, NAME_LEN + 1, NAME_LEN, "%s%u", name, id);
     } else {
         ret = snprintf_s(procName, NAME_LEN + 1, NAME_LEN, "%s", name);
     }
     if (ret < 0) {
-        printk(KERN_ERR "%s: procName %s snprintf_s fail\n", __func__, procName);
+        printk(KERN_ERR "%s: procName format fail", __func__);
         return;
     }
     remove_proc_entry(procName, NULL);

@@ -70,6 +70,7 @@ static int32_t HiRtcReadTime(struct RtcHost *host, struct RtcTime *hdfTime)
     struct rtc_time linuxTime = {0};
     struct rtc_device *dev = HdfGetRtcDevice();
 
+    (void)host;
     if (dev == NULL) {
         return HDF_FAILURE;
     }
@@ -83,13 +84,13 @@ static int32_t HiRtcReadTime(struct RtcHost *host, struct RtcTime *hdfTime)
     return HDF_SUCCESS;
 }
 
-
 static int32_t HiRtcWriteTime(struct RtcHost *host, const struct RtcTime *hdfTime)
 {
     int32_t ret;
     struct rtc_time linuxTime = {0};
     struct rtc_device *dev = HdfGetRtcDevice();
 
+    (void)host;
     if (dev == NULL) {
         return HDF_FAILURE;
     }
@@ -110,6 +111,7 @@ static int32_t HiReadAlarm(struct RtcHost *host, enum RtcAlarmIndex alarmIndex, 
     struct rtc_wkalrm alarm = {0};
     struct rtc_device *dev = HdfGetRtcDevice();
 
+    (void)host;
     (void)alarmIndex;
     if (dev == NULL) {
         return HDF_FAILURE;
@@ -131,6 +133,7 @@ static int32_t HiWriteAlarm(struct RtcHost *host, enum RtcAlarmIndex alarmIndex,
     struct rtc_wkalrm alarm = {0};
     struct rtc_device *dev = HdfGetRtcDevice();
 
+    (void)host;
     (void)alarmIndex;
     if (dev == NULL) {
         return HDF_FAILURE;
@@ -153,6 +156,7 @@ static int32_t HiAlarmInterruptEnable(struct RtcHost *host, enum RtcAlarmIndex a
     int32_t ret;
     struct rtc_device *dev = HdfGetRtcDevice();
 
+    (void)host;
     (void)alarmIndex;
     if (dev == NULL) {
         return HDF_FAILURE;

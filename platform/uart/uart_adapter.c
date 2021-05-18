@@ -1,5 +1,5 @@
 /*
- * uart_adatper.c
+ * uart_adapter.c
  *
  * linux uart driver adapter.
  *
@@ -42,7 +42,7 @@ static int32_t UartAdapterInit(struct UartHost *host)
     mm_segment_t oldfs;
 
     if (host == NULL) {
-        return HDF_FAILURE;
+        return HDF_ERR_INVALID_OBJECT;
     }
     if (sprintf_s(name, UART_NAME_LEN - 1, "/dev/%s%d", g_driverName, host->num) < 0) {
         return HDF_FAILURE;
@@ -62,9 +62,13 @@ static int32_t UartAdapterInit(struct UartHost *host)
 static int32_t UartAdapterDeInit(struct UartHost *host)
 {
     int32_t ret = HDF_SUCCESS;
-    struct file *fp = (struct file *)host->priv;
+    struct file *fp = NULL;
     mm_segment_t oldfs;
 
+    if (host == NULL) {
+        return HDF_ERR_INVALID_OBJECT;
+    }
+    fp = (struct file *)host->priv;
     oldfs = get_fs();
     set_fs(KERNEL_DS);
     if (!IS_ERR(fp) && fp) {
@@ -77,13 +81,17 @@ static int32_t UartAdapterRead(struct UartHost *host, uint8_t *data, uint32_t si
 {
     loff_t pos = 0;
     int ret;
-    struct file *fp = (struct file *)host->priv;
+    struct file *fp = NULL;
     char __user *p = (__force char __user *)data;
     mm_segment_t oldfs;
     uint32_t tmp = 0;
 
+    if (host == NULL) {
+        return HDF_ERR_INVALID_OBJECT;
+    }
+    fp = (struct file *)host->priv;
     if (data == NULL || size == 0) {
-        return HDF_FAILURE;
+        return HDF_ERR_INVALID_PARAM;
     }
     oldfs = get_fs();
     set_fs(KERNEL_DS);
@@ -102,12 +110,16 @@ static int32_t UartAdapterWrite(struct UartHost *host, uint8_t *data, uint32_t s
 {
     loff_t pos = 0;
     int ret;
-    struct file *fp = (struct file *)host->priv;
+    struct file *fp = NULL;
     char __user *p = (__force char __user *)data;
     mm_segment_t oldfs;
 
+    if (host == NULL) {
+        return HDF_ERR_INVALID_OBJECT;
+    }
+    fp = (struct file *)host->priv;
     if (data == NULL || size == 0) {
-        return HDF_FAILURE;
+        return HDF_ERR_INVALID_PARAM;
     }
     oldfs = get_fs();
     set_fs(KERNEL_DS);
@@ -189,10 +201,14 @@ static uint32_t CflagToBaudRate(unsigned short flag)
 static int32_t UartAdapterGetBaud(struct UartHost *host, uint32_t *baudRate)
 {
     struct termios termios;
-    struct file *fp = (struct file *)host->priv;
+    struct file *fp = NULL;
 
+    if (host == NULL) {
+        return HDF_ERR_INVALID_OBJECT;
+    }
+    fp = (struct file *)host->priv;
     if (baudRate == NULL) {
-        return HDF_FAILURE;
+        return HDF_ERR_INVALID_PARAM;
     }
     if (UartAdapterIoctlInner(fp, TCGETS, (unsigned long)&termios) < 0) {
         HDF_LOGE("tcgets fail");
@@ -295,7 +311,7 @@ static unsigned char CSToAttr(unsigned short cs)
     } else if (t == CS5) {
         return UART_ATTR_DATABIT_5;
     } else {
-        /* defaule value */
+        /* default value */
         return UART_ATTR_DATABIT_8;
     }
 }
@@ -311,7 +327,7 @@ static unsigned short AttrToCs(unsigned char attr)
     } else if (attr == UART_ATTR_DATABIT_5) {
         return CS5;
     } else {
-        /* defaule value */
+        /* default value */
         return CS8;
     }
 }
@@ -325,7 +341,7 @@ static unsigned char PariTyToAttr(unsigned short ps)
     } else if (!(ps & (PARENB | PARODD))) {
         return UART_ATTR_PARITY_NONE;
     } else {
-        /* defaule value */
+        /* default value */
         return UART_ATTR_PARITY_NONE;
     }
 }
@@ -337,7 +353,7 @@ static unsigned char StopBitToAttr(unsigned short st)
     } else if (st & CSTOPB) {
         return UART_ATTR_STOPBIT_2;
     } else {
-        /* defaule value */
+        /* default value */
         return UART_ATTR_STOPBIT_1;
     }
 }
@@ -353,11 +369,15 @@ static unsigned char CtsRtsToAttr(unsigned short cr)
 static int32_t UartAdapterGetAttribute(struct UartHost *host, struct UartAttribute *attribute)
 {
     struct termios termios;
-    struct file *fp = (struct file *)host->priv;
+    struct file *fp = NULL;
     int ret;
 
+    if (host == NULL) {
+        return HDF_ERR_INVALID_OBJECT;
+    }
+    fp = (struct file *)host->priv;
     if (attribute == NULL) {
-        return HDF_FAILURE;
+        return HDF_ERR_INVALID_PARAM;
     }
     ret = UartAdapterIoctlInner(fp, TCGETS, (unsigned long)&termios);
     if (ret < 0) {
@@ -373,11 +393,15 @@ static int32_t UartAdapterGetAttribute(struct UartHost *host, struct UartAttribu
 static int32_t UartAdapterSetAttribute(struct UartHost *host, struct UartAttribute *attribute)
 {
     struct termios termios;
-    struct file *fp = (struct file *)host->priv;
+    struct file *fp = NULL;
     int ret;
 
+    if (host == NULL) {
+        return HDF_ERR_INVALID_OBJECT;
+    }
+    fp = (struct file *)host->priv;
     if (attribute == NULL) {
-        return HDF_FAILURE;
+        return HDF_ERR_INVALID_PARAM;
     }
     ret = UartAdapterIoctlInner(fp, TCGETS, (unsigned long)&termios);
     if (ret < 0) {
@@ -398,7 +422,7 @@ static int32_t UartAdapterSetAttribute(struct UartHost *host, struct UartAttribu
         termios.c_cflag &= ~PARODD;
     } else if (attribute->parity == UART_ATTR_PARITY_NONE) {
         termios.c_cflag &= ~(PARENB | PARODD);
-    } else { /* defaule value */
+    } else { /* default value */
         termios.c_cflag &= ~(PARENB | PARODD);
     }
     if (attribute->stopBits == UART_ATTR_STOPBIT_1) {
@@ -406,7 +430,7 @@ static int32_t UartAdapterSetAttribute(struct UartHost *host, struct UartAttribu
     } else if (attribute->stopBits == UART_ATTR_STOPBIT_2) {
         termios.c_cflag |= CSTOPB;
     } else {
-        /* defaule value */
+        /* default value */
         termios.c_cflag &= ~CSTOPB;
     }
     ret = UartAdapterIoctlInner(fp, TCSETS, (unsigned long)&termios);

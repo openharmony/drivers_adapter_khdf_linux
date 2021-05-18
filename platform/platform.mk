@@ -13,7 +13,6 @@
 #
 
 HDF_PLATFORM_FRAMEWORKS_ROOT = ../../../../../framework/support/platform
-HDF_PLATFORM_VENDOR_ROOT     = ../../../../../../device/hisilicon/drivers/huawei_proprietary
 ccflags-$(CONFIG_DRIVERS_HDF_PLATFORM) += -Idrivers/hdf/framework/include/platform \
     -Idrivers/hdf/framework/support/platform/include \
     -Iinclude/hdf \
@@ -31,4 +30,4 @@ ccflags-$(CONFIG_DRIVERS_HDF_PLATFORM) += -Idrivers/hdf/framework/include/platfo
     -Idrivers/hdf/framework/core/common/include/host \
     -Idrivers/hdf/framework/ability/sbuf/include \
     -Idrivers/hdf/framework/utils/include \
-    -I../../../../third_party/bounds_checking_function/include
+    -Iinclude/../../../../../../third_party/bounds_checking_function/include
