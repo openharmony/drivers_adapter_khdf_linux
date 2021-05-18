@@ -3,7 +3,7 @@
  *
  * Mipi dsi adapter driver.
  *
- * Copyright (C) Huawei Device Co., Ltd. 2020-2021. All rights reserved.
+ * Copyright (c) Huawei Device Co., Ltd. 2020-2021. All rights reserved.
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -25,4 +25,4 @@ int MipiDsiRegisterDevice(const char *name, uint32_t id, unsigned short mode, st
 void MipiDsiUnregisterDevice(uint32_t id);
 int MipiDsiProcRegister(const char *name, uint32_t id, unsigned short mode, const struct file_operations *ops);
 void MipiDsiProcUnregister(const char *name, uint32_t id);
-#endif // MIPI_DSI_ADAPTER_H
+#endif /* MIPI_DSI_ADAPTER_H */

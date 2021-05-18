@@ -1,5 +1,5 @@
 /*
- * sdio_adatper.c
+ * sdio_adapter.c
  *
  * hi35xx linux sdio driver implement.
  *
@@ -460,12 +460,12 @@ static struct SdioMethod g_method = {
 
 static int32_t Hi35xxLinuxSdioBind(struct HdfDeviceObject *device)
 {
-    PLAT_LOGV("Hi35xxLinuxSdioBind: entry.");
+    HDF_LOGI("Hi35xxLinuxSdioBind: entry.");
     if (device == NULL) {
         HDF_LOGE("Hi35xxLinuxSdioBind: Fail, device is NULL.");
         return HDF_ERR_INVALID_OBJECT;
     }
-    PLAT_LOGV("Hi35xxLinuxSdioBind: Success.");
+    HDF_LOGI("Hi35xxLinuxSdioBind: Success.");
     return (SdioCntlrCreateAndBind(device) == NULL) ? HDF_FAILURE : HDF_SUCCESS;
 }
 
@@ -474,7 +474,7 @@ static int32_t Hi35xxLinuxSdioInit(struct HdfDeviceObject *device)
     struct SdioCntlr *cntlr = NULL;
     int32_t ret;
 
-    PLAT_LOGV("Hi35xxLinuxSdioInit: entry!");
+    HDF_LOGI("Hi35xxLinuxSdioInit: entry!");
     if (device == NULL) {
         HDF_LOGE("Hi35xxLinuxSdioInit: device is NULL.");
         return HDF_ERR_INVALID_OBJECT;
@@ -492,7 +492,7 @@ static int32_t Hi35xxLinuxSdioInit(struct HdfDeviceObject *device)
         return HDF_ERR_IO;
     }
     cntlr->method = &g_method;
-    PLAT_LOGV("Hi35xxLinuxSdioInit: Success!");
+    HDF_LOGI("Hi35xxLinuxSdioInit: Success!");
     return HDF_SUCCESS;
 }
 

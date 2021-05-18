@@ -1,5 +1,5 @@
 /*
- * gpio_adatper.h
+ * gpio_adapter.h
  *
  * gpio driver adapter of linux
  *
@@ -53,6 +53,7 @@ static int32_t LinuxGpioSetDir(struct GpioCntlr *cntlr, uint16_t gpio, uint16_t 
     int32_t ret;
     int val;
 
+    (void)cntlr;
     switch (dir) {
         case GPIO_DIR_IN:
             ret = gpio_direction_input(gpio);
@@ -77,6 +78,7 @@ static int32_t LinuxGpioGetDir(struct GpioCntlr *cntlr, uint16_t gpio, uint16_t 
 {
     int dirGet;
 
+    (void)cntlr;
     dirGet = gpiod_get_direction(gpio_to_desc(gpio));
     if (dirGet < 0) {
         return HDF_ERR_BSP_PLT_API_ERR;
@@ -98,6 +100,7 @@ static int32_t LinuxGpioSetIrq(struct GpioCntlr *cntlr, uint16_t gpio, uint16_t 
     int ret, irq;
     unsigned long flags = 0;
 
+    (void)cntlr;
     irq = gpio_to_irq(gpio);
     if (irq < 0) {
         HDF_LOGE("%s: gpio(%u) to irq fail:%d", __func__, gpio, irq);
@@ -125,6 +128,7 @@ static int32_t LinuxGpioUnsetIrq(struct GpioCntlr *cntlr, uint16_t gpio)
 {
     int irq;
 
+    (void)cntlr;
     irq = gpio_to_irq(gpio);
     if (irq < 0) {
         HDF_LOGE("%s: gpio(%u) to irq fail:%d", __func__, gpio, irq);
@@ -139,6 +143,7 @@ static inline int32_t LinuxGpioEnableIrq(struct GpioCntlr *cntlr, uint16_t gpio)
 {
     int irq;
 
+    (void)cntlr;
     irq = gpio_to_irq(gpio);
     if (irq < 0) {
         HDF_LOGE("%s: gpio(%u) to irq fail:%d", __func__, gpio, irq);
@@ -152,6 +157,7 @@ static inline int32_t LinuxGpioDisableIrq(struct GpioCntlr *cntlr, uint16_t gpio
 {
     int irq;
 
+    (void)cntlr;
     irq = gpio_to_irq(gpio);
     if (irq < 0) {
         HDF_LOGE("%s: gpio(%u) to irq fail:%d", __func__, gpio, irq);

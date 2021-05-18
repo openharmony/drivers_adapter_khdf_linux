@@ -12,12 +12,12 @@
 #
 #
 
-obj-$(CONFIG_DRIVERS_HDF_PLATFORM)  += common/
+obj-$(CONFIG_DRIVERS_HDF_PLATFORM)           += common/
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_MIPI_DSI)  += mipi_dsi/
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_GPIO)      += gpio/
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_I2C)       += i2c/
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_WATCHDOG)  += watchdog/
-obj-y += pwm/
+obj-$(CONFIG_DRIVERS_HDF_PLATFORM_PWM)       += pwm/
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_UART)      += uart/
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_SDIO)      += sdio/
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_EMMC)      += emmc/

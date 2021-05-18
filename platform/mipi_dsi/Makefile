@@ -14,10 +14,10 @@
 
 include drivers/hdf/khdf/platform/platform.mk
 
-obj-y  += mipi_dsi_adapter.o \
-          $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/mipi_dsi_core.o \
-          $(HDF_PLATFORM_VENDOR_ROOT)/mipi_dsi/mipi_tx_dev.o \
-          $(HDF_PLATFORM_VENDOR_ROOT)/mipi_dsi/mipi_tx_hi35xx.o
-ccflags-y += -I$(HDF_PLATFORM_VENDOR_ROOT)/mipi_dsi \
-             -Idrivers/hdf/khdf/platform/mipi_dsi
+obj-y  += $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/mipi_dsi_core.o \
+          mipi_dsi_adapter.o
+
+obj-y  += mipi_tx_dev.o \
+          mipi_tx_hi35xx.o
+
 EXTRA_CFLAGS += -Wno-error=date-time

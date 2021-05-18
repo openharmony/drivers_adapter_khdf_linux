@@ -13,7 +13,6 @@
 #
 
 export HDF_ROOT := drivers/hdf
-obj-y += platform/pwm/driver/
 obj-$(CONFIG_DRIVERS_HDF)  += osal/
 obj-$(CONFIG_DRIVERS_HDF)  += network/
 obj-$(CONFIG_DRIVERS_HDF)  += config/
