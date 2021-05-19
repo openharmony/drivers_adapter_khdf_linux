@@ -1,0 +1,12 @@
+root {
+    platfrom {
+        template codec_controller {
+            match_attr = "";
+            serviceName = "";
+        }
+        controller_0x120c1030 :: codec_controller {
+            match_attr = "hdf_codec_driver";
+            serviceName = "codec_service_0";
+        }
+    }
+}

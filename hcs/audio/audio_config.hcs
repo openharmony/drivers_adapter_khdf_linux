@@ -1,0 +1,20 @@
+root {
+    platfrom {
+        template card_controller {
+            match_attr = "";
+            serviceName = "";
+            codecName = "";
+            platformName = "";
+            cpuDaiName = "";
+            codecDaiName = "";
+        }
+        controller_0x120c1000 :: card_controller {
+            match_attr = "hdf_audio_driver_0";
+            serviceName = "audio_service_0";
+            codecName = "codec_service_0";
+            platformName = "dma_service_0";
+            cpuDaiName = "dai_service";
+            codecDaiName = "codec_dai";
+        }
+    }
+}
