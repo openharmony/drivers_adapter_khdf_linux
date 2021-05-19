@@ -18,16 +18,15 @@ HDF_DIR_PREFIX := ../../../../../../
 
 include drivers/hdf/khdf/model/network/wifi/hdfwifi.mk
 
-WAP_PATH := core/compoments/softap
-WSTA_PATH := core/compoments/sta
-WEAPOL_PATH := core/compoments/eapol
+WAP_PATH := core/components/softap
+WSTA_PATH := core/components/sta
+WEAPOL_PATH := core/components/eapol
 NETDEV_PATH := ../common/netdevice
 MODULE_PATH := core/module
 QOS_PATH := platform/src/qos
 MESSAGE_PATH := platform/src/message
 PLATFORM_PATH := platform/src
 CORE_PATH := core
-
 
 obj-$(CONFIG_DRIVERS_HDF_WIFI) += $(MODULE_NAME).o
 $(MODULE_NAME)-objs := $(HDF_WIFI_FRAMEWORKS_ROOT)/$(WAP_PATH)/ap.o \

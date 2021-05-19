@@ -55,13 +55,15 @@ HdfWlanQueue *CreateQueue(uint16_t maxQueueSize)
     }
     return (HdfWlanQueue*)impl;
 }
+
 void DestroyQueue(HdfWlanQueue *queue)
 {
     int32_t ret;
-    HdfWlanQueueImpl *impl = (HdfWlanQueueImpl *)queue;
+    HdfWlanQueueImpl *impl = NULL;
     if (queue == NULL) {
         return;
     }
+    impl = (HdfWlanQueueImpl *)queue;
     ret = OsalMutexDestroy(&impl->lock);
     if (ret != HDF_SUCCESS) {
         HDF_LOGE("%s: OsalSpinDestroy failed!ret=%d", __func__, ret);
@@ -72,7 +74,11 @@ void DestroyQueue(HdfWlanQueue *queue)
 void *PopQueue(HdfWlanQueue *queue)
 {
     int32_t ret;
-    HdfWlanQueueImpl *impl = (HdfWlanQueueImpl *)queue;
+    HdfWlanQueueImpl *impl = NULL;
+    if (queue == NULL) {
+        return NULL;
+    }
+    impl = (HdfWlanQueueImpl *)queue;
     void *result = NULL;
     if (queue == NULL) {
         return NULL;
@@ -82,29 +88,27 @@ void *PopQueue(HdfWlanQueue *queue)
         HDF_LOGE("%s:Get lock failed!ret=%d", __func__, ret);
         return NULL;
     }
-    do {
-        if (impl->elementCount > 0) {
-            uint16_t headIndex = impl->headIndex;
-
-            result = impl->elements[headIndex++];
-
-            impl->headIndex = ((headIndex >= impl->maxElements) ? 0 : headIndex);
-            impl->elementCount--;
-        }
-    } while (false);
+    if (impl->elementCount > 0) {
+        uint16_t headIndex = impl->headIndex;
+        result = impl->elements[headIndex++];
+        impl->headIndex = ((headIndex >= impl->maxElements) ? 0 : headIndex);
+        impl->elementCount--;
+    }
     ret = OsalMutexUnlock(&impl->lock);
     if (ret != HDF_SUCCESS) {
         HDF_LOGE("%s:Release lock failed!ret=%d", __func__, ret);
     }
     return result;
 }
+
 int32_t PushQueue(HdfWlanQueue *queue, void *context)
 {
     int32_t ret;
-    HdfWlanQueueImpl *impl = (HdfWlanQueueImpl *)queue;
+    HdfWlanQueueImpl *impl = NULL;
     if (queue == NULL) {
         return HDF_FAILURE;
     }
+    impl = (HdfWlanQueueImpl *)queue;
     ret = OsalMutexLock(&impl->lock);
     if (ret != HDF_SUCCESS) {
         HDF_LOGE("%s:Get lock failed!ret=%d", __func__, ret);

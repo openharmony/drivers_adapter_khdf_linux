@@ -22,4 +22,4 @@ ccflags-$(CONFIG_DRIVERS_HDF_WIFI) += \
              -Iinclude/hdf/wifi \
              -Iinclude/hdf/utils \
              -Iinclude/hdf/osal \
-             -I../../../../third_party/bounds_checking_function/include
+             -Iinclude/../../../../../../third_party/bounds_checking_function/include

@@ -105,7 +105,7 @@ static struct net_device_ops g_netDeviceOps = {
     .ndo_stop = NetDevStop
 };
 
-static struct net_device *CreateNetDevice(const struct NetDevice *hdfDev)
+static struct net_device *CreateNetDevice(struct NetDevice *hdfDev)
 {
     struct net_device *dev = NULL;
 
