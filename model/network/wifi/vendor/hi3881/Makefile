@@ -18,8 +18,13 @@ HDF_VENDOR_PREFIX := ../../../../../../../../../
 
 include drivers/hdf/khdf/model/network/wifi/hdfwifi.mk
 
+ifeq ($(TARGET_PRODUCT), Hi3516DV300)
+INC_TOP_PATH := ../../../../../
+VENDOR_WIFI_PATH := device/hisilicon/drivers/wifi/driver
+else ifeq ($(TARGET_PRODUCT), hi3516dv300)
 INC_TOP_PATH := ../../../../
 VENDOR_WIFI_PATH := device/hisilicon/drivers/huawei_proprietary/wifi/driver
+endif
 WIFI_DRIVER_DIR := hi3881
 
 ##################path of compile file :start###############

@@ -1,5 +1,5 @@
 /*
- * netbuf_adatper.h
+ * netbuf_adapter.h
  *
  * net buffer adapter of linux
  *
