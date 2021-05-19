@@ -18,7 +18,12 @@ else
   HCGEN_PATH := win-x86/bin/hc-gen.exe
 endif
 
-SOURCE_ROOT:=$(PROJECT_ROOT)
+ifeq ($(LOCAL_HCS_ROOT),)
+  LOCAL_HCS_ROOT := $(PRODUCT_PATH)
+endif
+
+SOURCE_ROOT:=$(abspath ../../../../../)
+
 HC_GEN := hc-gen
 BUILD_IN_HC_GEN := $(SOURCE_ROOT)/prebuilts/build-tools/$(HCGEN_PATH)
 ifneq ($(wildcard $(BUILD_IN_HC_GEN)),)
@@ -27,11 +32,19 @@ endif
 
 LOCAL_HCS_ROOT := $(abspath $(dir $(realpath $(lastword $(MAKEFILE_LIST)))))
 
-HCS_DIR := $(SOURCE_ROOT)/$(product_path)
-ifneq ($(wildcard $(HCS_DIR)),)
-  HCS_DIR := $(LOCAL_HCS_ROOT)
-endif
+HCS_DIR := $(LOCAL_HCS_ROOT)
 
+ifneq ($(TARGET_BOARD_PLATFORM),)
+  HCS_DIR := $(LOCAL_HCS_ROOT)/$(TARGET_BOARD_PLATFORM)
+else
+  ifneq ($(CONFIG_ARCH_HI3516DV300),)
+    HCS_DIR := $(LOCAL_HCS_ROOT)
+  endif
+  ifneq ($(CONFIG_ARCH_HI3518EV300),)
+    HCS_DIR := $(LOCAL_HCS_ROOT)
+  endif
+endif
+$(info HCS_DIR = $(HCS_DIR))
 HCB_FLAGS := -b -i -a
 
 HCS_OBJ := hdf_hcs_hex.o

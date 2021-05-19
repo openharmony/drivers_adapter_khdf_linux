@@ -34,7 +34,7 @@ int32_t OsalRegisterIrq(uint32_t irq,
 	ret = request_threaded_irq(irq, NULL, (irq_handler_t)handle,
 		config | IRQF_ONESHOT | IRQF_NO_SUSPEND, irq_name, data);
 	if (ret != 0) {
-		HDF_LOGE("%s fail %d", __func__, ret);
+		HDF_LOGE("%s fail %u", __func__, ret);
 		return HDF_FAILURE;
 	}
 
