@@ -26,7 +26,7 @@ obj-$(CONFIG_DRIVERS_HDF_INPUT) += \
                $(INPUT_ROOT_DIR)/event_hub.o \
                $(INPUT_ROOT_DIR)/hdf_touch.o \
                $(INPUT_ROOT_DIR)/hdf_key.o \
-               $(INPUT_ROOT_DIR)/hdf_hid.o
+               $(INPUT_ROOT_DIR)/hdf_hid_adapter.o
 
 obj-$(CONFIG_DRIVERS_HDF_TP_5P5_GT911) += \
               $(INPUT_ROOT_DIR)/touchscreen/touch_gt911.o
@@ -44,6 +44,12 @@ ccflags-y += -Iinclude/../drivers/hdf/framework/model/input/driver \
              -Iinclude/../drivers/hdf/framework/include/config \
              -Iinclude/../drivers/hdf/framework/core/host/include \
              -Iinclude/../drivers/hdf/framework/core/shared/include \
-             -Iinclude/../drivers/hdf/khdf/osal/include \
-             -I$(PROJECT_ROOT)/third_party/bounds_checking_function/include \
+             -Iinclude/../drivers/hdf/framework/utils/include \
+             -Iinclude/../drivers/hdf/khdf/osal/include
+ifeq ($(TARGET_PRODUCT), Hi3516DV300)
+ccflags-y += -I$(PROJECT_ROOT)/third_party/bounds_checking_function/include \
              -I$(PROJECT_ROOT)/third_party/FreeBSD/sys/dev/evdev
+else ifeq ($(TARGET_PRODUCT), hi3516dv300)
+ccflags-y += -I$(PROJECT_ROOT)/third_party/bounds_checking_function/include \
+             -I$(PROJECT_ROOT)/third_party/FreeBSD/sys/dev/evdev
+endif
