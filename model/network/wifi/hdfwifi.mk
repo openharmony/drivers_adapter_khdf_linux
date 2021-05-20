@@ -64,8 +64,8 @@ SECURE_LIB_INC := \
     -I../../../../../third_party/bounds_checking_function/include
 else ifeq ($(TARGET_PRODUCT), hi3516dv300)
 HDF_WIFI_VENDOR_INC := \
-    -I../../../../device/hisilicon/drivers/huawei_proprietary/wifi/driver/core
+    -I$(PROJECT_ROOT)/device/hisilicon/drivers/huawei_proprietary/wifi/driver/core
 
 SECURE_LIB_INC := \
-    -I../../../../third_party/bounds_checking_function/include
+    -I$(PROJECT_ROOT)/third_party/bounds_checking_function/include
 endif

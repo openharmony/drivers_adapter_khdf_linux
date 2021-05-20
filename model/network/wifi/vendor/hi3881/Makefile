@@ -22,7 +22,7 @@ ifeq ($(TARGET_PRODUCT), Hi3516DV300)
 INC_TOP_PATH := ../../../../../
 VENDOR_WIFI_PATH := device/hisilicon/drivers/wifi/driver
 else ifeq ($(TARGET_PRODUCT), hi3516dv300)
-INC_TOP_PATH := ../../../../
+INC_TOP_PATH := $(PROJECT_ROOT)
 VENDOR_WIFI_PATH := device/hisilicon/drivers/huawei_proprietary/wifi/driver
 endif
 WIFI_DRIVER_DIR := hi3881
