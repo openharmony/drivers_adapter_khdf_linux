@@ -158,7 +158,7 @@ void OsalMemFree(void *buf)
 	else if (type == TYPE_VMALLOC)
 		vfree(base);
 	else
-		HDF_LOGE("%s block : type %u fail", __func__, type);
+		HDF_LOGE("%s block : type %d fail", __func__, type);
 }
 EXPORT_SYMBOL(OsalMemFree);
 

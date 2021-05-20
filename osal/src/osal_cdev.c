@@ -60,7 +60,6 @@ static const char* StringRfindChar(const char* str, char chr)
 
 static char* hdfDevnode(struct device* dev, umode_t* mode)
 {
-    (void)mode;
     return kasprintf(GFP_KERNEL, "hdf/%s", dev_name(dev));
 }
 
@@ -133,7 +132,6 @@ static int RegisterDev(struct OsalCdev* cdev, const char* devName)
     if (ret) {
         ida_simple_remove(&hdf_vnode_ids, devMinor);
         HDF_LOGE("failed to add hdf cdev(%s)\n", devName);
-        return ret;
     }
 
     ret = device_add(&cdev->dev);
