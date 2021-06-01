@@ -82,7 +82,7 @@ plat-objs = $(oal-objs) $(oam-objs) $(board-objs) $(frw-objs) $(adapter-objs)
 hmac-objs := hmac_11i.o hmac_blockack.o hmac_chan_mgmt.o hmac_config.o hmac_crypto_tkip.o hmac_event.o hmac_uapsd.o \
              hmac_device.o hmac_encap_frame.o hmac_encap_frame_ap.o hmac_encap_frame_sta.o hmac_frag.o hmac_fsm.o \
              hmac_mgmt_ap.o hmac_mgmt_bss_comm.o hmac_mgmt_classifier.o hmac_mgmt_sta.o hmac_protection.o hmac_user.o \
-             hmac_rx_data.o hmac_tx_data.o hmac_rx_filter.o hmac_scan.o hmac_sme_sta.o hmac_tx_amsdu.o hmac_vap.o \
+             hmac_rx_data.o hmac_tx_data.o hmac_rx_filter.o hmac_scan.o hmac_sme_sta.o hmac_vap.o \
              hmac_main.o
 
 ifeq ($(CFG_EDCA_OPT_AP), y)
