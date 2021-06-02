@@ -17,10 +17,10 @@ SEC_OBJECTS:=$(patsubst %.c,%.o,$(SEC_LIB_SOURCES))
 SENSOR_ROOT_DIR = ../../../../../framework/model/sensor/driver
 
 obj-$(CONFIG_DRIVERS_HDF_SENSOR) += \
-               $(SENSOR_ROOT_DIR)/common/src/sensor_common.o \
-               $(SENSOR_ROOT_DIR)/common/src/sensor_device_common.o \
+               $(SENSOR_ROOT_DIR)/common/src/sensor_config_controller.o \
+               $(SENSOR_ROOT_DIR)/common/src/sensor_config_parser.o \
                $(SENSOR_ROOT_DIR)/common/src/sensor_device_manager.o \
-               $(SENSOR_ROOT_DIR)/common/src/sensor_parser.o
+               $(SENSOR_ROOT_DIR)/common/src/sensor_platform_if.o
 
 obj-$(CONFIG_DRIVERS_HDF_SENSOR_ACCEL) += $(SENSOR_ROOT_DIR)/accel/sensor_accel_driver.o \
                $(SENSOR_ROOT_DIR)/chipset/accel/accel_bmi160.o
