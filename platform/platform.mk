@@ -1,4 +1,4 @@
-i#
+#
 # Copyright (c) 2020-2021 Huawei Device Co., Ltd.
 #
 # This software is licensed under the terms of the GNU General Public
