@@ -14,4 +14,9 @@
 
 include drivers/hdf/khdf/platform/platform.mk
 
+obj-y  += $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/common/platform_device.o \
+          $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/common/platform_common.o \
+	  $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/common/platform_manager.o \
+	  $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/common/platform_queue.o
+
 obj-y  += ./plat_common.o
