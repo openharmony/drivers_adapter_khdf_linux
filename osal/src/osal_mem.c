@@ -48,6 +48,11 @@ static void *osal_mem_alloc(size_t size, uint32_t *type)
 	char *base = NULL;
 	const uint32_t mng_size = sizeof(struct mem_block);
 
+	if (size > (SIZE_MAX - mng_size)) {
+		HDF_LOGE("%s invalid param %d", __func__, size);
+		return NULL;
+	}
+
 	if (size > (KMALLOC_SIZE - mng_size)) {
 		base = (char *)vmalloc(size + mng_size);
 		*type = TYPE_VMALLOC;
