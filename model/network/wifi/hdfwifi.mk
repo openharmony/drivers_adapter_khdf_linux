@@ -51,7 +51,8 @@ HDF_WIFI_FRAMEWORKS_INC := \
     -Idrivers/hdf/framework/model/network/wifi/platform/include/message \
     -Idrivers/hdf/framework/model/network/wifi/client/include \
     -Idrivers/hdf/framework/include/wifi \
-    -Idrivers/hdf/framework/include/net
+    -Idrivers/hdf/framework/include/net \
+    -Idrivers/hdf/frameworks/model/network/wifi/bus
 
 HDF_WIFI_ADAPTER_INC := \
     -Idrivers/hdf/khdf/network/include
@@ -69,3 +70,4 @@ HDF_WIFI_VENDOR_INC := \
 SECURE_LIB_INC := \
     -I$(PROJECT_ROOT)/third_party/bounds_checking_function/include
 endif
+
