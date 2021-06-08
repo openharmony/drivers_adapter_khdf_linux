@@ -1,4 +1,4 @@
-#
+i#
 # Copyright (c) 2020-2021 Huawei Device Co., Ltd.
 #
 # This software is licensed under the terms of the GNU General Public
@@ -15,6 +15,9 @@
 HDF_PLATFORM_FRAMEWORKS_ROOT = ../../../../../framework/support/platform
 ccflags-$(CONFIG_DRIVERS_HDF_PLATFORM) += -Idrivers/hdf/framework/include/platform \
     -Idrivers/hdf/framework/support/platform/include \
+    -Idrivers/hdf/framework/support/platform/include/mmc \
+    -Idrivers/hdf/framework/support/platform/include/common \
+    -Idrivers/hdf/framework/model/storage/include/common \
     -Iinclude/hdf \
     -Iinclude/hdf/osal \
     -Iinclude/hdf/utils \

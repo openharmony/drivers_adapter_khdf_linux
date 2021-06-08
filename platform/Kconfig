@@ -65,6 +65,13 @@ config DRIVERS_HDF_PLATFORM_EMMC
     help
       Answer Y to enable HDF platform emmc driver.
 
+config DRIVERS_HDF_PLATFORM_MMC
+    bool "Enable HDF platform mmc driver"
+    default n
+    depends on DRIVERS_HDF_PLATFORM
+    help
+      Answer Y to enable HDF platform mmc driver.
+
 config DRIVERS_HDF_PLATFORM_SPI
     bool "Enable HDF platform spi driver"
     default n

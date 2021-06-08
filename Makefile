@@ -39,3 +39,4 @@ obj-$(CONFIG_DRIVERS_HDF_DISP) += model/display/
 obj-$(CONFIG_DRIVERS_HDF_INPUT)  += model/input/
 obj-$(CONFIG_DRIVERS_HDF_WIFI) += model/network/wifi/
 obj-$(CONFIG_DRIVERS_HDF_SENSOR)  += model/sensor/
+obj-$(CONFIG_DRIVERS_HDF_STORAGE) += model/storage/
