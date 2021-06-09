@@ -116,16 +116,8 @@
                     priority = 70;
                     permission = 0644;
                     moduleName = "HDF_PLATFORM_SDIO";
-                    serviceName = "HDF_PLATFORM_SDIO_0";
+                    serviceName = "HDF_PLATFORM_MMC_2";
                     deviceMatchAttr = "hisilicon_hi35xx_sdio_0";
-                }
-                device1 :: deviceNode {
-                    policy = 1;
-                    priority = 70;
-                    permission = 0644;
-                    moduleName = "HDF_PLATFORM_SDIO";
-                    serviceName = "HDF_PLATFORM_SDIO_1";
-                    deviceMatchAttr = "hisilicon_hi35xx_sdio_1";
                 }
             }
             device_emmc :: device {
@@ -134,7 +126,7 @@
                     priority = 20;
                     permission = 0644;
                     moduleName = "HDF_PLATFORM_EMMC";
-                    serviceName = "HDF_PLATFORM_EMMC_0";
+                    serviceName = "HDF_PLATFORM_MMC_0";
                     deviceMatchAttr = "hisilicon_hi35xx_emmc_0";
                 }
             }

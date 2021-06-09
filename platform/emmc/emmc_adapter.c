@@ -18,20 +18,24 @@
 
 #include <linux/mmc/card.h>
 #include <linux/mmc/host.h>
-#include "emmc_core.h"
+#include <securec.h>
+#include "mmc_corex.h"
+#include "mmc_emmc.h"
+#include "device_resource_if.h"
+#include "emmc_if.h"
 #include "hdf_log.h"
-#include "securec.h"
 
 #define HDF_LOG_TAG emmc_adapter_c
 
 struct mmc_host *himci_get_mmc_host(int slot);
 
-int32_t Hi35xxLinuxEmmcGetCid(struct EmmcCntlr *cntlr, uint8_t *cid, uint32_t size)
+int32_t Hi35xxLinuxEmmcGetCid(struct EmmcDevice *dev, uint8_t *cid, uint32_t size)
 {
     struct mmc_host *mmcHost = NULL;
+    struct MmcCntlr *cntlr = NULL;
 
-    if (cntlr == NULL) {
-        HDF_LOGE("Hi35xxLinuxEmmcGetCid: cntlr is null.");
+    if (dev == NULL || dev->mmc.cntlr == NULL) {
+        HDF_LOGE("Hi35xxLinuxEmmcGetCid: dev or cntlr is null.");
         return HDF_ERR_INVALID_OBJECT;
     }
     if (cid == NULL || size < EMMC_CID_LEN) {
@@ -39,14 +43,11 @@ int32_t Hi35xxLinuxEmmcGetCid(struct EmmcCntlr *cntlr, uint8_t *cid, uint32_t si
         return HDF_ERR_INVALID_PARAM;
     }
 
+    cntlr = dev->mmc.cntlr;
     mmcHost = (struct mmc_host *)cntlr->priv;
     if (mmcHost == NULL) {
-        mmcHost = himci_get_mmc_host(cntlr->configData.hostId);
-        if (mmcHost == NULL) {
-            HDF_LOGE("Hi35xxLinuxEmmcGetCid: get_mmc_host fail again!");
-            return HDF_ERR_NOT_SUPPORT;
-        }
-        cntlr->priv = (void *)mmcHost;
+        HDF_LOGE("Hi35xxLinuxEmmcGetCid: mmcHost is NULL!");
+        return HDF_ERR_NOT_SUPPORT;
     }
     if (mmcHost->card == NULL) {
         HDF_LOGE("Hi35xxLinuxEmmcGetCid: card is null.");
@@ -60,79 +61,121 @@ int32_t Hi35xxLinuxEmmcGetCid(struct EmmcCntlr *cntlr, uint8_t *cid, uint32_t si
     return HDF_SUCCESS;
 }
 
-int32_t Hi35xxLinuxEmmcFindHost(struct EmmcCntlr *cntlr, struct EmmcConfigData *data)
-{
-    if (cntlr == NULL || data == NULL) {
-        HDF_LOGE("Hi35xxLinuxEmmcFindHost: cntlr or data is null.");
-        return HDF_ERR_INVALID_OBJECT;
-    }
-
-    cntlr->priv = (void *)himci_get_mmc_host(data->hostId);
-    if (cntlr->priv == NULL) {
-        HDF_LOGE("Hi35xxLinuxEmmcFindHost: get_mmc_host fail!");
-        return HDF_FAILURE;
-    }
-    return HDF_SUCCESS;
-}
-
-static struct EmmcMethod g_emmcMethod = {
+static struct EmmcDeviceOps g_emmcMethod = {
     .getCid = Hi35xxLinuxEmmcGetCid,
-    .findHost = Hi35xxLinuxEmmcFindHost,
 };
 
-static int32_t Hi35xxLinuxEmmcBind(struct HdfDeviceObject *device)
+static void Hi35xxLinuxEmmcDeleteCntlr(struct MmcCntlr *cntlr)
 {
-    if (device == NULL) {
-        HDF_LOGE("Hi35xxLinuxEmmcBind: Fail, device is NULL.");
-        return HDF_ERR_INVALID_OBJECT;
-    }
-    if (EmmcCntlrCreateAndBind(device) == NULL) {
-        return HDF_FAILURE;
-    }
-    HDF_LOGI("Hi35xxLinuxEmmcBind: Success.");
-    return HDF_SUCCESS;
-}
-
-static int32_t Hi35xxLinuxEmmcInit(struct HdfDeviceObject *device)
-{
-    struct EmmcCntlr *cntlr = NULL;
-    int32_t ret;
-
-    if (device == NULL) {
-        HDF_LOGE("Hi35xxLinuxEmmcInit: device is NULL.");
-        return HDF_ERR_INVALID_OBJECT;
-    }
-
-    cntlr = EmmcCntlrFromDevice(device);
     if (cntlr == NULL) {
-        HDF_LOGE("Hi35xxLinuxEmmcInit: EmmcCntlrFromDevice fail.");
-        return HDF_ERR_IO;
-    }
-
-    ret = EmmcFillConfigData(device, &(cntlr->configData));
-    if (ret != HDF_SUCCESS) {
-        HDF_LOGE("Hi35xxLinuxEmmcInit: EmmcFillConfigData fail.");
-        return HDF_ERR_IO;
-    }
-
-    cntlr->priv = (void *)himci_get_mmc_host(cntlr->configData.hostId);
-    cntlr->method = &g_emmcMethod;
-    HDF_LOGI("Hi35xxLinuxEmmcInit: Success!");
-    return HDF_SUCCESS;
-}
-
-static void Hi35xxLinuxEmmcRelease(struct HdfDeviceObject *device)
-{
-    struct EmmcCntlr *cntlr = NULL;
-
-    cntlr = EmmcCntlrFromDevice(device);
-    if (cntlr == NULL) {
-        HDF_LOGE("Hi35xxLinuxEmmcRelease: Fail, cntlr is NULL.");
         return;
     }
 
-    EmmcCntlrDestroy(cntlr);
-    HDF_LOGD("Hi35xxLinuxEmmcRelease: Success.");
+    if (cntlr->curDev != NULL) {
+        MmcDeviceRemove(cntlr->curDev);
+        OsalMemFree(cntlr->curDev);
+    }
+    MmcCntlrRemove(cntlr);
+    OsalMemFree(cntlr);
+}
+
+static int32_t Hi35xxLinuxEmmcCntlrParse(struct MmcCntlr *cntlr, struct HdfDeviceObject *obj)
+{
+    const struct DeviceResourceNode *node = NULL;
+    struct DeviceResourceIface *drsOps = NULL;
+    int32_t ret;
+
+    if (obj == NULL || cntlr == NULL) {
+        HDF_LOGE("Hi35xxLinuxEmmcCntlrParse: input para is NULL.");
+        return HDF_FAILURE;
+    }
+
+    node = obj->property;
+    if (node == NULL) {
+        HDF_LOGE("Hi35xxLinuxEmmcCntlrParse: drs node is NULL.");
+        return HDF_FAILURE;
+    }
+    drsOps = DeviceResourceGetIfaceInstance(HDF_CONFIG_SOURCE);
+    if (drsOps == NULL || drsOps->GetUint16 == NULL || drsOps->GetUint32 == NULL) {
+        HDF_LOGE("Hi35xxLinuxEmmcCntlrParse: invalid drs ops fail!");
+        return HDF_FAILURE;
+    }
+
+    ret = drsOps->GetUint16(node, "hostId", &(cntlr->index), 0);
+    if (ret != HDF_SUCCESS) {
+        HDF_LOGE("Hi35xxLinuxEmmcCntlrParse: read hostIndex fail!");
+        return ret;
+    }
+    ret = drsOps->GetUint32(node, "devType", &(cntlr->devType), 0);
+    if (ret != HDF_SUCCESS) {
+        HDF_LOGE("Hi35xxLinuxEmmcCntlrParse: read devType fail!");
+        return ret;
+    }
+    return HDF_SUCCESS;
+}
+
+static int32_t Hi35xxLinuxEmmcBind(struct HdfDeviceObject *obj)
+{
+    struct MmcCntlr *cntlr = NULL;
+    int32_t ret;
+
+    HDF_LOGE("Hi35xxLinuxEmmcBind: entry!");
+    if (obj == NULL) {
+        HDF_LOGE("Hi35xxLinuxEmmcBind: Fail, obj is NULL.");
+        return HDF_ERR_INVALID_OBJECT;
+    }
+
+    cntlr = (struct MmcCntlr *)OsalMemCalloc(sizeof(struct MmcCntlr));
+    if (cntlr == NULL) {
+        HDF_LOGE("Hi35xxLinuxEmmcBind: no mem for MmcCntlr.");
+        return HDF_ERR_MALLOC_FAIL;
+    }
+
+    cntlr->ops = NULL;
+    cntlr->hdfDevObj = obj;
+    obj->service = &cntlr->service;
+    ret = Hi35xxLinuxEmmcCntlrParse(cntlr, obj);
+    if (ret != HDF_SUCCESS) {
+        HDF_LOGE("Hi35xxLinuxEmmcBind: cntlr parse fail.");
+        goto _ERR;
+    }
+    cntlr->priv = (void *)himci_get_mmc_host((int32_t)cntlr->index);
+
+    ret = MmcCntlrAdd(cntlr);
+    if (ret != HDF_SUCCESS) {
+        HDF_LOGE("Hi35xxLinuxEmmcBind: cntlr add fail.");
+        goto _ERR;
+    }
+
+    ret = MmcCntlrAllocDev(cntlr, (enum MmcDevType)cntlr->devType);
+    if (ret != HDF_SUCCESS) {
+        HDF_LOGE("Hi35xxLinuxEmmcBind: alloc dev fail.");
+        goto _ERR;
+    }
+    MmcDeviceAddOps(cntlr->curDev, &g_emmcMethod);
+    HDF_LOGD("Hi35xxLinuxEmmcBind: Success!");
+    return HDF_SUCCESS;
+
+_ERR:
+    Hi35xxLinuxEmmcDeleteCntlr(cntlr);
+    HDF_LOGE("Hi35xxLinuxEmmcBind: Fail!");
+    return HDF_FAILURE;
+}
+
+static int32_t Hi35xxLinuxEmmcInit(struct HdfDeviceObject *obj)
+{
+    (void)obj;
+
+    HDF_LOGD("Hi35xxLinuxEmmcInit: Success!");
+    return HDF_SUCCESS;
+}
+
+static void Hi35xxLinuxEmmcRelease(struct HdfDeviceObject *obj)
+{
+    if (obj == NULL) {
+        return;
+    }
+    Hi35xxLinuxEmmcDeleteCntlr((struct MmcCntlr *)obj->service);
 }
 
 struct HdfDriverEntry g_emmcDriverEntry = {
