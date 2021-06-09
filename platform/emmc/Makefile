@@ -14,6 +14,5 @@
 
 include drivers/hdf/khdf/platform/platform.mk
 
-obj-y  += $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/emmc_core.o \
-          $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/emmc_if.o \
+obj-y  += $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/mmc/emmc_if.o \
           ./emmc_adapter.o

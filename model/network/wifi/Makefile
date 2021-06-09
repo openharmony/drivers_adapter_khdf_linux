@@ -27,6 +27,7 @@ QOS_PATH := platform/src/qos
 MESSAGE_PATH := platform/src/message
 PLATFORM_PATH := platform/src
 CORE_PATH := core
+IBUS_PATH := bus
 
 obj-$(CONFIG_DRIVERS_HDF_WIFI) += $(MODULE_NAME).o
 $(MODULE_NAME)-objs := $(HDF_WIFI_FRAMEWORKS_ROOT)/$(WAP_PATH)/ap.o \
@@ -52,6 +53,8 @@ $(MODULE_NAME)-objs := $(HDF_WIFI_FRAMEWORKS_ROOT)/$(WAP_PATH)/ap.o \
                        $(HDF_WIFI_FRAMEWORKS_ROOT)/$(PLATFORM_PATH)/hdf_wlan_product.o \
                        $(HDF_WIFI_FRAMEWORKS_ROOT)/$(PLATFORM_PATH)/hdf_wlan_reset_manager.o \
                        $(HDF_WIFI_FRAMEWORKS_ROOT)/$(PLATFORM_PATH)/hdf_wlan_utils.o \
+                       $(HDF_WIFI_FRAMEWORKS_ROOT)/$(IBUS_PATH)/hdf_ibus_intf.o \
+                       $(HDF_WIFI_FRAMEWORKS_ROOT)/$(IBUS_PATH)/hdf_sdio_intf.o \
 
 ccflags-$(CONFIG_DRIVERS_HDF_WIFI) += \
     $(HDF_FRAMEWORKS_INC) \
@@ -60,3 +63,4 @@ ccflags-$(CONFIG_DRIVERS_HDF_WIFI) += \
     $(SECURE_LIB_INC)
 
 obj-$(CONFIG_DRIVERS_HDF_WIFI) += vendor/
+
