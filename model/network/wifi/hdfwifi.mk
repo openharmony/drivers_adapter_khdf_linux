@@ -14,11 +14,7 @@
 
 HDF_WIFI_FRAMEWORKS_ROOT = $(HDF_DIR_PREFIX)/framework/model/network/wifi
 HDF_WIFI_KHDF_FRAMEWORKS_ROOT = $(HDF_DIR_PREFIX)/adapter/khdf/linux/model/network/wifi
-ifeq ($(TARGET_PRODUCT), Hi3516DV300)
 HDF_WIFI_VENDOR_ROOT = $(HDF_VENDOR_PREFIX)/device/hisilicon/drivers/wifi/driver
-else ifeq ($(TARGET_PRODUCT), hi3516dv300)
-HDF_WIFI_VENDOR_ROOT = $(HDF_VENDOR_PREFIX)/device/hisilicon/drivers/huawei_proprietary/wifi/driver
-endif
 HDF_FRAMEWORKS_INC := \
     -Idrivers/hdf/framework/ability/sbuf/include \
     -Idrivers/hdf/framework/core/common/include/host \
@@ -57,17 +53,8 @@ HDF_WIFI_FRAMEWORKS_INC := \
 HDF_WIFI_ADAPTER_INC := \
     -Idrivers/hdf/khdf/network/include
 
-ifeq ($(TARGET_PRODUCT), Hi3516DV300)
 HDF_WIFI_VENDOR_INC := \
-    -I../../../../../device/hisilicon/drivers/wifi/driver/core
-
-SECURE_LIB_INC := \
-    -I../../../../../third_party/bounds_checking_function/include
-else ifeq ($(TARGET_PRODUCT), hi3516dv300)
-HDF_WIFI_VENDOR_INC := \
-    -I$(PROJECT_ROOT)/device/hisilicon/drivers/huawei_proprietary/wifi/driver/core
+    -I$(PROJECT_ROOT)/device/hisilicon/drivers/wifi/driver/core
 
 SECURE_LIB_INC := \
     -I$(PROJECT_ROOT)/third_party/bounds_checking_function/include
-endif
-
