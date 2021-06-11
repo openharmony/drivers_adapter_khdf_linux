@@ -17,7 +17,7 @@ obj-$(CONFIG_DRIVERS_HDF)  += osal/
 obj-$(CONFIG_DRIVERS_HDF)  += network/
 obj-$(CONFIG_DRIVERS_HDF)  += config/
 
-ifeq ($(TARGET_PRODUCT), hi3516dv300)
+ifneq ($(TARGET_PRODUCT), Hi3516DV300)
 ifeq ($(CONFIG_DRIVERS_HDF_TEST), y)
 obj-y  += ../../../../$(PRODUCT_PATH)/config/hdf_test/
 obj-y  += test/
