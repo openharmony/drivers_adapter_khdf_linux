@@ -37,4 +37,4 @@ ccflags-y += -Idrivers/hdf/framework/model/sensor/driver/include \
              -Idrivers/hdf/framework/include/platform \
              -Idrivers/hdf/framework/include/config \
              -Idrivers/hdf/khdf/osal/include \
-             -I$(PROJECT_ROOT)/third_party/bounds_checking_function/include
+             -Idrivers/hdf/../../../../../../../../../../../../../third_party/bounds_checking_function/include
