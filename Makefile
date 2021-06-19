@@ -18,7 +18,7 @@ obj-$(CONFIG_DRIVERS_HDF)  += network/
 obj-$(CONFIG_DRIVERS_HDF)  += config/
 
 
-SUPPORT_LEVEL_STD_H := $(shell [[ "$(CONFIG_HDF_SUPPORT_LEVEL)" != "" && "$(CONFIG_HDF_SUPPORT_LEVEL)" -ge 2 ]] && echo true)
+SUPPORT_LEVEL_STD_H := $(shell [[ "$(CONFIG_HDF_SUPPORT_LEVEL)" -ge 2 ]] && echo true)
 
 ifneq ($(SUPPORT_LEVEL_STD_H), true) # for L1
 ifeq ($(CONFIG_DRIVERS_HDF_TEST), y)
