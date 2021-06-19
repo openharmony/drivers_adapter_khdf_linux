@@ -17,14 +17,17 @@ obj-$(CONFIG_DRIVERS_HDF)  += osal/
 obj-$(CONFIG_DRIVERS_HDF)  += network/
 obj-$(CONFIG_DRIVERS_HDF)  += config/
 
-ifneq ($(TARGET_PRODUCT), Hi3516DV300)
+
+SUPPORT_LEVEL_STD_H := $(shell [[ "$(CONFIG_HDF_SUPPORT_LEVEL)" -ge 2 ]] && echo true)
+
+ifneq ($(SUPPORT_LEVEL_STD_H), true) # for L1
 ifeq ($(CONFIG_DRIVERS_HDF_TEST), y)
 obj-y  += ../../../../$(PRODUCT_PATH)/config/hdf_test/
 obj-y  += test/
 else
 obj-$(CONFIG_DRIVERS_HDF)  += ../../../../$(PRODUCT_PATH)/config/
 endif
-else
+else # for L2+
 ifeq ($(CONFIG_DRIVERS_HDF_TEST), y)
 obj-y  += hcs/hdf_test/
 obj-y  += test/
