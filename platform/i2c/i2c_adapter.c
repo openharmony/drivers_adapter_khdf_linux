@@ -17,7 +17,6 @@
  */
 
 #include <linux/i2c.h>
-#include "device_resource_if.h"
 #include "hdf_device_desc.h"
 #include "hdf_log.h"
 #include "i2c_core.h"
@@ -79,134 +78,101 @@ static struct I2cMethod g_method = {
     .transfer = LinuxI2cTransfer,
 };
 
-static int32_t LinuxI2cReadDrs(struct I2cCntlr *cntlr, const struct DeviceResourceNode *node)
-{
-    int32_t ret;
-    struct DeviceResourceIface *drsOps = NULL;
-
-    drsOps = DeviceResourceGetIfaceInstance(HDF_CONFIG_SOURCE);
-    if (drsOps == NULL || drsOps->GetUint32 == NULL) {
-        HDF_LOGE("%s: invalid drs ops fail!", __func__);
-        return HDF_FAILURE;
-    }
-
-    ret = drsOps->GetUint16(node, "bus", (uint16_t *)&cntlr->busId, 0);
-    if (ret != HDF_SUCCESS) {
-        HDF_LOGE("%s: read bus fail!", __func__);
-        return ret;
-    }
-
-    return HDF_SUCCESS;
-}
-
 static int32_t LinuxI2cBind(struct HdfDeviceObject *device)
 {
     (void)device;
     return HDF_SUCCESS;
 }
 
-static int32_t LinuxI2cParseAndInit(struct HdfDeviceObject *device, const struct DeviceResourceNode *node)
+static int LinuxI2cRemove(struct device *dev, void *data)
+{
+    struct I2cCntlr *cntlr = NULL;
+    struct i2c_adapter *adapter = NULL;
+
+    HDF_LOGI("%s: Enter", __func__);
+    (void)data;
+
+    if (dev == NULL) {
+        HDF_LOGE("%s: dev is null", __func__);
+        return HDF_ERR_INVALID_OBJECT;
+    }
+
+    if (dev->type != &i2c_adapter_type) {
+        return HDF_SUCCESS; // continue remove
+    }
+
+    adapter = to_i2c_adapter(dev);
+    cntlr = I2cCntlrGet(adapter->nr);
+    if (cntlr != NULL) {
+        I2cCntlrPut(cntlr);
+        I2cCntlrRemove(cntlr);
+        i2c_put_adapter(adapter);
+        OsalMemFree(cntlr);
+    }
+}
+
+static int LinuxI2cProbe(struct device *dev, void *data)
 {
     int32_t ret;
     struct I2cCntlr *cntlr = NULL;
     struct i2c_adapter *adapter = NULL;
 
-    HDF_LOGI("%s: Enter", __func__);
-    (void)device;
+    (void)data;
 
+    if (dev == NULL) {
+        HDF_LOGE("%s: dev is null", __func__);
+        return HDF_ERR_INVALID_OBJECT;
+    }
+
+    if (dev->type != &i2c_adapter_type) {
+        return HDF_SUCCESS; // continue probe
+    }
+
+    HDF_LOGI("%s: Enter", __func__);
+    adapter = to_i2c_adapter(dev);
     cntlr = (struct I2cCntlr *)OsalMemCalloc(sizeof(*cntlr));
     if (cntlr == NULL) {
         HDF_LOGE("%s: malloc cntlr fail!", __func__);
         return HDF_ERR_MALLOC_FAIL;
     }
 
-    ret = LinuxI2cReadDrs(cntlr, node);
-    if (ret != HDF_SUCCESS) {
-        HDF_LOGE("%s: read drs fail! ret:%d", __func__, ret);
-        goto __ERR__;
-    }
-
-    adapter = i2c_get_adapter(cntlr->busId);
-    if (adapter == NULL) {
-        HDF_LOGE("%s: i2c_get_adapter fail!", __func__);
-        goto __ERR__;
-    }
+    cntlr->busId = adapter->nr;
     cntlr->priv = adapter;
     cntlr->ops = &g_method;
     ret = I2cCntlrAdd(cntlr);
     if (ret != HDF_SUCCESS) {
-        HDF_LOGE("%s: add i2c controller fail:%d!", __func__, ret);
-        goto __ERR__;
+        i2c_put_adapter(adapter);
+        HDF_LOGE("%s: add controller fail:%d", __func__, ret);
+        return ret;
     }
+    HDF_LOGI("%s: i2c adapter %d add success", __func__, cntlr->busId);
     return HDF_SUCCESS;
- __ERR__:
-    OsalMemFree(cntlr);
-    return ret;
 }
 
 static int32_t LinuxI2cInit(struct HdfDeviceObject *device)
 {
     int32_t ret;
-    const struct DeviceResourceNode *childNode = NULL;
 
     HDF_LOGI("%s: Enter", __func__);
-    if (device == NULL || device->property == NULL) {
-        HDF_LOGE("%s: device or property is NULL", __func__);
+    if (device == NULL) {
+        HDF_LOGE("%s: device is NULL", __func__);
         return HDF_ERR_INVALID_OBJECT;
     }
 
-    ret = HDF_SUCCESS;
-    DEV_RES_NODE_FOR_EACH_CHILD_NODE(device->property, childNode) {
-        ret = LinuxI2cParseAndInit(device, childNode);
-        if (ret != HDF_SUCCESS) {
-            break;
-        }
-    }
-
+    ret = i2c_for_each_dev(NULL, LinuxI2cProbe);
+    HDF_LOGI("%s: done", __func__);
     return ret;
-}
-
-static void LinuxI2cRemoveByNode(const struct DeviceResourceNode *node)
-{
-    int32_t ret;
-    int16_t bus;
-    struct I2cCntlr *cntlr = NULL;
-    struct DeviceResourceIface *drsOps = NULL;
-
-    drsOps = DeviceResourceGetIfaceInstance(HDF_CONFIG_SOURCE);
-    if (drsOps == NULL || drsOps->GetUint32 == NULL) {
-        HDF_LOGE("%s: invalid drs ops fail!", __func__);
-        return;
-    }
-
-    ret = drsOps->GetUint16(node, "bus", (uint16_t *)&bus, 0);
-    if (ret != HDF_SUCCESS) {
-        HDF_LOGE("%s: read bus fail!", __func__);
-        return;
-    }
-
-    cntlr = I2cCntlrGet(bus);
-    if (cntlr != NULL && cntlr->priv == node) {
-        I2cCntlrPut(cntlr);
-        I2cCntlrRemove(cntlr);
-        OsalMemFree(cntlr);
-    }
-    return;
 }
 
 static void LinuxI2cRelease(struct HdfDeviceObject *device)
 {
-    const struct DeviceResourceNode *childNode = NULL;
-
     HDF_LOGI("%s: enter", __func__);
-    if (device == NULL || device->property == NULL) {
-        HDF_LOGE("%s: device or property is NULL", __func__);
+    if (device == NULL) {
+        HDF_LOGE("%s: device is NULL", __func__);
         return;
     }
 
-    DEV_RES_NODE_FOR_EACH_CHILD_NODE(device->property, childNode) {
-        LinuxI2cRemoveByNode(childNode);
-    }
+    (void)i2c_for_each_dev(NULL, LinuxI2cRemove);
 }
 
 struct HdfDriverEntry g_i2cLinuxDriverEntry = {
