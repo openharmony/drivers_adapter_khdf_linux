@@ -35,7 +35,7 @@ else
 obj-$(CONFIG_DRIVERS_HDF)  += hcs/
 endif
 endif
-$(info CONFIG_DRIVERS_HDF_VIBRATOR = $(CONFIG_DRIVERS_HDF_VIBRATOR))
+
 obj-$(CONFIG_DRIVERS_HDF)  += manager/
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM) += platform/
 obj-$(CONFIG_DRIVERS_HDF_DISP) += model/display/
