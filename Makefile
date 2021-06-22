@@ -35,7 +35,7 @@ else
 obj-$(CONFIG_DRIVERS_HDF)  += hcs/
 endif
 endif
-
+$(info CONFIG_DRIVERS_HDF_VIBRATOR = $(CONFIG_DRIVERS_HDF_VIBRATOR))
 obj-$(CONFIG_DRIVERS_HDF)  += manager/
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM) += platform/
 obj-$(CONFIG_DRIVERS_HDF_DISP) += model/display/
@@ -44,3 +44,4 @@ obj-$(CONFIG_DRIVERS_HDF_WIFI) += model/network/wifi/
 obj-$(CONFIG_DRIVERS_HDF_SENSOR)  += model/sensor/
 obj-$(CONFIG_DRIVERS_HDF_STORAGE) += model/storage/
 obj-$(CONFIG_DRIVERS_HDF_BT) += model/network/bluetooth/
+obj-$(CONFIG_DRIVERS_HDF_VIBRATOR)  += model/misc/vibrator/
