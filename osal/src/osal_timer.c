@@ -168,7 +168,7 @@ int32_t OsalTimerDelete(OsalTimer *timer)
 	OsalMutexUnlock(&ktimer->mutex);
 
 	if (ktimer->mode == OSAL_TIMER_ONCE)
-		add_timer(&ktimer->timer);
+		mod_timer(&ktimer->timer, ktimer->timer.expires);
 
 	timer->realTimer = NULL;
 
