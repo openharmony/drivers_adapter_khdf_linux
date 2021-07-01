@@ -44,3 +44,4 @@ obj-$(CONFIG_DRIVERS_HDF_WIFI) += model/network/wifi/
 obj-$(CONFIG_DRIVERS_HDF_SENSOR)  += model/sensor/
 obj-$(CONFIG_DRIVERS_HDF_STORAGE) += model/storage/
 obj-$(CONFIG_DRIVERS_HDF_BT) += model/network/bluetooth/
+obj-$(CONFIG_DRIVERS_HDF_VIBRATOR)  += model/misc/vibrator/
