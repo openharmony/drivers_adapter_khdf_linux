@@ -54,6 +54,13 @@ obj-$(CONFIG_DRIVERS_HDF_WIFI) += $(HDF_FRAMWORK_TEST_ROOT)/wifi/hdf_wifi_test.o
 
 obj-$(CONFIG_DRIVERS_HDF_SENSOR) += $(HDF_FRAMWORK_TEST_ROOT)/sensor/hdf_sensor_test.o
 
+obj-$(CONFIG_DRIVERS_HDF_AUDIO_TEST) += $(HDF_FRAMWORK_TEST_ROOT)/model/audio/src/hdf_audio_test.o \
+                                        $(HDF_FRAMWORK_TEST_ROOT)/model/audio/src/audio_host_test.o \
+                                        $(HDF_FRAMWORK_TEST_ROOT)/model/audio/src/audio_core_test.o \
+                                        $(HDF_FRAMWORK_TEST_ROOT)/model/audio/src/audio_parse_test.o \
+                                        $(HDF_FRAMWORK_TEST_ROOT)/model/audio/src/audio_sapm_test.o \
+                                        $(HDF_FRAMWORK_TEST_ROOT)/model/audio/src/audio_stream_dispatch_test.o
+
 ccflags-y += -Idrivers/hdf/framework/include \
              -Idrivers/hdf/framework/include/osal \
              -Idrivers/hdf/framework/include/utils \
@@ -74,4 +81,13 @@ ccflags-y += -Idrivers/hdf/framework/include \
              -Idrivers/hdf/framework/include/config \
              -Idrivers/hdf/framework/ability/config/hcs_parser/include \
              -Idrivers/hdf/framework/test/unittest/osal \
-             -Idrivers/hdf/khdf/osal/include
+             -Idrivers/hdf/khdf/osal/include \
+             -Idrivers/hdf/framework/model/audio/include \
+             -Idrivers/hdf/framework/model/audio/sapm/include \
+             -Idrivers/hdf/framework/model/audio/dispatch/include \
+             -Idrivers/hdf/framework/test/unittest/model/audio/include \
+             -Idrivers/hdf/framework/../peripheral/audio/interfaces/include \
+             -Idrivers/hdf/framework/model/audio/dispatch/include \
+             -Idrivers/hdf/framework/model/audio/device/codec/include \
+             -Idrivers/hdf/framework/model/audio/device/soc/include \
+             -Idrivers/hdf/framework/model/audio/device/accessory/include
