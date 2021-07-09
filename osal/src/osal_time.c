@@ -21,7 +21,7 @@
 #include <linux/export.h>
 #include <linux/rtc.h>
 #include <linux/string.h>
-#include <linux/time.h>
+#include <linux/timekeeping.h>
 #include "hdf_log.h"
 #include "osal_math.h"
 #include "securec.h"
@@ -33,17 +33,17 @@
 
 int32_t OsalGetTime(OsalTimespec *time)
 {
-	struct timeval tv;
+	struct timespec64 ts;
 
 	if (time == NULL) {
 		HDF_LOGE("%s invalid para", __func__);
 		return HDF_ERR_INVALID_PARAM;
 	}
 
-	(void)memset_s(&tv, sizeof(tv), 0, sizeof(tv));
-	do_gettimeofday(&tv);
-	time->sec = tv.tv_sec;
-	time->usec = tv.tv_usec;
+	(void)memset_s(&ts, sizeof(ts), 0, sizeof(ts));
+	ktime_get_ts64(&ts);
+	time->sec = ts.tv_sec;
+	time->usec = ts.tv_nsec / HDF_KILO_UNIT;
 
 	return HDF_SUCCESS;
 }
