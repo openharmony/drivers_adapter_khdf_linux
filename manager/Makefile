@@ -13,7 +13,7 @@
 #
 
 #SOURCES=$(wildcard *.c)
-SEC_LIB_SOURCES =   memcpy_s.c memmove_s.c memset_s.c securecutil.c secureinput_a.c secureprintoutput_a.c snprintf_s.c sprintf_s.c  strcat_s.c strcpy_s.c strncat_s.c strncpy_s.c strtok_s.c  vsnprintf_s.c vsprintf_s.c 
+SEC_LIB_SOURCES =   memcpy_s.c memmove_s.c memset_s.c securecutil.c secureinput_a.c secureprintoutput_a.c snprintf_s.c sprintf_s.c  strcat_s.c strcpy_s.c strncat_s.c strncpy_s.c strtok_s.c  vsnprintf_s.c vsprintf_s.c
 
 #SEC_LIB_SOURCES += fwscanf_s.c secureinput_w.c secureprintoutput_w.c swprintf_s.c swscanf_s.c vfwscanf_s.c vswprintf_s.c vswscanf_s.c vwscanf_s.c wcscat_s.c wcscpy_s.c wcsncat_s.c wcsncpy_s.c wcstok_s.c wmemcpy_s.c wmemmove_s.c wscanf_s.c
 #SEC_LIB_SOURCES:=$(wildcard ../../framework/libc_sec/src/*.c)
@@ -46,7 +46,6 @@ obj-y += \
               ../../../../framework/core/manager/src/devsvc_manager.o \
               ../../../../framework/core/manager/src/hdf_driver_installer.o \
               ../../../../framework/core/manager/src/hdf_host_info.o \
-              ../../../../framework/core/manager/src/power_state_manager.o \
               ../../../../framework/core/manager/src/power_state_token_clnt.o \
               ../../../../framework/core/shared/src/hdf_service_record.o \
               ../../../../framework/core/shared/src/hdf_device_info.o \
