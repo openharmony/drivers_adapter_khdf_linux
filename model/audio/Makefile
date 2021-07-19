@@ -34,7 +34,7 @@ obj-y += \
           $(KHDF_AUDIO_ROOT_DIR)/dispatch/src/audio_control_dispatch.o \
           $(KHDF_AUDIO_CODEC_DIR)/codec/hi3516_codec/src/hi3516_codec.o \
           $(KHDF_AUDIO_CODEC_DIR)/codec/hi3516_codec/src/hi3516_aiao.o \
-          $(KHDF_AUDIO_CODEC_DIR)/accessory/tfa9879_smartPA/src/tfa9879_codec.o
+          $(KHDF_AUDIO_CODEC_DIR)/accessory/tfa9879_smartpa/src/tfa9879_codec.o
 
 obj-$(CONFIG_ARCH_HI3516DV300) += \
           $(KHDF_AUDIO_ROOT_DIR)/core/src/audio_core.o \
@@ -51,7 +51,7 @@ obj-$(CONFIG_ARCH_HI3516DV300) += \
           $(KHDF_AUDIO_ROOT_DIR)/dispatch/src/audio_control_dispatch.o \
           $(KHDF_AUDIO_CODEC_DIR)/codec/hi3516_codec/src/hi3516_codec.o \
           $(KHDF_AUDIO_CODEC_DIR)/codec/hi3516_codec/src/hi3516_aiao.o \
-          $(KHDF_AUDIO_CODEC_DIR)/accessory/tfa9879_smartPA/src/tfa9879_codec.o
+          $(KHDF_AUDIO_CODEC_DIR)/accessory/tfa9879_smartpa/src/tfa9879_codec.o
 
 ccflags-y += -lm -lc  -lgcc -std=gnu99 -Werror \
              -Iinclude/$(KHDF_AUDIO_BASE_ROOT_DIR)/drivers/framework/include/platform \
@@ -79,6 +79,6 @@ ccflags-y += -lm -lc  -lgcc -std=gnu99 -Werror \
              -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/model/audio/device/codec/include \
              -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/model/audio/device/soc/include \
              -Iinclude/$(KHDF_AUDIO_CODEC_DIR)/codec/hi3516_codec/include \
-             -Iinclude/$(KHDF_AUDIO_CODEC_DIR)/accessory/tfa9879_smartPA/include \
+             -Iinclude/$(KHDF_AUDIO_CODEC_DIR)/accessory/tfa9879_smartpa/include \
              -Iinclude/$(KHDF_AUDIO_PERIPHERAL_ROOT_DIR)/audio/interfaces/include \
              -Iinclude/$(KHDF_AUDIO_CODEC_DIR)/include
