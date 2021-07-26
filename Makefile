@@ -17,34 +17,36 @@ obj-$(CONFIG_DRIVERS_HDF)  += osal/
 obj-$(CONFIG_DRIVERS_HDF)  += network/
 obj-$(CONFIG_DRIVERS_HDF)  += config/
 
-
 SUPPORT_LEVEL_STD_H := $(shell [[ "$(CONFIG_HDF_SUPPORT_LEVEL)" -ge 2 ]] && echo true)
 
-ifneq ($(SUPPORT_LEVEL_STD_H), true) # for L1
-ifeq ($(CONFIG_DRIVERS_HDF_TEST), y)
-obj-y  += ../../../../$(PRODUCT_PATH)/config/hdf_test/
-obj-y  += test/
-else
-obj-$(CONFIG_DRIVERS_HDF)  += ../../../../$(PRODUCT_PATH)/config/
+$(warning PRODUCT_PATH=$(PRODUCT_PATH))
+ifeq ($(PRODUCT_PATH),)
+$(error PRODUCT_PATH not)
 endif
-else # for L2+
+
+# for L2+, hcs config should in vendor/product_company/product_name/config/khdf
+ifeq ($(SUPPORT_LEVEL_STD_H), true)
+SUB_DIR:=khdf/
+endif
+
+ifeq ($(CONFIG_DRIVERS_HDF), y)
 ifeq ($(CONFIG_DRIVERS_HDF_TEST), y)
-obj-y  += hcs/hdf_test/
-obj-y  += test/
+obj-$(CONFIG_DRIVERS_HDF) += ../../../../$(PRODUCT_PATH)/config/$(SUB_DIR)/hdf_test/
+obj-$(CONFIG_DRIVERS_HDF) += test/
 else
-obj-$(CONFIG_DRIVERS_HDF)  += hcs/
+obj-$(CONFIG_DRIVERS_HDF) += ../../../../$(PRODUCT_PATH)/config/$(SUB_DIR)
 endif
 endif
 
-obj-$(CONFIG_DRIVERS_HDF)  += manager/
+obj-$(CONFIG_DRIVERS_HDF) += manager/
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM) += platform/
 obj-$(CONFIG_DRIVERS_HDF_DISP) += model/display/
-obj-$(CONFIG_DRIVERS_HDF_INPUT)  += model/input/
+obj-$(CONFIG_DRIVERS_HDF_INPUT) += model/input/
 obj-$(CONFIG_DRIVERS_HDF_WIFI) += model/network/wifi/
-obj-$(CONFIG_DRIVERS_HDF_USB_PNP_NOTIFY)  += model/usb/host/
-obj-$(CONFIG_DRIVERS_HDF_USB_F_GENERIC)  += model/usb/device/
-obj-$(CONFIG_DRIVERS_HDF_SENSOR)  += model/sensor/
+obj-$(CONFIG_DRIVERS_HDF_USB_PNP_NOTIFY) += model/usb/host/
+obj-$(CONFIG_DRIVERS_HDF_USB_F_GENERIC) += model/usb/device/
+obj-$(CONFIG_DRIVERS_HDF_SENSOR) += model/sensor/
 obj-$(CONFIG_DRIVERS_HDF_STORAGE) += model/storage/
 obj-$(CONFIG_DRIVERS_HDF_BT) += model/network/bluetooth/
-obj-$(CONFIG_DRIVERS_HDF_VIBRATOR)  += model/misc/vibrator/
+obj-$(CONFIG_DRIVERS_HDF_VIBRATOR) += model/misc/vibrator/
 obj-$(CONFIG_DRIVERS_HDF_AUDIO) += model/audio/
