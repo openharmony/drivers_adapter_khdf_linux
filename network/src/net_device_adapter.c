@@ -183,11 +183,10 @@ static int32_t NetDevDeInit(struct NetDeviceImpl *impl)
     return HDF_SUCCESS;
 }
 
-static int32_t NetDevAdd(struct NetDeviceImpl *impl,
-    Protocol80211IfType ifType)
+static int32_t NetDevAdd(struct NetDeviceImpl *impl)
 {
     struct net_device *dev = NULL;
-    int ret = 0;
+    int ret;
 
     if ((dev = GetDevFromDevImpl(impl)) == NULL) {
         return HDF_ERR_INVALID_PARAM;
