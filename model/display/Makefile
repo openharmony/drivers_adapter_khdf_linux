@@ -14,10 +14,15 @@
 
 DISPLAY_ROOT_DIR = ../../../../../framework/model/display/driver
 obj-y += \
-         $(DISPLAY_ROOT_DIR)/hdf_disp.o \
-         $(DISPLAY_ROOT_DIR)/lcd_abs_if.o
+         $(DISPLAY_ROOT_DIR)/hdf_disp.o
+
+obj-$(CONFIG_ARCH_SPRD) += \
+         $(DISPLAY_ROOT_DIR)/hdf_drm_panel.o \
+         $(DISPLAY_ROOT_DIR)/panel/ili9881c_boe.o
+
 obj-$(CONFIG_ARCH_HI3516DV300) += \
-         $(DISPLAY_ROOT_DIR)/hi35xx_disp.o
+         $(DISPLAY_ROOT_DIR)/adapter_soc/hi35xx_disp.o
+
 obj-$(CONFIG_DRIVERS_HDF_LCDKIT) += \
          $(DISPLAY_ROOT_DIR)/lcdkit/lite_lcdkit.o \
          $(DISPLAY_ROOT_DIR)/lcdkit/lcdkit_parse_config.o
@@ -28,6 +33,7 @@ obj-$(CONFIG_DRIVERS_HDF_LCD_ST7789) += \
 
 ccflags-y += -lm -lc -lgcc \
              -Iinclude/../drivers/hdf/framework/model/display/driver \
+             -Iinclude/../drivers/hdf/framework/model/display/driver/adapter_soc \
              -Iinclude/../drivers/hdf/framework/include/utils \
              -Iinclude/../drivers/hdf/framework/include/core \
              -Iinclude/../drivers/hdf/framework/core/common/include/host \
@@ -36,5 +42,7 @@ ccflags-y += -lm -lc -lgcc \
              -Iinclude/../drivers/hdf/framework/include/osal \
              -Iinclude/../drivers/hdf/framework/include/platform \
              -Iinclude/../drivers/hdf/framework/include/config \
-             -Iinclude/../drivers/hdf/khdf/osal/include
+             -Iinclude/../drivers/hdf/khdf/osal/include \
+             -Iinclude/linux \
+             -Iinclude/drm
 ccflags-y += -I$(PROJECT_ROOT)/third_party/bounds_checking_function/include
