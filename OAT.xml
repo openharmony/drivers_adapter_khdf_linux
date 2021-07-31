@@ -60,8 +60,10 @@ Note:If the text contains special characters, please escape them according to th
         <policylist>
             <policy name="projectPolicy" desc="">
                 <policyitem type="license" name="GPL" path=".*" desc="linux kernel adapter codes"/>
-                <!--policyitem type="compatibility" name="GPL" path=".*" desc="linux kernel adapter codes"/-->
-                <!--policyitem type="compatibility" name="GPL-2.0+" path=".*" desc="linux kernel adapter codes"/-->
+                <policyitem type="copyright" name="Samsung Electronics Co.," path=".*" rule="may" group="defaultGroup" filefilter="copyrightPolicyFilter" desc="kernel codes"/>
+                <policyitem type="copyright" name="Samsung Electronics" path=".*" rule="may" group="defaultGroup" filefilter="copyrightPolicyFilter" desc="kernel codes"/>
+                <policyitem type="copyright" name="David Brownell" path=".*" rule="may" group="defaultGroup" filefilter="copyrightPolicyFilter" desc="kernel codes"/>
+                <policyitem type="copyright" name="Agilent Technologies" path=".*" rule="may" group="defaultGroup" filefilter="copyrightPolicyFilter" desc="kernel codes"/>
             </policy>
         </policylist>
         <filefilterlist>
