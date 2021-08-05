@@ -23,6 +23,7 @@
 #include <linux/eventfd.h>
 #include <linux/dma-mapping.h>
 #include <linux/usb/cdc.h>
+#include <linux/interrupt.h>
 #include "u_generic.h"
 #include "u_f.h"
 #include "u_os_desc.h"
@@ -189,10 +190,10 @@ struct ffs_io_data {
 	uint32_t read;
 	uint32_t len;
 	uint32_t timeout;
-	unsigned long buf;
+	uint32_t buf;
 	uint32_t actual;
 	int      status;
-	struct work_struct work;
+	struct tasklet_struct task;
 	struct usb_ep *ep;
 	struct usb_request *req;
 	struct ffs_epfile *epfile;
@@ -237,11 +238,11 @@ static char *ffs_devnode(struct device *dev, umode_t *mode)
 }
 
 /* Control file aka ep0 *****************************************************/
-static struct ffs_memory *generic_find_ep0_memory_area(struct ffs_data *ffs, unsigned long buf, size_t len)
+static struct ffs_memory *generic_find_ep0_memory_area(struct ffs_data *ffs, uint32_t buf, uint32_t len)
 {
 	struct ffs_memory *ffsm = NULL;
 	struct ffs_memory *iter = NULL;
-	unsigned long buf_start = buf;
+	uint32_t buf_start = buf;
 	unsigned long flags;
 
 	spin_lock_irqsave(&ffs->mem_lock, flags);
@@ -276,7 +277,7 @@ static void ffs_ep0_async_io_complete(struct usb_ep *_ep, struct usb_request *re
 	io_data->status = io_data->req->status;
 	io_data->actual = io_data->req->actual;
 	kfifo_in(&ffs->reqEventFifo, &io_data->buf, sizeof(struct UsbFnReqEvent));
-	wake_up_locked(&ffs->wait_que);
+	wake_up_all(&ffs->wait_que);
 
 	list_del(&req->list);
 	usb_ep_free_request(io_data->ep, io_data->req);
@@ -832,6 +833,14 @@ static long ffs_ep0_ioctl(struct file *file, unsigned code, unsigned long value)
 	return ret;
 }
 
+#ifdef CONFIG_COMPAT
+static long ffs_ep0_compat_ioctl(struct file *file, unsigned code,
+		unsigned long value)
+{
+	return ffs_ep0_ioctl(file, code, value);
+}
+#endif
+
 static __poll_t ffs_ep0_poll(struct file *file, poll_table *wait)
 {
 	struct ffs_data *ffs = file->private_data;
@@ -927,12 +936,15 @@ static const struct file_operations ffs_ep0_operations = {
 	.read =		ffs_ep0_read,
 	.release =	ffs_ep0_release,
 	.unlocked_ioctl =	ffs_ep0_ioctl,
+#ifdef CONFIG_COMPAT
+	.compat_ioctl = ffs_ep0_compat_ioctl,
+#endif
 	.poll =		ffs_ep0_poll,
 	.mmap =     ffs_ep0_mmap,
 };
 
 /* "Normal" endpoints operations ********************************************/
-static struct ffs_memory *generic_find_memory_area(struct ffs_epfile *epfile, unsigned long buf, size_t len)
+static struct ffs_memory *generic_find_memory_area(struct ffs_epfile *epfile, uint32_t buf, uint32_t len)
 {
 	struct ffs_memory *ffsm = NULL, *iter;
 	unsigned long buf_start = (unsigned long)buf;
@@ -959,19 +971,30 @@ static void ffs_epfile_io_complete(struct usb_ep *_ep, struct usb_request *req)
 	}
 }
 
-static void ffs_epfile_async_io_complete(struct usb_ep *_ep, struct usb_request *req)
+static void epfile_task_proc(unsigned long context)
 {
-	struct ffs_io_data *io_data = req->context;
-	struct ffs_data *ffs = io_data->epfile->ffs;
-	mutex_lock(&io_data->epfile->mutex);
-	io_data->status = req->status;
-	io_data->actual = req->actual;
-	kfifo_in(&io_data->epfile->reqEventFifo, &io_data->buf, sizeof(struct UsbFnReqEvent));
-	wake_up_all(&io_data->epfile->wait_que);
+	struct ffs_io_data *io_data = (struct ffs_io_data *)context;
+	struct ffs_epfile *epfile = io_data->epfile;
+	unsigned long flags;
+
+	spin_lock_irqsave(&epfile->ffs->eps_lock, flags);
+	io_data->status = io_data->req->status;
+	io_data->actual = io_data->req->actual;
+	kfifo_in(&epfile->reqEventFifo, &io_data->buf, sizeof(struct UsbFnReqEvent));
 	list_del(&io_data->req->list);
 	usb_ep_free_request(io_data->ep, io_data->req);
 	kfree(io_data);
-	mutex_unlock(&io_data->epfile->mutex);
+	spin_unlock_irqrestore(&epfile->ffs->eps_lock, flags);
+	wake_up_all(&epfile->wait_que);
+}
+
+static void ffs_epfile_async_io_complete(struct usb_ep *_ep, struct usb_request *req)
+{
+	struct ffs_io_data *io_data = req->context;
+
+	tasklet_init(&io_data->task, epfile_task_proc, (unsigned long)io_data);
+	tasklet_schedule(&io_data->task);
+
 }
 
 static int ffs_epfile_open(struct inode *inode, struct file *file)
@@ -1369,12 +1392,16 @@ static ssize_t ffs_epfile_read(struct file *file, char __user *buf, size_t count
 {
 	int status = 0;
 	unsigned int copied = 0;
+	unsigned long flags;
 	struct ffs_epfile *epfile = file->private_data;
 	ENTER();
 	if (kfifo_is_empty(&epfile->reqEventFifo)) {
 		return 0;
 	}
+	spin_lock_irqsave(&epfile->ffs->eps_lock, flags);
 	status = kfifo_to_user(&epfile->reqEventFifo, buf, count, &copied) == 0 ? copied : -1;
+	spin_unlock_irqrestore(&epfile->ffs->eps_lock, flags);
+
 	return status;
 }
 
