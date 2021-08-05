@@ -48,27 +48,27 @@ struct IoData {
 	uint32_t read;
 	uint32_t len;
 	uint32_t timeout;
-	unsigned long buf;
+	uint32_t buf;
 };
 
 struct UsbFnReqEvent {
-	unsigned long buf;
+	uint32_t buf;
 	uint32_t actual;
 	int      status;
 };
 
 struct ffs_memory{
-  unsigned long vm_start;
   unsigned long mem;
+  uint32_t vm_start;
   uint32_t size;
   struct list_head memlist;
 };
 
 struct generic_memory{
-  size_t size;
-  unsigned long buf;
-  char storage[];
+  uint32_t size;
+  uint32_t buf;
 };
+
 
 #define FUNCTIONFS_NEWFN                     _IOW('g', 60, struct FuncNew)
 #define FUNCTIONFS_DELFN                     _IOW('g', 61, struct FuncNew)
