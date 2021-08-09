@@ -31,10 +31,10 @@ endif
 
 ifeq ($(CONFIG_DRIVERS_HDF), y)
 ifeq ($(CONFIG_DRIVERS_HDF_TEST), y)
-obj-$(CONFIG_DRIVERS_HDF) += ../../../../$(PRODUCT_PATH)/config/$(SUB_DIR)/hdf_test/
+obj-$(CONFIG_DRIVERS_HDF) += ../../../../$(PRODUCT_PATH)/hdf_config/$(SUB_DIR)/hdf_test/
 obj-$(CONFIG_DRIVERS_HDF) += test/
 else
-obj-$(CONFIG_DRIVERS_HDF) += ../../../../$(PRODUCT_PATH)/config/$(SUB_DIR)
+obj-$(CONFIG_DRIVERS_HDF) += ../../../../$(PRODUCT_PATH)/hdf_config/$(SUB_DIR)
 endif
 endif
 
