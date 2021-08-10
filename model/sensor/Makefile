@@ -25,10 +25,15 @@ obj-$(CONFIG_DRIVERS_HDF_SENSOR) += \
 obj-$(CONFIG_DRIVERS_HDF_SENSOR_ACCEL) += $(SENSOR_ROOT_DIR)/accel/sensor_accel_driver.o \
                $(SENSOR_ROOT_DIR)/chipset/accel/accel_bmi160.o
 
+obj-$(CONFIG_DRIVERS_HDF_SENSOR_GYRO) += $(SENSOR_ROOT_DIR)/gyro/sensor_gyro_driver.o \
+               $(SENSOR_ROOT_DIR)/chipset/gyro/gyro_bmi160.o
+
 ccflags-y += -Idrivers/hdf/framework/model/sensor/driver/include \
              -Idrivers/hdf/framework/model/sensor/driver/common/include \
              -Idrivers/hdf/framework/model/sensor/driver/chipset/accel \
              -Idrivers/hdf/framework/model/sensor/driver/accel \
+             -Idrivers/hdf/framework/model/sensor/driver/chipset/gyro \
+             -Idrivers/hdf/framework/model/sensor/driver/gyro \
              -Idrivers/hdf/framework/include/core \
              -Idrivers/hdf/framework/core/common/include/host \
              -Idrivers/hdf/framework/include/utils \
