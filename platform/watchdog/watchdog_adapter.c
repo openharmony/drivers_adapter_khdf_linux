@@ -20,6 +20,7 @@
 #include <asm/ioctls.h>
 #include <linux/watchdog.h>
 #include <linux/fs.h>
+#include <linux/version.h>
 #include "device_resource_if.h"
 #include "hdf_base.h"
 #include "hdf_log.h"
@@ -145,9 +146,13 @@ static struct watchdog_device *WdtCoreDataToWdd(void *wdCoreData)
      * struct watchdog_device *wdd;
      * ...
      * }
-     */
+     */ 
     struct WdtCoreDataHead {
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,14,182)
+        struct device dev;
+#else
         struct kref kref;
+#endif
         struct cdev cdev;
         struct watchdog_device *wdd;
     };
