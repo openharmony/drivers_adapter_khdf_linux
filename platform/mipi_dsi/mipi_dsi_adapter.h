@@ -21,8 +21,4 @@
 
 #include <linux/fs.h>
 
-int MipiDsiRegisterDevice(const char *name, uint32_t id, unsigned short mode, struct file_operations *ops);
-void MipiDsiUnregisterDevice(uint32_t id);
-int MipiDsiProcRegister(const char *name, uint32_t id, unsigned short mode, const struct file_operations *ops);
-void MipiDsiProcUnregister(const char *name, uint32_t id);
 #endif /* MIPI_DSI_ADAPTER_H */

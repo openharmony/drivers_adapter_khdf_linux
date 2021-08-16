@@ -16,18 +16,28 @@
  *
  */
 
+#include "mipi_tx_dev.h"
 #include <linux/fs.h>
 #include <linux/semaphore.h>
 #include <linux/seq_file.h>
+#include <linux/init.h>
+#include <linux/kdev_t.h>
+#include <linux/miscdevice.h>
+#include <linux/module.h>
+#include <linux/proc_fs.h>
+#include <linux/cdev.h>
+#include <linux/device.h>
 #include "hdf_base.h"
 #include "hdf_log.h"
-#include "mipi_dsi_adapter.h"
-#include "mipi_tx_dev.h"
-#include "mipi_tx_hi35xx.h"
-#include "mipi_tx_reg.h"
+#include "securec.h"
 #include "osal_io.h"
 #include "osal_mem.h"
-#include "securec.h"
+#include "osal_uaccess.h"
+#include <asm/io.h>
+#include <asm/uaccess.h>
+#include "mipi_dsi_adapter.h"
+#include "mipi_dsi_core.h"
+#include "mipi_tx_reg.h"
 
 #ifdef __cplusplus
 #if __cplusplus
@@ -38,281 +48,501 @@ extern "C"{
 /****************************************************************************
  * macro definition                                                         *
  ****************************************************************************/
+#define HDF_LOG_TAG                mipi_tx_dev
 #define MIPI_TX_DEV_NAME           "hi_mipi_tx"
 #define MIPI_TX_PROC_NAME          "mipi_tx"
+#define NAME_LEN                   20
 
-struct semaphore g_mipiTxSem;
-static int32_t MipiTxSemaInit(struct semaphore *sem, uint16_t val)
+struct MipiDsiVfsPara {
+    struct MipiDsiCntlr *cntlr;
+    struct miscdevice *miscdev;
+    struct semaphore sem;
+    void *priv;
+};
+
+static struct MipiDsiVfsPara g_vfsPara[MAX_CNTLR_CNT];
+static uint8_t g_curId = 0;
+static int32_t RegisterDevice(const char *name, uint8_t id, unsigned short mode, struct file_operations *ops)
 {
-    if (sem == NULL) {
-        return -1;
+    int32_t error;
+    struct miscdevice *dev = NULL;
+
+    if ((name == NULL) || (ops == NULL) || (id >= MAX_CNTLR_CNT)) {
+        HDF_LOGE("%s: name, ops or id is error.", __func__);
+        return HDF_FAILURE;
     }
-    sema_init(sem, val);
-    return 0;
+    dev = OsalMemCalloc(sizeof(struct miscdevice));
+    if (dev == NULL) {
+        HDF_LOGE("%s: [OsalMemCalloc] failed.", __func__);
+        return HDF_FAILURE;
+    }
+    dev->fops = ops;
+    dev->name = OsalMemCalloc(NAME_LEN + 1);
+    if (dev->name == NULL) {
+        OsalMemFree(dev);
+        HDF_LOGE("%s: [OsalMemCalloc] failed.", __func__);
+        return HDF_FAILURE;
+    }
+    if (id != 0) { /* 0 : id */
+        if (snprintf_s((char *)dev->name, NAME_LEN + 1, NAME_LEN, "%s%u", name, id) < 0) {
+            OsalMemFree((char *)dev->name);
+            OsalMemFree(dev);
+            HDF_LOGE("%s: [snprintf_s] failed.", __func__);
+            return HDF_FAILURE;
+        }
+    } else {
+        if (memcpy_s((char *)dev->name, NAME_LEN, name, strlen(name)) != EOK) {
+            OsalMemFree((char *)dev->name);
+            OsalMemFree(dev);
+            HDF_LOGE("%s: [memcpy_s] failed.", __func__);
+            return HDF_FAILURE;
+        }
+    }
+    ops->owner = THIS_MODULE;
+    dev->minor = MISC_DYNAMIC_MINOR;
+    dev->mode = mode;
+    error = misc_register(dev);
+    if (error < 0) {
+        printk("%s: id %u cannot register miscdev on minor=%d (err=%d)",
+            __func__, id, MISC_DYNAMIC_MINOR, error);
+        OsalMemFree((char *)dev->name);
+        OsalMemFree(dev);
+        return error;
+    }
+
+    g_vfsPara[id].miscdev = dev;
+    g_curId = id;
+    printk("mipi_dsi:create inode ok %s %d", dev->name, dev->minor);
+    HDF_LOGI("%s: success.", __func__);
+
+    return HDF_SUCCESS;
 }
 
-static void MipiTxSemaDestroy(const struct semaphore *sem)
+static int32_t ProcRegister(const char *name, uint8_t id, unsigned short mode, const struct file_operations *ops)
 {
+    char procName[NAME_LEN + 1];
+    struct proc_dir_entry* entry = NULL;
+    int32_t ret;
+
+    if ((name == NULL) || (ops == NULL) || (id >= MAX_CNTLR_CNT)) {
+        HDF_LOGE("%s: name, ops or id is error.", __func__);
+        return HDF_FAILURE;
+    }
+    if (memset_s(procName, NAME_LEN + 1, 0, NAME_LEN + 1) != EOK) {
+        HDF_LOGE("%s: [memcpy_s] failed.", __func__);
+        return HDF_FAILURE;
+    }
+    if (id != 0) {
+        ret = snprintf_s(procName, NAME_LEN + 1, NAME_LEN, "%s%u", name, id);
+    } else {
+        ret = snprintf_s(procName, NAME_LEN + 1, NAME_LEN, "%s", name);
+    }
+    if (ret < 0) {
+        printk(KERN_ERR "%s: procName %s snprintf_s fail", __func__, procName);
+        return HDF_FAILURE;
+    }
+    entry = proc_create(procName, mode, NULL, ops);
+    if (entry == NULL) {
+        printk(KERN_ERR "%s: proc_create name %s fail", __func__, procName);
+        return HDF_FAILURE;
+    }
+    HDF_LOGI("%s: success.", __func__);
+    return HDF_SUCCESS;
+}
+
+static void UnregisterDevice(uint8_t id)
+{
+    if (id >= MAX_CNTLR_CNT) {
+        HDF_LOGE("%s: id error.", __func__);
+        return;
+    }
+    struct miscdevice *dev = g_vfsPara[id].miscdev;
+    if (dev == NULL) {
+        HDF_LOGE("%s: dev is NULL.", __func__);
+        return;
+    }
+
+    misc_deregister(dev);
+    OsalMemFree((void *)dev->name);
+    dev->name = NULL;
+    OsalMemFree(dev);
+    dev = NULL;
+    g_curId = 0;
+    HDF_LOGI("%s: success.", __func__);
+}
+
+static void ProcUnregister(const char *name, uint8_t id)
+{
+    char procName[NAME_LEN + 1];
+    int32_t ret;
+
+    if (id >= MAX_CNTLR_CNT) {
+        HDF_LOGE("%s: id error.", __func__);
+        return;
+    }
+    if (memset_s(procName, NAME_LEN + 1, 0, NAME_LEN + 1) != EOK) {
+        HDF_LOGE("%s: [memcpy_s] failed.", __func__);
+        return;
+    }
+    if (id != 0) {
+        ret = snprintf_s(procName, NAME_LEN + 1, NAME_LEN, "%s%u", name, id);
+    } else {
+        ret = snprintf_s(procName, NAME_LEN + 1, NAME_LEN, "%s", name);
+    }
+    if (ret < 0) {
+        printk(KERN_ERR "%s: procName format fail", __func__);
+        return;
+    }
+    remove_proc_entry(procName, NULL);
+    HDF_LOGI("%s: success.", __func__);
+}
+
+static int32_t SemaInit(struct semaphore *sem, uint16_t val)
+{
+    if (sem == NULL) {
+        HDF_LOGE("%s: sem is NULL", __func__);
+        return HDF_FAILURE;
+    }
+    sema_init(sem, val);
+    return HDF_SUCCESS;
+}
+
+static void SemaDestroy(struct semaphore *sem)
+{
+    // don't support sema_destory(sem)!
     (void *)sem;
     return;
 }
 
-static int32_t MipiTxSemaDownInterruptable(const struct semaphore *sem)
+static int32_t SemaDownInterruptable(struct semaphore *sem)
 {
-    return down_interruptible((struct semaphore *)sem);
+    return down_interruptible(sem);
 }
 
-static void MipiTxUp(const struct semaphore *sem)
+static void SemaUp(struct semaphore *sem)
 {
-    up((struct semaphore *)sem);
+    up(sem);
 }
 
-static int g_enDev;
-static int g_enDevCfg;
-MipiTxDevCtxTag g_mipiTxDevCtx;
-
-static int MipiTxCheckCombDevCfg(const ComboDevCfgTag *devCfg)
+static uint8_t GetId()
 {
-    int i;
-    int validLaneId[LANE_MAX_NUM] = {0, 1, 2, 3};
+    if (g_curId >= MAX_CNTLR_CNT) {
+        HDF_LOGE("%s: failed g_curId = %u.", __func__, g_curId);
+        return 0;
+    }
 
-    if (g_enDev == TRUE) {
-        HDF_LOGE("mipi_tx dev has enable!\n");
-        return -1;
+    HDF_LOGI("%s: success.", __func__);
+    return g_curId;
+}
+
+static uint8_t GetIdFromFilep(struct file *filep)
+{
+    uint8_t id;
+    if (filep == NULL) {
+        HDF_LOGE("%s: filep is invalid.", __func__);
+        return 0;
     }
-    if (devCfg->devno != 0) {
-        HDF_LOGE("mipi_tx dev devno err!\n");
-        return -1;
+
+    if (filep->private_data == NULL) {
+        HDF_LOGE("%s: private_data is NULL.", __func__);
+        return 0;
     }
-    for (i = 0; i < LANE_MAX_NUM; i++) {
-        if ((devCfg->laneId[i] != validLaneId[i]) && (devCfg->laneId[i] != MIPI_TX_DISABLE_LANE_ID)) {
-            HDF_LOGE("mipi_tx dev laneId %d err!\n", devCfg->laneId[i]);
-            return -1;
+
+    id = (uint8_t)(filep->private_data);
+    if (id >= MAX_CNTLR_CNT) {
+        HDF_LOGE("%s: id error.", __func__);
+        return 0;
+    }
+
+    return id;
+}
+
+static struct MipiDsiCntlr *GetCntlrFromFilep(struct file *filep)
+{
+    uint8_t id;
+    if (filep == NULL) {
+        HDF_LOGE("%s: filep is invalid.", __func__);
+        return NULL;
+    }
+    id = GetId();
+
+    return g_vfsPara[id].cntlr;
+}
+
+static struct semaphore *GetSemaFromFilep(struct file *filep)
+{
+    uint8_t id;
+    if (filep == NULL) {
+        HDF_LOGE("%s: filep is invalid.", __func__);
+        return NULL;
+    }
+    id = GetId();
+
+    return &g_vfsPara[id].sem;
+}
+
+static struct MipiCfg *GetCfgFromFilep(struct file *filep)
+{
+    uint8_t id;
+    if (filep == NULL) {
+        HDF_LOGE("%s: filep is invalid.", __func__);
+        return NULL;
+    }
+    id = GetId();
+    if (g_vfsPara[id].cntlr == NULL) {
+        HDF_LOGE("%s: g_vfsPara[id].cntlr is NULL.", __func__);
+        return NULL;
+    }
+
+    return &(g_vfsPara[id].cntlr->cfg);
+}
+
+static int32_t MipiDsiDevSetCfg(struct MipiDsiCntlr *cntlr, struct MipiCfg *arg)
+{
+    int32_t ret;
+    struct MipiCfg *temp = NULL;
+
+    if (arg == NULL) {
+        HDF_LOGE("%s: arg is invalid.", __func__);
+        return HDF_ERR_INVALID_PARAM;
+    }
+
+    if (cntlr == NULL) {
+        HDF_LOGE("%s: cntlr is NULL.", __func__);
+        return HDF_ERR_INVALID_PARAM;
+    }
+
+    uint32_t size = sizeof(struct MipiCfg);
+    temp = (struct MipiCfg *)OsalMemCalloc(size);
+    if (temp == NULL) {
+        HDF_LOGE("%s: OsalMemCalloc error.", __func__);
+        return HDF_ERR_MALLOC_FAIL;
+    }
+
+    if (access_ok(VERIFY_READ, arg, size)) { /* user space */
+        if (CopyFromUser(temp, arg, size) != 0) {
+            OsalMemFree(temp);
+            temp = NULL;
+            HDF_LOGE("%s: [CopyFromUser] failed.", __func__);
+            return HDF_FAILURE;
+        }
+    } else { /* kernel space */
+        if (memcpy_s(temp, size, arg, size) != EOK) {
+            OsalMemFree(temp);
+            temp = NULL;
+            HDF_LOGE("%s: [memcpy_s] failed.", __func__);
+            return HDF_FAILURE;
         }
     }
-    if ((devCfg->outputMode != OUTPUT_MODE_CSI) && (devCfg->outputMode != OUTPUT_MODE_DSI_VIDEO) &&
-        (devCfg->outputMode != OUTPUT_MODE_DSI_CMD)) {
-        HDF_LOGE("mipi_tx dev outputMode %d err!\n", devCfg->outputMode);
-        return -1;
-    }
-    if ((devCfg->videoMode != BURST_MODE) && (devCfg->videoMode != NON_BURST_MODE_SYNC_PULSES) &&
-        (devCfg->videoMode != NON_BURST_MODE_SYNC_EVENTS)) {
-        HDF_LOGE("mipi_tx dev videoMode %d err!\n", devCfg->videoMode);
-        return -1;
-    }
-    if ((devCfg->outputFormat != OUT_FORMAT_RGB_16_BIT) && (devCfg->outputFormat != OUT_FORMAT_RGB_18_BIT) &&
-        (devCfg->outputFormat != OUT_FORMAT_RGB_24_BIT) && (devCfg->outputFormat !=
-        OUT_FORMAT_YUV420_8_BIT_NORMAL) && (devCfg->outputFormat != OUT_FORMAT_YUV420_8_BIT_LEGACY) &&
-        (devCfg->outputFormat != OUT_FORMAT_YUV422_8_BIT)) {
-        HDF_LOGE("mipi_tx dev outputFormat %d err!\n", devCfg->outputFormat);
-        return -1;
-    }
-    return 0;
-}
 
-int MipiTxSetComboDevCfg(const ComboDevCfgTag *devCfg)
-{
-    int ret;
+    ret = MipiDsiCntlrSetCfg(cntlr, temp);
+    g_curId = cntlr->devNo;
+    OsalMemFree(temp);
+    HDF_LOGI("%s: success.", __func__);
 
-    ret = MipiTxCheckCombDevCfg(devCfg);
-    if (ret < 0) {
-        HDF_LOGE("mipi_tx check combo_dev config failed!\n");
-        return ret;
-    }
-    /* set controller config */
-    MipiTxDrvSetControllerCfg(devCfg);
-    /* set phy config */
-    MipiTxDrvSetPhyCfg(devCfg);
-    ret = memcpy_s(&g_mipiTxDevCtx.devCfg, sizeof(ComboDevCfgTag), devCfg, sizeof(ComboDevCfgTag));
-    if (ret != EOK) {
-        return ret;
-    }
-    g_enDevCfg = TRUE;
     return ret;
 }
 
-static int MipiTxCheckSetCmdInfo(const CmdInfoTag *cmdInfo)
+int32_t MipiDsiDevSetCmd(struct MipiDsiCntlr *cntlr, struct DsiCmdDesc *arg)
 {
-    if (g_enDev == TRUE) {
-        HDF_LOGE("mipi_tx dev has enable!\n");
-        return -1;
+    int32_t ret;
+    struct DsiCmdDesc *temp = NULL;
+
+    if (arg == NULL) {
+        HDF_LOGE("%s: arg is invalid.", __func__);
+        return HDF_ERR_INVALID_PARAM;
     }
-    if (g_enDevCfg != TRUE) {
-        HDF_LOGE("mipi_tx dev has not config!\n");
-        return -1;
+
+    if (cntlr == NULL) {
+        HDF_LOGE("%s: cntlr is NULL.", __func__);
+        return HDF_ERR_INVALID_PARAM;
     }
-    if (cmdInfo->devno != 0) {
-        HDF_LOGE("mipi_tx devno %d err!\n", cmdInfo->devno);
-        return -1;
+
+    uint32_t size = sizeof(struct DsiCmdDesc);
+    temp = (struct DsiCmdDesc *)OsalMemCalloc(size);
+    if (temp == NULL) {
+        HDF_LOGE("%s: [OsalMemCalloc] error.", __func__);
+        return HDF_ERR_MALLOC_FAIL;
     }
-    /* When cmd is not NULL, cmd_size means the length of cmd or it means cmd and addr */
-    if (cmdInfo->cmd != NULL) {
-        if (cmdInfo->cmdSize > MIPI_TX_SET_DATA_SIZE) {
-            HDF_LOGE("mipi_tx dev cmd_size %d err!\n", cmdInfo->cmdSize);
-            return -1;
+
+    if (access_ok(VERIFY_READ, arg, size)) { /* user space */
+        if (CopyFromUser(temp, arg, size) != 0) {
+            OsalMemFree(temp);
+            temp = NULL;
+            HDF_LOGE("%s: [CopyFromUser] failed.", __func__);
+            return HDF_FAILURE;
+        }
+    } else { /* kernel space */
+        if (memcpy_s(temp, size, arg, size) != EOK) {
+            OsalMemFree(temp);
+            temp = NULL;
+            HDF_LOGE("%s: [memcpy_s] failed.", __func__);
+            return HDF_FAILURE;
         }
     }
-    return 0;
+
+    ret = MipiDsiCntlrTx(cntlr, temp);
+    OsalMemFree(temp);
+    HDF_LOGI("%s: success.", __func__);
+
+    return ret;
 }
 
-int MipiTxSetCmd(const CmdInfoTag *cmdInfo)
+int32_t MipiDsiDevGetCmd(struct MipiDsiCntlr *cntlr, GetDsiCmdDescTag *arg)
 {
-    int ret;
-
-    ret = MipiTxCheckSetCmdInfo(cmdInfo);
-    if (ret < 0) {
-        HDF_LOGE("mipi_tx check combo_dev config failed!\n");
-        return ret;
+    int32_t ret;
+    GetDsiCmdDescTag *temp = NULL;
+    if ((cntlr == NULL) || (arg == NULL)) {
+        HDF_LOGE("%s: cntlr or arg is NULL.", __func__);
+        return HDF_ERR_INVALID_PARAM;
     }
-    return MipiTxDrvSetCmdInfo(cmdInfo);
+
+    uint32_t size = sizeof(GetDsiCmdDescTag);
+    temp = (GetDsiCmdDescTag *)OsalMemCalloc(size);
+    if (temp == NULL) {
+        HDF_LOGE("%s: [OsalMemCalloc] error.", __func__);
+        return HDF_ERR_MALLOC_FAIL;
+    }
+    if (access_ok(VERIFY_READ, arg, size)) { /* user space */
+        if (CopyFromUser(temp, arg, size) != 0) {
+            HDF_LOGE("%s: [CopyFromUser] failed.", __func__);
+            goto fail0;
+        }
+    } else { /* kernel space */
+        if (memcpy_s(temp, size, arg, size) != EOK) {
+            HDF_LOGE("%s: [memcpy_s] failed.", __func__);
+            goto fail0;
+        }
+    }
+    ret = MipiDsiCntlrRx(cntlr, &temp->readCmd, temp->readLen, temp->out);
+    if (ret != HDF_SUCCESS) {
+        HDF_LOGE("%s: [MipiDsiCntlrRx] failed.", __func__);
+        goto fail0;
+    }
+    if (access_ok(VERIFY_WRITE, arg, size)) { /* user space */
+        if (CopyToUser(arg, temp, size) != 0) {
+            HDF_LOGE("%s: [CopyToUser] failed.", __func__);
+            goto fail0;
+        }
+    } else { /* kernel space */
+        if (memcpy_s(arg, size, temp, size) != EOK) {
+            HDF_LOGE("%s: [memcpy_s] failed.", __func__);
+            goto fail0;
+        }
+    }
+    OsalMemFree(temp);
+    temp = NULL;
+    HDF_LOGI("%s: success.", __func__);
+    return HDF_SUCCESS;
+fail0:
+    OsalMemFree(temp);
+    temp = NULL;
+    return HDF_FAILURE;
 }
 
-static int MipiTxCheckGetCmdInfo(const GetCmdInfoTag *getCmdInfo)
+static long MipiDsiDevIoctl(struct file *filep, unsigned int cmd, unsigned long arg)
 {
-    if (g_enDev == TRUE) {
-        HDF_LOGE("mipi_tx dev has enable!\n");
-        return -1;
-    }
-    if (g_enDevCfg != TRUE) {
-        HDF_LOGE("mipi_tx dev has not config!\n");
-        return -1;
-    }
-    if (getCmdInfo->devno != 0) {
-        HDF_LOGE("mipi_tx dev devno %d err!\n", getCmdInfo->devno);
-        return -1;
-    }
-    if ((getCmdInfo->getDataSize == 0) || (getCmdInfo->getDataSize > MIPI_TX_GET_DATA_SIZE)) {
-        HDF_LOGE("mipi_tx dev getDataSize %d err!\n", getCmdInfo->getDataSize);
-        return -1;
-    }
-    if (getCmdInfo->getData == NULL) {
-        HDF_LOGE("mipi_tx dev getData is null!\n");
-        return -1;
-    }
-    return 0;
-}
-
-int MipiTxGetCmd(GetCmdInfoTag *getCmdInfo)
-{
-    int ret;
-
-    ret = MipiTxCheckGetCmdInfo(getCmdInfo);
-    if (ret < 0) {
-        HDF_LOGE("mipi_tx check combo_dev config failed!\n");
-        return ret;
-    }
-    return MipiTxDrvGetCmdInfo(getCmdInfo);
-}
-
-static void MipiTxEnable(void)
-{
-    OutPutModeTag mode;
-
-    mode = g_mipiTxDevCtx.devCfg.outputMode;
-    MipiTxDrvEnableInput(mode);
-    g_enDev = TRUE;
-}
-
-static void MipiTxDisable(void)
-{
-    MipiTxDrvDisableInput();
-    g_enDev = FALSE;
-    g_enDevCfg = FALSE;
-}
-
-static long MipiTxIoctl(struct file *filep, unsigned int cmd, unsigned long arg)
-{
-    int ret = 0;
+    int32_t ret = HDF_SUCCESS;
     void *pArg = (void *)arg;
 
     if (filep == NULL || pArg == NULL) {
-        HDF_LOGE("invalid input param");
-        return -1;
+        HDF_LOGE("%s: filep or pArg is NULL.", __func__);
+        return HDF_FAILURE;
     }
-    if (MipiTxSemaDownInterruptable(&g_mipiTxSem)) {
-        return -1;
+    struct MipiDsiCntlr *cntlr = GetCntlrFromFilep(filep);
+    if (cntlr == NULL) {
+        HDF_LOGE("%s: cntlr is NULL.", __func__);
+        return HDF_FAILURE;
     }
+
+    struct semaphore *sem = GetSemaFromFilep(filep);
+    if (sem == NULL) {
+        HDF_LOGE("%s: sem is NULL.", __func__);
+        return HDF_FAILURE;
+    }
+
+    (void)SemaDownInterruptable(sem);
     switch (cmd) {
         case HI_MIPI_TX_SET_DEV_CFG:
-            ret = MipiTxSetComboDevCfg((ComboDevCfgTag *)pArg);
-            if (ret < 0) {
-                HDF_LOGE("mipi_tx set combo_dev config failed!\n");
-            }
+            ret = MipiDsiDevSetCfg(cntlr, (struct MipiCfg *)pArg);
             break;
         case HI_MIPI_TX_SET_CMD:
-            ret = MipiTxSetCmd((CmdInfoTag *)pArg);
-            if (ret < 0) {
-                HDF_LOGE("mipi_tx set cmd failed!\n");
-            }
+            ret = MipiDsiDevSetCmd(cntlr, (struct DsiCmdDesc *)pArg);
             break;
         case HI_MIPI_TX_GET_CMD:
-            ret = MipiTxGetCmd((GetCmdInfoTag *)pArg);
-            if (ret < 0) {
-                HDF_LOGE("mipi_tx get cmd failed!\n");
-            }
+            ret = MipiDsiDevGetCmd(cntlr, (GetDsiCmdDescTag *)pArg);
             break;
         case HI_MIPI_TX_ENABLE:
-            MipiTxEnable();
+            MipiDsiCntlrSetHsMode(cntlr);
+            HDF_LOGI("%s: [MipiDsiCntlrSetHsMode] do.", __func__);
             break;
         case HI_MIPI_TX_DISABLE:
-            MipiTxDisable();
+            MipiDsiCntlrSetLpMode(cntlr);
+            HDF_LOGI("%s: [MipiDsiCntlrSetLpMode] do.", __func__);
             break;
         default:
-            HDF_LOGE("invalid mipi_tx ioctl cmd");
+            HDF_LOGE("%s: [default] failed.", __func__);
             ret = -1;
             break;
     }
-    MipiTxUp(&g_mipiTxSem);
+    SemaUp(sem);
+
     return ret;
 }
 
-static int MipiTxInit(int smooth)
+static int MipiDsiDevOpen(struct inode *inode, struct file *filep)
 {
-    return MipiTxDrvInit(smooth);
-}
-
-static void MipiTxExit(void)
-{
-    MipiTxDrvExit();
-}
-
-static int MipiTxOpen(struct inode *inode, struct file *filep)
-{
+    uint8_t id;
     (void)inode;
     (void)filep;
+
+    id = GetId();
+    g_vfsPara[id].cntlr = MipiDsiCntlrOpen(id);
+    HDF_LOGI("%s: success.", __func__);
+
     return 0;
 }
 
-static int MipiTxRelease(struct inode *inode, struct file *filep)
+static int MipiDsiDevRelease(struct inode *inode, struct file *filep)
 {
+    uint8_t id;
     (void)inode;
     (void)filep;
+
+    id = GetId();
+    if (g_vfsPara[id].cntlr != NULL) {
+        MipiDsiCntlrClose(g_vfsPara[id].cntlr);
+    }
+    HDF_LOGI("%s: success.", __func__);
     return 0;
 }
 
-static void MipiTxProcDevShow(struct seq_file *s)
+static void MipiDsiDevProcDevShow(struct seq_file *s)
 {
-    ComboDevCfgTag *devCfg = NULL;
-    SyncInfoTag *syncInfo = NULL;
-    devCfg = (ComboDevCfgTag *)&g_mipiTxDevCtx.devCfg;
-    syncInfo = (SyncInfoTag *)&g_mipiTxDevCtx.devCfg.syncInfo;
+    struct MipiCfg *cfg = NULL;
+    struct DsiTimingInfo *t = NULL;
+    uint8_t id;
+
+    id = GetId();
+    if (g_vfsPara[id].cntlr == NULL) {
+        HDF_LOGE("%s: g_vfsPara[id].cntlr is NULL", __func__);
+        return;
+    }
+    cfg = &(g_vfsPara[id].cntlr->cfg);
+    t = &(cfg->timing);
 
     /* mipi tx device config */
     seq_printf(s, "----------MIPI_Tx DEV CONFIG---------------------------\n");
-    seq_printf(s, "%8s%8s%8s%8s%8s%15s%15s%15s%15s%15s\n",
-        "devno", "lane0", "lane1", "lane2", "lane3", "output_mode", "phy_data_rate", "pixel_clk(KHz)",
+    seq_printf(s, "%8s%15s%15s%15s%15s%15s\n",
+        "lane", "output_mode", "phy_data_rate", "pixel_clk(KHz)",
         "video_mode", "output_fmt");
-    seq_printf(s, "%8d%8d%8d%8d%8d%15d%15d%15d%15d%15d\n",
-        devCfg->devno,
-        devCfg->laneId[0],
-        devCfg->laneId[1],
-        devCfg->laneId[2], /* lina id 2 */
-        devCfg->laneId[3], /* lina id 3 */
-        devCfg->outputMode,
-        devCfg->phyDataRate,
-        devCfg->pixelClk,
-        devCfg->videoMode,
-        devCfg->outputFormat);
+    seq_printf(s, "%8d%15d%15d%15d%15d%15d\n",
+        cfg->lane,
+        cfg->mode,
+        cfg->phyDataRate,
+        cfg->pixelClk,
+        cfg->burstMode,
+        cfg->format);
     seq_printf(s, "\r\n");
     /* mipi tx device sync config */
     seq_printf(s, "----------MIPI_Tx SYNC CONFIG---------------------------\n");
@@ -320,124 +550,81 @@ static void MipiTxProcDevShow(struct seq_file *s)
         "pkt_size", "hsa_pixels", "hbp_pixels", "hline_pixels", "vsa_lines", "vbp_lines",
         "vfp_lines", "active_lines", "edpi_cmd_size");
     seq_printf(s, "%14d%14d%14d%14d%14d%14d%14d%14d%14d\n",
-        syncInfo->vidPktSize,
-        syncInfo->vidHsaPixels,
-        syncInfo->vidHbpPixels,
-        syncInfo->vidHlinePixels,
-        syncInfo->vidVsaLines,
-        syncInfo->vidVbpLines,
-        syncInfo->vidVfpLines,
-        syncInfo->vidActiveLines,
-        syncInfo->edpiCmdSize);
+        t->xPixels,
+        t->hsaPixels,
+        t->hbpPixels,
+        t->hlinePixels,
+        t->vsaLines,
+        t->vbpLines,
+        t->vfpLines,
+        t->ylines,
+        t->edpiCmdSize);
     seq_printf(s, "\r\n");
+    HDF_LOGI("%s: success.", __func__);
 }
 
-static void MipiTxProcDevStatusShow(struct seq_file *s)
-{
-    MipiTxDevPhyTag phyCtx;
-
-    MipiTxDrvGetDevStatus(&phyCtx);
-    /* mipi tx phy status */
-    seq_printf(s, "----------MIPI_Tx DEV STATUS---------------------------\n");
-    seq_printf(s, "%8s%8s%8s%8s%8s%8s%8s\n",
-        "width", "height", "HoriAll", "VertAll", "hbp", "hsa", "vsa");
-    seq_printf(s, "%8u%8u%8u%8u%8u%8u%8u\n",
-        phyCtx.hactDet,
-        phyCtx.vactDet,
-        phyCtx.hallDet,
-        phyCtx.vallDet,
-        phyCtx.hbpDet,
-        phyCtx.hsaDet,
-        phyCtx.vsaDet);
-    seq_printf(s, "\r\n");
-}
-
-static int MipiTxProcShow(struct seq_file *m, void *v)
+static int MipiDsiDevProcShow(struct seq_file *m, void *v)
 {
     seq_printf(m, "\nModule: [MIPI_TX], Build Time["__DATE__", "__TIME__"]\n");
-    MipiTxProcDevShow(m);
-    MipiTxProcDevStatusShow(m);
+    MipiDsiDevProcDevShow(m);
     HDF_LOGI("%s: v %p", __func__, v);
+    HDF_LOGI("%s: success.", __func__);
     return 0;
 }
 
-static int MipiTxProcOpen(struct inode *inode, struct file *file)
+static int MipiDsiDevProcOpen(struct inode *inode, struct file *file)
 {
-    return single_open(file, MipiTxProcShow, NULL);
+    (void)inode;
+    HDF_LOGE("%s: enter.", __func__);
+    return single_open(file, MipiDsiDevProcShow, NULL);
 }
 
-static const struct file_operations g_procMipiTxOps = {
-    .open = MipiTxProcOpen,
+static const struct file_operations g_procMipiDsiDevOps = {
+    .open = MipiDsiDevProcOpen,
     .read = seq_read,
 };
 
 static const struct file_operations g_mipiTxfOps = {
-    .open = MipiTxOpen,
-    .release = MipiTxRelease,
-    .unlocked_ioctl = MipiTxIoctl,
+    .open = MipiDsiDevOpen,
+    .release = MipiDsiDevRelease,
+    .unlocked_ioctl = MipiDsiDevIoctl,
 };
 
-static int MipiVfsInit(int smooth)
+int32_t MipiDsiDevModuleInit(uint8_t id)
 {
-    int ret;
+    int32_t ret;
 
-    (void)smooth;
     /* 0660 : node mode */
-    ret = MipiDsiRegisterDevice(MIPI_TX_DEV_NAME, 0, 0660, (struct file_operations *)&g_mipiTxfOps);
+    ret = RegisterDevice(MIPI_TX_DEV_NAME, id, 0660, (struct file_operations *)&g_mipiTxfOps);
     if (ret < 0) {
-        HDF_LOGE("%s: mipi dsi reg dev fail:%d", __func__, ret);
+        HDF_LOGE("%s: [RegisterDevice] fail: %d.", __func__, ret);
         return ret;
     }
-    ret = MipiDsiProcRegister(MIPI_TX_PROC_NAME, 0, 0440, &g_procMipiTxOps); /* 0440 : proc file mode */
+    ret = ProcRegister(MIPI_TX_PROC_NAME, id, 0440, &g_procMipiDsiDevOps); /* 0440 : proc file mode */
     if (ret < 0) {
-        MipiDsiUnregisterDevice(0);
-        HDF_LOGE("%s: mipi dsi reg proc fail:%d", __func__, ret);
+        UnregisterDevice(id);
+        HDF_LOGE("%s: [ProcRegister] fail: %d.", __func__, ret);
         return ret;
     }
 
-    return 0;
-}
-
-static void MipiVfsRemove(void)
-{
-    MipiDsiUnregisterDevice(0);
-    MipiDsiProcUnregister(MIPI_TX_PROC_NAME, 0);
-}
-
-int MipiTxModuleInit(int smooth)
-{
-    int ret;
-
-    (void)MipiVfsInit;
-
-    ret = MipiTxInit(smooth);
-    if (ret != 0) {
-        HDF_LOGE("hi_mipi_init failed!\n");
-        goto fail1;
+    ret = SemaInit(&g_vfsPara[id].sem, 1);
+    if (ret != HDF_SUCCESS) {
+        UnregisterDevice(id);
+        ProcUnregister(MIPI_TX_PROC_NAME, id);
+        HDF_LOGE("%s: [SemaInit] failed.", __func__);
+        return HDF_FAILURE;
     }
-    ret = MipiTxSemaInit(&g_mipiTxSem, 1);
-    if (ret != 0) {
-        HDF_LOGE("init sema error!\n");
-        goto fail2;
-    }
-    HDF_LOGE("load mipi_tx driver successful!\n");
-    return 0;
-
-fail2:
-    MipiTxExit();
-fail1:
-    (void)MipiVfsRemove;
-
-    HDF_LOGE("load mipi_tx driver failed!\n");
-    return ret;
+    HDF_LOGI("%s: success!", __func__);
+    return HDF_SUCCESS;
 }
 
-void MipiTxModuleExit(void)
+void MipiDsiDevModuleExit(uint8_t id)
 {
-    MipiTxSemaDestroy(&g_mipiTxSem);
-    MipiTxExit();
-    (void)MipiVfsRemove;
-    HDF_LOGI("unload mipi_tx driver ok!\n");
+    SemaDestroy(&g_vfsPara[id].sem);
+    UnregisterDevice(id);
+    ProcUnregister(MIPI_TX_PROC_NAME, id);
+
+    HDF_LOGI("%s: success!", __func__);
 }
 
 #ifdef __cplusplus
