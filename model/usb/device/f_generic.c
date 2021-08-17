@@ -488,7 +488,7 @@ static ssize_t __ffs_ep0_read_events(struct ffs_data *ffs, char __user *buf, siz
 	const size_t size = n * sizeof *events;
 	unsigned i = 0;
 
-	memset(events, 0, size);
+	memset_s(events, size, 0, size);
 
 	do {
 		events[i].type = ffs->ev.types[i];
@@ -500,7 +500,7 @@ static ssize_t __ffs_ep0_read_events(struct ffs_data *ffs, char __user *buf, siz
 
 	ffs->ev.count -= n;
 	if (ffs->ev.count)
-		memmove(ffs->ev.types, ffs->ev.types + n,
+		memmove_s(ffs->ev.types, ffs->ev.count * sizeof *ffs->ev.types, ffs->ev.types + n,
 			ffs->ev.count * sizeof *ffs->ev.types);
 
 	spin_unlock_irq(&ffs->ev.waitq.lock);
@@ -765,9 +765,9 @@ static long ffs_ep0_ioctl(struct file *file, unsigned code, unsigned long value)
 			if (unlikely(!p))
 				return -ENOMEM;
 		} else {
-			memset(p, 0, sizeof(*p));
+			memset_s(p, sizeof(struct ffs_io_data), 0, sizeof(*p));
 		}
-		memcpy(p, &myIoData, sizeof(struct IoData));
+		memcpy_s(p, sizeof(struct ffs_io_data), &myIoData, sizeof(struct IoData));
 		ret = ffs_ep0_iorw(file, p);
 		if (ret == -EIOCBQUEUED) {
 			return 0;
@@ -1272,9 +1272,9 @@ static long ffs_epfile_ioctl(struct file *file, unsigned code, unsigned long val
 				return -ENOMEM;
 			}
 		} else {
-			memset(p, 0, sizeof(*p));
+			memset_s(p, sizeof(struct ffs_io_data), 0, sizeof(*p));
 		}
-		memcpy(p,&myIoData,sizeof(struct IoData));
+		memcpy_s(p, sizeof(struct ffs_io_data), &myIoData, sizeof(struct IoData));
 		spin_unlock_irq(&epfile->ffs->eps_lock);
 		ret = ffs_epfile_iorw(file, p);
 		if (ret == -EIOCBQUEUED) {
@@ -1470,13 +1470,13 @@ static long usbfn_ioctl(struct file *file, unsigned int cmd, unsigned long value
 			if (unlikely(!ffs))
 				return (-ENOMEM);
 
-			memcpy(ffs->dev_name, newfn.name, newfn.nameLen);
+			memcpy_s(ffs->dev_name, MAX_NAMELEN, newfn.name, newfn.nameLen);
 			if (unlikely(!ffs->dev_name)) {
 				ffs_data_put(ffs);
 				return (-ENOMEM);
 			}
 
-			sprintf(nameEp0, "%s.ep%u", ffs->dev_name, 0);
+			sprintf_s(nameEp0, MAX_NAMELEN, "%s.ep%u", ffs->dev_name, 0);
 			ffs_dev = ffs_acquire_dev(newfn.name);
 			if (IS_ERR(ffs_dev)) {
 				ffs_data_put(ffs);
@@ -1760,9 +1760,9 @@ static int ffs_epfiles_create(struct ffs_data *ffs)
 		INIT_LIST_HEAD(&epfile->memory_list);
 		init_waitqueue_head(&epfile->wait_que);
 		if (ffs->user_flags & FUNCTIONFS_VIRTUAL_ADDR)
-			sprintf(epfile->name, "%s.ep%02x", ffs->dev_name, ffs->eps_addrmap[i]);
+			sprintf_s(epfile->name, MAX_NAMELEN, "%s.ep%02x", ffs->dev_name, ffs->eps_addrmap[i]);
 		else
-			sprintf(epfile->name, "%s.ep%u", ffs->dev_name, i);
+			sprintf_s(epfile->name, MAX_NAMELEN, "%s.ep%u", ffs->dev_name, i);
 
 		cdev_init(&epfile->cdev, &ffs_epfile_operations);
 		epfile->devno=MKDEV(MAJOR(ffs->devno), i);
@@ -2809,7 +2809,8 @@ static int __ffs_func_bind_do_os_desc(enum ffs_os_desc_type type,
 
 		t = &func->function.os_desc_table[desc->bFirstInterfaceNumber];
 		t->if_id = func->interfaces_nums[desc->bFirstInterfaceNumber];
-		memcpy(t->os_desc->ext_compat_id, &desc->CompatibleID,
+		memcpy_s(t->os_desc->ext_compat_id, ARRAY_SIZE(desc->CompatibleID) +
+		       ARRAY_SIZE(desc->SubCompatibleID), &desc->CompatibleID,
 		       ARRAY_SIZE(desc->CompatibleID) +
 		       ARRAY_SIZE(desc->SubCompatibleID));
 		length = sizeof(*desc);
@@ -2841,7 +2842,7 @@ static int __ffs_func_bind_do_os_desc(enum ffs_os_desc_type type,
 		ext_prop_data = func->ffs->ms_os_descs_ext_prop_data_avail;
 		func->ffs->ms_os_descs_ext_prop_data_avail +=
 			ext_prop->data_len;
-		memcpy(ext_prop_data,
+		memcpy_s(ext_prop_data, ext_prop->data_len,
 		       usb_ext_prop_data_ptr(data, ext_prop->name_len),
 		       ext_prop->data_len);
 		/* unicode data reported to the host as "WCHAR"s */
@@ -2855,7 +2856,7 @@ static int __ffs_func_bind_do_os_desc(enum ffs_os_desc_type type,
 		}
 		ext_prop->data = ext_prop_data;
 
-		memcpy(ext_prop_name, usb_ext_prop_name_ptr(data),
+		memcpy_s(ext_prop_name, ext_prop->name_len, usb_ext_prop_name_ptr(data),
 		       ext_prop->name_len);
 		/* property name reported to the host as "WCHAR"s */
 		ext_prop->name_len *= 2;
@@ -2978,10 +2979,10 @@ static int _ffs_func_bind(struct usb_configuration *c, struct usb_function *f)
 		vla_ptr(vlabuf, d, ext_prop_data);
 
 	/* Copy descriptors  */
-	memcpy(vla_ptr(vlabuf, d, raw_descs), ffs->raw_descs,
+	memcpy_s(vla_ptr(vlabuf, d, raw_descs), ffs->raw_descs_length, ffs->raw_descs,
 	       ffs->raw_descs_length);
 
-	memset(vla_ptr(vlabuf, d, inums), 0xff, d_inums__sz);
+	memset_s(vla_ptr(vlabuf, d, inums), d_inums__sz, 0xff, d_inums__sz);
 	eps_ptr = vla_ptr(vlabuf, d, eps);
 	for (i = 0; i < ffs->eps_count; i++)
 		eps_ptr[i].num = -1;
@@ -3426,7 +3427,7 @@ static void ffs_free_inst(struct usb_function_instance *f)
 static int ffs_set_inst_name(struct usb_function_instance *fi, const char *name)
 {
     char name_dev[MAX_NAMELEN] = {0};
-    sprintf(name_dev,"%s.%s",FUNCTION_GENERIC,name);
+    sprintf_s(name_dev, MAX_NAMELEN, "%s.%s", FUNCTION_GENERIC, name);
 	if (strlen(name_dev) >= FIELD_SIZEOF(struct ffs_dev, name))
 		return -ENAMETOOLONG;
 	return ffs_name_dev_adapter(to_f_fs_opts(fi)->dev, name_dev);

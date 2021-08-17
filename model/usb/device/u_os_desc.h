@@ -15,6 +15,7 @@
 
 #include <asm/unaligned.h>
 #include <linux/nls.h>
+#include "securec.h"
 
 #define USB_EXT_PROP_DW_SIZE			0
 #define USB_EXT_PROP_DW_PROPERTY_DATA_TYPE	4
@@ -97,7 +98,7 @@ static inline void usb_ext_prop_put_binary(u8 *buf, int pnl, const u8 *data,
 					   int data_len)
 {
 	put_unaligned_le32(data_len, usb_ext_prop_data_len_ptr(buf, pnl));
-	memcpy(usb_ext_prop_data_ptr(buf, pnl), data, data_len);
+	memcpy_s(usb_ext_prop_data_ptr(buf, pnl), data_len, data, data_len);
 }
 
 static inline int usb_ext_prop_put_unicode(u8 *buf, int pnl, const char *string,
