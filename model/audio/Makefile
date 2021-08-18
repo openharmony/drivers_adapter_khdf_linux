@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+# Copyright (c) 2021 Huawei Device Co., Ltd.
 #
 # This software is licensed under the terms of the GNU General Public
 # License version 2, as published by the Free Software Foundation, and
@@ -23,35 +23,45 @@ obj-y += \
           $(KHDF_AUDIO_ROOT_DIR)/core/src/audio_core.o \
           $(KHDF_AUDIO_ROOT_DIR)/core/src/audio_host.o \
           $(KHDF_AUDIO_ROOT_DIR)/core/src/audio_parse.o \
-          $(KHDF_AUDIO_ROOT_DIR)/core/src/codec_core.o \
+          $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_accessory_base.o \
+          $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_codec_base.o \
+          $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_dsp_base.o \
+          $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_platform_base.o \
           $(KHDF_AUDIO_ROOT_DIR)/sapm/src/audio_sapm.o \
-          $(KHDF_AUDIO_ROOT_DIR)/device/soc/src/platform.o \
-          $(KHDF_AUDIO_ROOT_DIR)/device/soc/src/dai.o \
-          $(KHDF_AUDIO_ROOT_DIR)/device/soc/src/dsp.o \
-          $(KHDF_AUDIO_ROOT_DIR)/device/codec/src/codec.o \
-          $(KHDF_AUDIO_ROOT_DIR)/device/accessory/src/accessory.o \
           $(KHDF_AUDIO_ROOT_DIR)/dispatch/src/audio_stream_dispatch.o \
           $(KHDF_AUDIO_ROOT_DIR)/dispatch/src/audio_control_dispatch.o \
-          $(KHDF_AUDIO_CODEC_DIR)/codec/hi3516_codec/src/hi3516_codec.o \
-          $(KHDF_AUDIO_CODEC_DIR)/codec/hi3516_codec/src/hi3516_aiao.o \
-          $(KHDF_AUDIO_CODEC_DIR)/accessory/tfa9879_smartpa/src/tfa9879_codec.o
+          $(KHDF_AUDIO_CODEC_DIR)/tfa9879/accessory/src/tfa9879_accessory_adapter.o \
+          $(KHDF_AUDIO_CODEC_DIR)/tfa9879/accessory/src/tfa9879_accessory_impl.o \
+          $(KHDF_AUDIO_CODEC_DIR)/hi3516dv300/codec/src/hi3516_codec_adapter.o \
+          $(KHDF_AUDIO_CODEC_DIR)/hi3516dv300/codec/src/hi3516_codec_impl.o \
+          $(KHDF_AUDIO_CODEC_DIR)/hi3516dv300/codec/src/hi3516_codec_ops.o \
+          $(KHDF_AUDIO_CODEC_DIR)/hi3516dv300/dsp/src/dsp_adapter.o \
+          $(KHDF_AUDIO_CODEC_DIR)/hi3516dv300/soc/src/hi3516_dai_adapter.o \
+          $(KHDF_AUDIO_CODEC_DIR)/hi3516dv300/soc/src/hi3516_aiao_impl.o \
+          $(KHDF_AUDIO_CODEC_DIR)/hi3516dv300/soc/src/hi3516_platform_ops.o \
+          $(KHDF_AUDIO_CODEC_DIR)/hi3516dv300/soc/src/hi3516_platform_adapter.o
 
 obj-$(CONFIG_ARCH_HI3516DV300) += \
           $(KHDF_AUDIO_ROOT_DIR)/core/src/audio_core.o \
           $(KHDF_AUDIO_ROOT_DIR)/core/src/audio_host.o \
           $(KHDF_AUDIO_ROOT_DIR)/core/src/audio_parse.o \
-          $(KHDF_AUDIO_ROOT_DIR)/core/src/codec_core.o \
+          $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_accessory_base.o \
+          $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_codec_base.o \
+          $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_dsp_base.o \
+          $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_platform_base.o \
           $(KHDF_AUDIO_ROOT_DIR)/sapm/src/audio_sapm.o \
-          $(KHDF_AUDIO_ROOT_DIR)/device/soc/src/platform.o \
-          $(KHDF_AUDIO_ROOT_DIR)/device/soc/src/dai.o \
-          $(KHDF_AUDIO_ROOT_DIR)/device/soc/src/dsp.o \
-          $(KHDF_AUDIO_ROOT_DIR)/device/codec/src/codec.o \
-          $(KHDF_AUDIO_ROOT_DIR)/device/accessory/src/accessory.o \
           $(KHDF_AUDIO_ROOT_DIR)/dispatch/src/audio_stream_dispatch.o \
           $(KHDF_AUDIO_ROOT_DIR)/dispatch/src/audio_control_dispatch.o \
-          $(KHDF_AUDIO_CODEC_DIR)/codec/hi3516_codec/src/hi3516_codec.o \
-          $(KHDF_AUDIO_CODEC_DIR)/codec/hi3516_codec/src/hi3516_aiao.o \
-          $(KHDF_AUDIO_CODEC_DIR)/accessory/tfa9879_smartpa/src/tfa9879_codec.o
+          $(KHDF_AUDIO_CODEC_DIR)/tfa9879/accessory/src/tfa9879_accessory_adapter.o \
+          $(KHDF_AUDIO_CODEC_DIR)/tfa9879/accessory/src/tfa9879_accessory_impl.o \
+          $(KHDF_AUDIO_CODEC_DIR)/hi3516dv300/codec/src/hi3516_codec_adapter.o \
+          $(KHDF_AUDIO_CODEC_DIR)/hi3516dv300/codec/src/hi3516_codec_impl.o \
+          $(KHDF_AUDIO_CODEC_DIR)/hi3516dv300/codec/src/hi3516_codec_ops.o \
+          $(KHDF_AUDIO_CODEC_DIR)/hi3516dv300/dsp/src/dsp_adapter.o \
+          $(KHDF_AUDIO_CODEC_DIR)/hi3516dv300/soc/src/hi3516_dai_adapter.o \
+          $(KHDF_AUDIO_CODEC_DIR)/hi3516dv300/soc/src/hi3516_aiao_impl.o \
+          $(KHDF_AUDIO_CODEC_DIR)/hi3516dv300/soc/src/hi3516_platform_ops.o \
+          $(KHDF_AUDIO_CODEC_DIR)/hi3516dv300/soc/src/hi3516_platform_adapter.o
 
 ccflags-y += -lm -lc  -lgcc -std=gnu99 -Werror \
              -Iinclude/$(KHDF_AUDIO_BASE_ROOT_DIR)/drivers/framework/include/platform \
@@ -72,13 +82,14 @@ ccflags-y += -lm -lc  -lgcc -std=gnu99 -Werror \
              -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/core/host/include \
              -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/core/shared/include \
              -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/core/manager/include \
+             -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/include/audio \
              -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/model/audio/core/include \
              -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/model/audio/sapm/include \
              -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/model/audio/dispatch/include \
-             -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/model/audio/device/accessory/include \
-             -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/model/audio/device/codec/include \
-             -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/model/audio/device/soc/include \
-             -Iinclude/$(KHDF_AUDIO_CODEC_DIR)/codec/hi3516_codec/include \
-             -Iinclude/$(KHDF_AUDIO_CODEC_DIR)/accessory/tfa9879_smartpa/include \
+             -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/model/audio/common/include \
+             -Iinclude/$(KHDF_AUDIO_CODEC_DIR)/tfa9879/accessory/include \
+             -Iinclude/$(KHDF_AUDIO_CODEC_DIR)/hi3516dv300/codec/include \
+             -Iinclude/$(KHDF_AUDIO_CODEC_DIR)/hi3516dv300/soc/include \
+             -Iinclude/$(KHDF_AUDIO_CODEC_DIR)/hi3516dv300/include \
              -Iinclude/$(KHDF_AUDIO_PERIPHERAL_ROOT_DIR)/audio/interfaces/include \
              -Iinclude/$(KHDF_AUDIO_CODEC_DIR)/include
