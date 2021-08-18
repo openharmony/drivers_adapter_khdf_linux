@@ -15,6 +15,7 @@
 include drivers/hdf/khdf/platform/platform.mk
 
 obj-y  += $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/mipi_dsi_core.o \
+          $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/mipi_dsi_if.o \
           mipi_dsi_adapter.o
 
 obj-y  += mipi_tx_dev.o \
