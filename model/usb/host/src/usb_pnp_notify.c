@@ -24,6 +24,7 @@
 #include "hdf_device_desc.h"
 #include "hdf_log.h"
 #include "osal_mem.h"
+#include "securec.h"
 
 #define HDF_LOG_TAG USB_PNP_NOTIFY
 
@@ -59,7 +60,8 @@ static struct UsbPnpDeviceInfo *UsbPnpNotifyCreateInfo(void)
         OsalMutexInit(&infoTemp->lock);
         infoTemp->status = USB_PNP_DEVICE_INIT_STATUS;
         DListHeadInit(&infoTemp->list);
-        memset(infoTemp->interfaceRemoveStatus, 0, sizeof(infoTemp->interfaceRemoveStatus));
+        memset_s(infoTemp->interfaceRemoveStatus, USB_PNP_INFO_MAX_INTERFACES,
+            0, sizeof(infoTemp->interfaceRemoveStatus));
         DListInsertTail(&infoTemp->list, &g_usbPnpInfoListHead);
 
         return infoTemp;
@@ -364,7 +366,7 @@ static int32_t UsbPnpNotifyHdfSendEvent(const struct HdfDeviceObject *deviceObje
         goto out;
     }
 
-    HDF_LOGI("%s:%d report one device information, %d usbDevAddr=%px, devNum=%d, busNum=%d, infoTable=%d-0x%x-0x%x!",
+    HDF_LOGI("%s:%d report one device information, %d usbDevAddr=0x%x, devNum=%d, busNum=%d, infoTable=%d-0x%x-0x%x!",
         __func__, __LINE__, g_usbPnpNotifyCmdType, deviceInfo->info.usbDevAddr, deviceInfo->info.devNum,
         deviceInfo->info.busNum, deviceInfo->info.numInfos, deviceInfo->info.deviceInfo.vendorId,
         deviceInfo->info.deviceInfo.productId);
@@ -402,7 +404,7 @@ static void TestReadPnpInfo(struct HdfSBuf *data)
 
     flag = HdfSbufReadBuffer(data, (const void **)(&g_testUsbPnpInfo), &infoSize);
     if ((flag == false) || (g_testUsbPnpInfo == NULL)) {
-        HDF_LOGE("%{public}s: fail to read g_testUsbPnpInfo, flag=%{public}d, g_testUsbPnpInfo=%{public}px", \
+        HDF_LOGE("%s: fail to read g_testUsbPnpInfo, flag=%d, g_testUsbPnpInfo=%px", \
             __func__, flag, g_testUsbPnpInfo);
         return;
     }
