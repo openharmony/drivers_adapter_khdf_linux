@@ -13,8 +13,14 @@
 #
 
 DISPLAY_ROOT_DIR = ../../../../../framework/model/display/driver
+
+ifeq ($(CONFIG_DRIVERS_HDF_DISP), y)
 obj-y += \
-         $(DISPLAY_ROOT_DIR)/hdf_disp.o
+         $(DISPLAY_ROOT_DIR)/hdf_disp.o \
+         $(DISPLAY_ROOT_DIR)/backlight/hdf_bl.o
+
+obj-$(CONFIG_DRIVERS_HDF_PLATFORM_PWM) += \
+         $(DISPLAY_ROOT_DIR)/backlight/pwm_bl.o
 
 obj-$(CONFIG_ARCH_SPRD) += \
          $(DISPLAY_ROOT_DIR)/hdf_drm_panel.o \
@@ -34,6 +40,7 @@ obj-$(CONFIG_DRIVERS_HDF_LCD_ST7789) += \
 ccflags-y += -lm -lc -lgcc \
              -Iinclude/../drivers/hdf/framework/model/display/driver \
              -Iinclude/../drivers/hdf/framework/model/display/driver/adapter_soc \
+             -Iinclude/../drivers/hdf/framework/model/display/driver/backlight \
              -Iinclude/../drivers/hdf/framework/include/utils \
              -Iinclude/../drivers/hdf/framework/include/core \
              -Iinclude/../drivers/hdf/framework/core/common/include/host \
@@ -46,3 +53,5 @@ ccflags-y += -lm -lc -lgcc \
              -Iinclude/linux \
              -Iinclude/drm
 ccflags-y += -I$(PROJECT_ROOT)/third_party/bounds_checking_function/include
+
+endif
