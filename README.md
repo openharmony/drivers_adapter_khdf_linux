@@ -45,5 +45,5 @@ This repository stores the code and compilation scripts for the OpenHarmony driv
 
 drivers\_adapter\_khdf\_linux
 
-drivers\_peripheral
+[drivers\_peripheral](https://gitee.com/openharmony/drivers_peripheral/blob/master/README.md)
 
