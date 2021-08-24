@@ -109,6 +109,7 @@ static int LinuxI2cRemove(struct device *dev, void *data)
         i2c_put_adapter(adapter);
         OsalMemFree(cntlr);
     }
+    return HDF_SUCCESS;
 }
 
 static int LinuxI2cProbe(struct device *dev, void *data)
