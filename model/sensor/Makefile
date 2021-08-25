@@ -20,7 +20,8 @@ obj-$(CONFIG_DRIVERS_HDF_SENSOR) += \
                $(SENSOR_ROOT_DIR)/common/src/sensor_config_controller.o \
                $(SENSOR_ROOT_DIR)/common/src/sensor_config_parser.o \
                $(SENSOR_ROOT_DIR)/common/src/sensor_device_manager.o \
-               $(SENSOR_ROOT_DIR)/common/src/sensor_platform_if.o
+               $(SENSOR_ROOT_DIR)/common/src/sensor_platform_if.o 
+               
 
 obj-$(CONFIG_DRIVERS_HDF_SENSOR_ACCEL) += $(SENSOR_ROOT_DIR)/accel/sensor_accel_driver.o \
                $(SENSOR_ROOT_DIR)/chipset/accel/accel_bmi160.o
@@ -28,12 +29,17 @@ obj-$(CONFIG_DRIVERS_HDF_SENSOR_ACCEL) += $(SENSOR_ROOT_DIR)/accel/sensor_accel_
 obj-$(CONFIG_DRIVERS_HDF_SENSOR_GYRO) += $(SENSOR_ROOT_DIR)/gyro/sensor_gyro_driver.o \
                $(SENSOR_ROOT_DIR)/chipset/gyro/gyro_bmi160.o
 
+obj-$(CONFIG_DRIVERS_HDF_SENSOR_BAROMETER) += $(SENSOR_ROOT_DIR)/barometer/sensor_barometer_driver.o \
+               $(SENSOR_ROOT_DIR)/chipset/barometer/barometer_bmp180.o             
+
 ccflags-y += -Idrivers/hdf/framework/model/sensor/driver/include \
              -Idrivers/hdf/framework/model/sensor/driver/common/include \
              -Idrivers/hdf/framework/model/sensor/driver/chipset/accel \
              -Idrivers/hdf/framework/model/sensor/driver/accel \
              -Idrivers/hdf/framework/model/sensor/driver/chipset/gyro \
              -Idrivers/hdf/framework/model/sensor/driver/gyro \
+             -Idrivers/hdf/framework/model/sensor/driver/barometer \
+             -Idrivers/hdf/framework/model/sensor/driver/chipset/barometer \
              -Idrivers/hdf/framework/include/core \
              -Idrivers/hdf/framework/core/common/include/host \
              -Idrivers/hdf/framework/include/utils \
