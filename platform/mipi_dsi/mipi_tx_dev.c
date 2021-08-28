@@ -20,6 +20,10 @@
 #include <linux/fs.h>
 #include <linux/semaphore.h>
 #include <linux/seq_file.h>
+#include <linux/version.h>
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0)
+#include <linux/proc_fs.h>
+#endif
 #include <linux/init.h>
 #include <linux/kdev_t.h>
 #include <linux/miscdevice.h>
@@ -118,7 +122,11 @@ static int32_t RegisterDevice(const char *name, uint8_t id, unsigned short mode,
     return HDF_SUCCESS;
 }
 
-static int32_t ProcRegister(const char *name, uint8_t id, unsigned short mode, const struct file_operations *ops)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0)
+static int32_t ProcRegister(const char *name, uint32_t id, unsigned short mode, const struct proc_ops *ops)
+#else
+static int32_t ProcRegister(const char *name, uint32_t id, unsigned short mode, const struct file_operations *ops)
+#endif
 {
     char procName[NAME_LEN + 1];
     struct proc_dir_entry* entry = NULL;
@@ -319,7 +327,11 @@ static int32_t MipiDsiDevSetCfg(struct MipiDsiCntlr *cntlr, struct MipiCfg *arg)
         return HDF_ERR_MALLOC_FAIL;
     }
 
-    if (access_ok(VERIFY_READ, arg, size)) { /* user space */
+    if (access_ok(
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,6,0)
+        VERIFY_READ,
+#endif
+        arg, size)) { /* user space */
         if (CopyFromUser(temp, arg, size) != 0) {
             OsalMemFree(temp);
             temp = NULL;
@@ -365,7 +377,11 @@ int32_t MipiDsiDevSetCmd(struct MipiDsiCntlr *cntlr, struct DsiCmdDesc *arg)
         return HDF_ERR_MALLOC_FAIL;
     }
 
-    if (access_ok(VERIFY_READ, arg, size)) { /* user space */
+    if (access_ok(
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,6,0)
+        VERIFY_READ,
+#endif
+        arg, size)) { /* user space */
         if (CopyFromUser(temp, arg, size) != 0) {
             OsalMemFree(temp);
             temp = NULL;
@@ -403,7 +419,11 @@ int32_t MipiDsiDevGetCmd(struct MipiDsiCntlr *cntlr, GetDsiCmdDescTag *arg)
         HDF_LOGE("%s: [OsalMemCalloc] error.", __func__);
         return HDF_ERR_MALLOC_FAIL;
     }
-    if (access_ok(VERIFY_READ, arg, size)) { /* user space */
+    if (access_ok(
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,6,0)
+        VERIFY_READ,
+#endif
+        arg, size)) { /* user space */
         if (CopyFromUser(temp, arg, size) != 0) {
             HDF_LOGE("%s: [CopyFromUser] failed.", __func__);
             goto fail0;
@@ -419,7 +439,11 @@ int32_t MipiDsiDevGetCmd(struct MipiDsiCntlr *cntlr, GetDsiCmdDescTag *arg)
         HDF_LOGE("%s: [MipiDsiCntlrRx] failed.", __func__);
         goto fail0;
     }
-    if (access_ok(VERIFY_WRITE, arg, size)) { /* user space */
+    if (access_ok(
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,6,0)
+        VERIFY_WRITE,
+#endif
+        arg, size)) { /* user space */
         if (CopyToUser(arg, temp, size) != 0) {
             HDF_LOGE("%s: [CopyToUser] failed.", __func__);
             goto fail0;
@@ -579,10 +603,17 @@ static int MipiDsiDevProcOpen(struct inode *inode, struct file *file)
     return single_open(file, MipiDsiDevProcShow, NULL);
 }
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0)
+static const struct proc_ops g_procMipiDsiDevOps = {
+    .proc_open = MipiDsiDevProcOpen,
+    .proc_read = seq_read,
+};
+#else
 static const struct file_operations g_procMipiDsiDevOps = {
     .open = MipiDsiDevProcOpen,
     .read = seq_read,
 };
+#endif
 
 static const struct file_operations g_mipiTxfOps = {
     .open = MipiDsiDevOpen,

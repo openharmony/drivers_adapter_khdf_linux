@@ -32,7 +32,7 @@
 
 #define HDF_LOG_TAG hdf_uart_adapter
 #define UART_NAME_LEN 20
-extern ssize_t __vfs_write(struct file *, const char __user *, size_t, loff_t *);
+
 static char g_driverName[UART_NAME_LEN];
 
 static int32_t UartAdapterInit(struct UartHost *host)
@@ -96,9 +96,9 @@ static int32_t UartAdapterRead(struct UartHost *host, uint8_t *data, uint32_t si
     oldfs = get_fs();
     set_fs(KERNEL_DS);
     while (size >= tmp) {
-        ret = __vfs_read(fp, p + tmp, 1, &pos);
+        ret = vfs_read(fp, p + tmp, 1, &pos);
         if (ret < 0) {
-            HDF_LOGE("__vfs_read fail %d", ret);
+            HDF_LOGE("vfs_read fail %d", ret);
             break;
         }
         tmp++;
@@ -123,9 +123,9 @@ static int32_t UartAdapterWrite(struct UartHost *host, uint8_t *data, uint32_t s
     }
     oldfs = get_fs();
     set_fs(KERNEL_DS);
-    ret = __vfs_write(fp, p, size, &pos);
+    ret = vfs_write(fp, p, size, &pos);
     if (ret < 0) {
-        HDF_LOGE("__vfs_write fail %d", ret);
+        HDF_LOGE("vfs_write fail %d", ret);
         set_fs(oldfs);
         return HDF_FAILURE;
     }
