@@ -19,6 +19,7 @@
 #include "mipi_tx_hi35xx.h"
 #include <linux/io.h>
 #include <linux/uaccess.h>
+#include <linux/version.h>
 #include "hdf_log.h"
 #include "securec.h"
 #include "osal_time.h"
@@ -688,7 +689,11 @@ static int32_t LinuxCopyToKernel(void *dest, uint32_t max, const void *src, uint
 {
     int32_t ret;
 
-    if (access_ok(VERIFY_READ, src, count)) { /* user space */
+    if (access_ok(
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,6,0)
+        VERIFY_READ,
+#endif
+        src, count)) { /* user space */
         ret = (copy_from_user(dest, src, count) != 0) ? HDF_FAILURE : HDF_SUCCESS;
         if (ret == HDF_FAILURE) {
             HDF_LOGE("%s: [copy_from_user] failed.", __func__);
@@ -894,7 +899,11 @@ static int MipiTxDrvGetCmdInfo(GetCmdInfoTag *getCmdInfo)
         HDF_LOGE("%s: [MipiTxGetReadFifoData] failed!", __func__);
         goto fail0;
     }
-    if (access_ok(VERIFY_WRITE, getCmdInfo->getData, getCmdInfo->getDataSize)) { /* user space */
+    if (access_ok(
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,6,0)
+        VERIFY_WRITE,
+#endif
+        getCmdInfo->getData, getCmdInfo->getDataSize)) { /* user space */
         if (copy_to_user(getCmdInfo->getData, dataBuf, getCmdInfo->getDataSize) != 0) {
             HDF_LOGE("%s: copy_to_user fail", __func__);
             goto fail0;
