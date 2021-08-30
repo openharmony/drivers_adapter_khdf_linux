@@ -1604,7 +1604,11 @@ static void ffs_data_put(struct ffs_data *ffs)
 		pr_info("%s(): freeing\n", __func__);
 		ffs_data_clear(ffs);
 		BUG_ON(waitqueue_active(&ffs->ev.waitq) ||
-		       waitqueue_active(&ffs->ep0req_completion.wait) ||
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,0,0)
+			swait_active(&ffs->ep0req_completion.wait) ||
+#else
+			waitqueue_active(&ffs->ep0req_completion.wait) ||
+#endif
 		       waitqueue_active(&ffs->wait) ||
 		       waitqueue_active(&ffs->wait_que));
 		destroy_workqueue(ffs->io_completion_wq);
@@ -3428,7 +3432,7 @@ static int ffs_set_inst_name(struct usb_function_instance *fi, const char *name)
 {
 	char name_dev[MAX_NAMELEN] = {0};
 	snprintf_s(name_dev, MAX_NAMELEN, MAX_NAMELEN - 1,"%s.%s", FUNCTION_GENERIC, name);
-	if (strlen(name_dev) >= FIELD_SIZEOF(struct ffs_dev, name))
+	if (strlen(name_dev) >= sizeof_field(struct ffs_dev, name))
 		return -ENAMETOOLONG;
 	return ffs_name_dev_adapter(to_f_fs_opts(fi)->dev, name_dev);
 }
