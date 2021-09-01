@@ -17,10 +17,9 @@
  */
 
 #include "net_device_adapter.h"
-
 #include <linux/etherdevice.h>
 #include <linux/rtnetlink.h>
-
+#include <linux/version.h>
 #include "net_device.h"
 #include "net_device_impl.h"
 #include "osal_mem.h"
@@ -247,7 +246,11 @@ static int32_t NetDevSetStatus(struct NetDeviceImpl *impl,
         dev_close(dev);
         ret = HDF_SUCCESS;
     } else if (status == NETIF_UP) {
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,0,0)
+        ret = dev_open(dev, NULL);
+#else
         ret = dev_open(dev);
+#endif
     } else {
         HDF_LOGE("%s fail : status error!", __func__);
         rtnl_unlock();
