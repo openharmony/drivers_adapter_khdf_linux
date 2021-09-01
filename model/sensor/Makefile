@@ -31,7 +31,10 @@ obj-$(CONFIG_DRIVERS_HDF_SENSOR_GYRO) += $(SENSOR_ROOT_DIR)/gyro/sensor_gyro_dri
                $(SENSOR_ROOT_DIR)/chipset/gyro/gyro_bmi160.o
 
 obj-$(CONFIG_DRIVERS_HDF_SENSOR_BAROMETER) += $(SENSOR_ROOT_DIR)/barometer/sensor_barometer_driver.o \
-               $(SENSOR_ROOT_DIR)/chipset/barometer/barometer_bmp180.o             
+               $(SENSOR_ROOT_DIR)/chipset/barometer/barometer_bmp180.o
+
+obj-$(CONFIG_DRIVERS_HDF_SENSOR_HALL) += $(SENSOR_ROOT_DIR)/hall/sensor_hall_driver.o \
+               $(SENSOR_ROOT_DIR)/chipset/hall/hall_ak8789.o
 
 ccflags-y += -Idrivers/hdf/framework/model/sensor/driver/include \
              -Idrivers/hdf/framework/model/sensor/driver/common/include \
@@ -41,6 +44,8 @@ ccflags-y += -Idrivers/hdf/framework/model/sensor/driver/include \
              -Idrivers/hdf/framework/model/sensor/driver/gyro \
              -Idrivers/hdf/framework/model/sensor/driver/barometer \
              -Idrivers/hdf/framework/model/sensor/driver/chipset/barometer \
+             -Idrivers/hdf/framework/model/sensor/driver/hall \
+             -Idrivers/hdf/framework/model/sensor/driver/chipset/hall \
              -Idrivers/hdf/framework/include/core \
              -Idrivers/hdf/framework/core/common/include/host \
              -Idrivers/hdf/framework/include/utils \
