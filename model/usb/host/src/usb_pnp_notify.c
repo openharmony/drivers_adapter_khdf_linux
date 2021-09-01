@@ -153,7 +153,7 @@ static int32_t UsbPnpNotifyAddInitInfo(struct UsbPnpDeviceInfo *deviceInfo, unio
 {
     int32_t ret = HDF_SUCCESS;
 
-    deviceInfo->info.usbDevAddr = (uint32_t)infoData.usbDev;
+    deviceInfo->info.usbDevAddr = (uintptr_t)infoData.usbDev;
     deviceInfo->info.devNum = infoData.usbDev->devnum;
     if (infoData.usbDev->bus == NULL) {
         HDF_LOGE("%s infoData.usbDev->bus=%px is NULL", __func__, infoData.usbDev->bus);
@@ -319,7 +319,7 @@ static int32_t UsbPnpNotifyGetDeviceInfo(void *eventData, union UsbPnpDeviceInfo
     } else if ((g_usbPnpNotifyCmdType == USB_PNP_NOTIFY_ADD_DEVICE)
         || (g_usbPnpNotifyCmdType == USB_PNP_NOTIFY_REMOVE_DEVICE)) {
         infoQueryPara.type = USB_INFO_DEVICE_ADDRESS_TYPE;
-        infoQueryPara.usbDevAddr = (uint32_t)pnpInfoData->usbDev;
+        infoQueryPara.usbDevAddr = (uintptr_t)pnpInfoData->usbDev;
         *deviceInfo = UsbPnpNotifyFindInfo(infoQueryPara);
     } else {
         *deviceInfo = UsbPnpNotifyCreateInfo();
@@ -367,7 +367,7 @@ static int32_t UsbPnpNotifyHdfSendEvent(const struct HdfDeviceObject *deviceObje
     }
 
     HDF_LOGI("%s:%d report one device information, %d usbDevAddr=0x%x, devNum=%d, busNum=%d, infoTable=%d-0x%x-0x%x!",
-        __func__, __LINE__, g_usbPnpNotifyCmdType, deviceInfo->info.usbDevAddr, deviceInfo->info.devNum,
+        __func__, __LINE__, g_usbPnpNotifyCmdType, (uint32_t)deviceInfo->info.usbDevAddr, deviceInfo->info.devNum,
         deviceInfo->info.busNum, deviceInfo->info.numInfos, deviceInfo->info.deviceInfo.vendorId,
         deviceInfo->info.deviceInfo.productId);
 
@@ -470,8 +470,8 @@ static int32_t TestPnpNotifyHdfSendEvent(const struct HdfDeviceObject *deviceObj
     }
 
     HDF_LOGI("%s: report one device information, %d usbDev=0x%x, devNum=%d, busNum=%d, infoTable=%d-0x%x-0x%x!", \
-        __func__, g_usbPnpNotifyCmdType, infoTable.usbDevAddr, infoTable.devNum, infoTable.busNum, infoTable.numInfos, \
-        infoTable.deviceInfo.vendorId, infoTable.deviceInfo.productId);
+        __func__, g_usbPnpNotifyCmdType, (uint32_t)infoTable.usbDevAddr, infoTable.devNum, infoTable.busNum, \
+        infoTable.numInfos, infoTable.deviceInfo.vendorId, infoTable.deviceInfo.productId);
 
     ret = HdfDeviceSendEvent(deviceObject, g_usbPnpNotifyCmdType, data);
     if (ret != HDF_SUCCESS) {
@@ -580,7 +580,7 @@ static int UsbPnpNotifyCallback(struct notifier_block *self, unsigned long actio
             break;
         case USB_DEVICE_REMOVE:
             infoQueryPara.type = USB_INFO_DEVICE_ADDRESS_TYPE;
-            infoQueryPara.usbDevAddr = (uint32_t)dev;
+            infoQueryPara.usbDevAddr = (uintptr_t)dev;
             deviceInfo = UsbPnpNotifyFindInfo(infoQueryPara);
             if (deviceInfo == NULL) {
                 HDF_LOGE("%s:%d USB_DEVICE_REMOVE find info failed", __func__, __LINE__);
