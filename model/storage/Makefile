@@ -24,6 +24,7 @@ ccflags-y += -Idrivers/hdf/framework/model/storage/include/common \
              -Idrivers/hdf/framework/include/core \
              -Idrivers/hdf/framework/core/common/include/host \
              -Idrivers/hdf/framework/include/utils \
+             -Idrivers/hdf/framework/utils/include \
              -Idrivers/hdf/framework/include/osal \
              -Idrivers/hdf/framework/ability/sbuf/include \
              -Idrivers/hdf/framework/include/platform \
