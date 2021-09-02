@@ -16,7 +16,7 @@
  *
  */
 
-#include "plat_common.h"
+#include "platform_core.h"
 
 #include <linux/sched.h>
 
