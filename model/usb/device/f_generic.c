@@ -765,9 +765,9 @@ static long ffs_ep0_ioctl(struct file *file, unsigned code, unsigned long value)
 			if (unlikely(!p))
 				return -ENOMEM;
 		} else {
-			memset_s(p, sizeof(struct ffs_io_data), 0, sizeof(*p));
+			memset_s(p, sizeof(*p), 0, sizeof(*p));
 		}
-		memcpy_s(p, sizeof(struct ffs_io_data), &myIoData, sizeof(struct IoData));
+		memcpy_s(p, sizeof(*p), &myIoData, sizeof(struct IoData));
 		ret = ffs_ep0_iorw(file, p);
 		if (ret == -EIOCBQUEUED) {
 			return 0;
@@ -1272,9 +1272,9 @@ static long ffs_epfile_ioctl(struct file *file, unsigned code, unsigned long val
 				return -ENOMEM;
 			}
 		} else {
-			memset_s(p, sizeof(struct ffs_io_data), 0, sizeof(*p));
+			memset_s(p, sizeof(*p), 0, sizeof(*p));
 		}
-		memcpy_s(p, sizeof(struct ffs_io_data), &myIoData, sizeof(struct IoData));
+		memcpy_s(p, sizeof(*p), &myIoData, sizeof(struct IoData));
 		spin_unlock_irq(&epfile->ffs->eps_lock);
 		ret = ffs_epfile_iorw(file, p);
 		if (ret == -EIOCBQUEUED) {
@@ -1475,7 +1475,9 @@ static long usbfn_ioctl(struct file *file, unsigned int cmd, unsigned long value
 				return (-ENOMEM);
 			}
 
-			sprintf_s(nameEp0, MAX_NAMELEN, "%s.ep%u", ffs->dev_name, 0);
+			if (sprintf_s(nameEp0, MAX_NAMELEN, "%s.ep%u", ffs->dev_name, 0) < 0) {
+				return -EFAULT;
+			}
 			ffs_dev = ffs_acquire_dev(newfn.name);
 			if (IS_ERR(ffs_dev)) {
 				ffs_data_put(ffs);
@@ -1763,10 +1765,15 @@ static int ffs_epfiles_create(struct ffs_data *ffs)
 		mutex_init(&epfile->mutex);
 		INIT_LIST_HEAD(&epfile->memory_list);
 		init_waitqueue_head(&epfile->wait_que);
-		if (ffs->user_flags & FUNCTIONFS_VIRTUAL_ADDR)
-			sprintf_s(epfile->name, MAX_NAMELEN, "%s.ep%02x", ffs->dev_name, ffs->eps_addrmap[i]);
-		else
-			sprintf_s(epfile->name, MAX_NAMELEN, "%s.ep%u", ffs->dev_name, i);
+		if (ffs->user_flags & FUNCTIONFS_VIRTUAL_ADDR) {
+			if (sprintf_s(epfile->name, MAX_NAMELEN, "%s.ep%02x", ffs->dev_name, ffs->eps_addrmap[i]) < 0) {
+				return -EFAULT;
+			}
+		} else {
+			if (sprintf_s(epfile->name, MAX_NAMELEN, "%s.ep%u", ffs->dev_name, i) < 0 ){
+				return -EFAULT;
+			}
+		}
 
 		cdev_init(&epfile->cdev, &ffs_epfile_operations);
 		epfile->devno=MKDEV(MAJOR(ffs->devno), i);
@@ -3431,7 +3438,9 @@ static void ffs_free_inst(struct usb_function_instance *f)
 static int ffs_set_inst_name(struct usb_function_instance *fi, const char *name)
 {
 	char name_dev[MAX_NAMELEN] = {0};
-	snprintf_s(name_dev, MAX_NAMELEN, MAX_NAMELEN - 1,"%s.%s", FUNCTION_GENERIC, name);
+	if (snprintf_s(name_dev, MAX_NAMELEN, MAX_NAMELEN - 1,"%s.%s", FUNCTION_GENERIC, name) < 0) {
+		return -EFAULT;
+	}
 	if (strlen(name_dev) >= sizeof_field(struct ffs_dev, name))
 		return -ENAMETOOLONG;
 	return ffs_name_dev_adapter(to_f_fs_opts(fi)->dev, name_dev);
