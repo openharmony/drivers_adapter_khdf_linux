@@ -3,7 +3,7 @@
  *
  * create vfs node for mipi
  *
- * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2021 Huawei Device Co., Ltd.
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -17,31 +17,27 @@
  */
 
 #include "mipi_tx_dev.h"
+#include <asm/io.h>
+#include <asm/uaccess.h>
+#include <linux/cdev.h>
+#include <linux/device.h>
 #include <linux/fs.h>
-#include <linux/semaphore.h>
-#include <linux/seq_file.h>
-#include <linux/version.h>
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0)
-#include <linux/proc_fs.h>
-#endif
 #include <linux/init.h>
 #include <linux/kdev_t.h>
 #include <linux/miscdevice.h>
 #include <linux/module.h>
 #include <linux/proc_fs.h>
-#include <linux/cdev.h>
-#include <linux/device.h>
+#include <linux/semaphore.h>
+#include <linux/seq_file.h>
+#include <linux/version.h>
 #include "hdf_base.h"
 #include "hdf_log.h"
-#include "securec.h"
+#include "mipi_dsi_core.h"
+#include "mipi_tx_reg.h"
 #include "osal_io.h"
 #include "osal_mem.h"
 #include "osal_uaccess.h"
-#include <asm/io.h>
-#include <asm/uaccess.h>
-#include "mipi_dsi_adapter.h"
-#include "mipi_dsi_core.h"
-#include "mipi_tx_reg.h"
+#include "securec.h"
 
 #ifdef __cplusplus
 #if __cplusplus
@@ -123,9 +119,9 @@ static int32_t RegisterDevice(const char *name, uint8_t id, unsigned short mode,
 }
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0)
-static int32_t ProcRegister(const char *name, uint32_t id, unsigned short mode, const struct proc_ops *ops)
+static int32_t ProcRegister(const char *name, uint8_t id, unsigned short mode, const struct proc_ops *ops)
 #else
-static int32_t ProcRegister(const char *name, uint32_t id, unsigned short mode, const struct file_operations *ops)
+static int32_t ProcRegister(const char *name, uint8_t id, unsigned short mode, const struct file_operations *ops)
 #endif
 {
     char procName[NAME_LEN + 1];
