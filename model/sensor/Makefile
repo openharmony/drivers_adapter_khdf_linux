@@ -30,8 +30,9 @@ obj-$(CONFIG_DRIVERS_HDF_SENSOR_ACCEL_BMI160) += $(SENSOR_ROOT_DIR)/chipset/acce
 obj-$(CONFIG_DRIVERS_HDF_SENSOR_GYRO) += $(SENSOR_ROOT_DIR)/gyro/sensor_gyro_driver.o \
                $(SENSOR_ROOT_DIR)/chipset/gyro/gyro_bmi160.o
 
-obj-$(CONFIG_DRIVERS_HDF_SENSOR_BAROMETER) += $(SENSOR_ROOT_DIR)/barometer/sensor_barometer_driver.o \
-               $(SENSOR_ROOT_DIR)/chipset/barometer/barometer_bmp180.o
+obj-$(CONFIG_DRIVERS_HDF_SENSOR_BAROMETER) += $(SENSOR_ROOT_DIR)/barometer/sensor_barometer_driver.o
+
+obj-$(CONFIG_DRIVERS_HDF_SENSOR_BAROMETER_BMP180) += $(SENSOR_ROOT_DIR)/chipset/barometer/barometer_bmp180.o
 
 obj-$(CONFIG_DRIVERS_HDF_SENSOR_HALL) += $(SENSOR_ROOT_DIR)/hall/sensor_hall_driver.o 
 
