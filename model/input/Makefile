@@ -21,7 +21,8 @@ obj-$(CONFIG_DRIVERS_HDF_INPUT) += \
                $(INPUT_ROOT_DIR)/event_hub.o \
                $(INPUT_ROOT_DIR)/hdf_touch.o \
                $(INPUT_ROOT_DIR)/hdf_key.o \
-               $(INPUT_ROOT_DIR)/hdf_hid_adapter.o
+               $(INPUT_ROOT_DIR)/hdf_hid_adapter.o \
+               $(INPUT_ROOT_DIR)/hdf_encoder.o
 
 obj-$(CONFIG_DRIVERS_HDF_TP_5P5_GT911) += \
               $(INPUT_ROOT_DIR)/touchscreen/touch_gt911.o
