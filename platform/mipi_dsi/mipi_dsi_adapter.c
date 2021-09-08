@@ -3,7 +3,7 @@
  *
  * Mipi dsi adapter driver.
  *
- * Copyright (c) Huawei Device Co., Ltd. 2021. All rights reserved.
+ * Copyright (c) 2021 Huawei Device Co., Ltd.
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
