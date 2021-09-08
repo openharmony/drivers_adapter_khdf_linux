@@ -38,6 +38,10 @@ obj-$(CONFIG_DRIVERS_HDF_SENSOR_HALL) += $(SENSOR_ROOT_DIR)/hall/sensor_hall_dri
 
 obj-$(CONFIG_DRIVERS_HDF_SENSOR_HALL_AK8789) += $(SENSOR_ROOT_DIR)/chipset/hall/hall_ak8789.o
 
+obj-$(CONFIG_DRIVERS_HDF_SENSOR_MAGNETIC) += $(SENSOR_ROOT_DIR)/magnetic/sensor_magnetic_driver.o
+
+obj-$(CONFIG_DRIVERS_HDF_SENSOR_MAGNETIC_LSM303) += $(SENSOR_ROOT_DIR)/chipset/magnetic/magnetic_lsm303.o
+
 ccflags-y += -Idrivers/hdf/framework/model/sensor/driver/include \
              -Idrivers/hdf/framework/model/sensor/driver/common/include \
              -Idrivers/hdf/framework/model/sensor/driver/chipset/accel \
@@ -48,6 +52,8 @@ ccflags-y += -Idrivers/hdf/framework/model/sensor/driver/include \
              -Idrivers/hdf/framework/model/sensor/driver/chipset/barometer \
              -Idrivers/hdf/framework/model/sensor/driver/hall \
              -Idrivers/hdf/framework/model/sensor/driver/chipset/hall \
+             -Idrivers/hdf/framework/model/sensor/driver/chipset/magnetic \
+             -Idrivers/hdf/framework/model/sensor/driver/magnetic \
              -Idrivers/hdf/framework/include/core \
              -Idrivers/hdf/framework/core/common/include/host \
              -Idrivers/hdf/framework/include/utils \
