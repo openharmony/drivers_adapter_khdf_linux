@@ -27,6 +27,10 @@ obj-$(CONFIG_DRIVERS_HDF_SENSOR_ACCEL) += $(SENSOR_ROOT_DIR)/accel/sensor_accel_
 
 obj-$(CONFIG_DRIVERS_HDF_SENSOR_ACCEL_BMI160) += $(SENSOR_ROOT_DIR)/chipset/accel/accel_bmi160.o
 
+obj-$(CONFIG_DRIVERS_HDF_SENSOR_ALS) += $(SENSOR_ROOT_DIR)/accel/sensor_als_driver.o
+
+obj-$(CONFIG_DRIVERS_HDF_SENSOR_ALS_BH1745) += $(SENSOR_ROOT_DIR)/chipset/als/als_bh1745.o
+
 obj-$(CONFIG_DRIVERS_HDF_SENSOR_PROXIMITY) += $(SENSOR_ROOT_DIR)/proximity/sensor_proximity_driver.o
 
 obj-$(CONFIG_DRIVERS_HDF_SENSOR_GYRO) += $(SENSOR_ROOT_DIR)/gyro/sensor_gyro_driver.o \
@@ -48,6 +52,8 @@ ccflags-y += -Idrivers/hdf/framework/model/sensor/driver/include \
              -Idrivers/hdf/framework/model/sensor/driver/common/include \
              -Idrivers/hdf/framework/model/sensor/driver/chipset/accel \
              -Idrivers/hdf/framework/model/sensor/driver/accel \
+             -Idrivers/hdf/framework/model/sensor/driver/als \
+             -Idrivers/hdf/framework/model/sensor/driver/chipset/als \
              -Idrivers/hdf/framework/model/sensor/driver/chipset/gyro \
              -Idrivers/hdf/framework/model/sensor/driver/gyro \
              -Idrivers/hdf/framework/model/sensor/driver/barometer \
