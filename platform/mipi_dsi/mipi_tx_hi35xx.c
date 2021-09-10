@@ -950,7 +950,6 @@ static void MipiTxDrvDisableInput(void)
     g_mipiTxRegsVa->LPCLK_CTRL.u32 = 0x0;
     MipiTxReset();
     g_enDev = false;
-    g_enCfg = false;
 }
 
 static int MipiTxDrvRegInit(void)
