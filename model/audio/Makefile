@@ -44,6 +44,7 @@ obj-$(CONFIG_ARCH_HI3516DV300) += \
 
 ccflags-y += -lm -lc -lgcc -std=gnu99 -Werror \
              -Iinclude/$(KHDF_AUDIO_BASE_ROOT_DIR)/third_party/bounds_checking_function/include \
+	     -Iinclude/$(KHDF_AUDIO_BASE_ROOT_DIR)/utils/native/base/include \
              -Iinclude/$(KHDF_AUDIO_KHDF_ROOT_DIR)/osal/include \
              -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/include/core \
              -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/include/utils \
