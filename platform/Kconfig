@@ -33,12 +33,6 @@ config DRIVERS_HDF_PLATFORM_WATCHDOG
     help
       Answer Y to enable HDF platform watchdog driver.
 
-config PWM_HI35XX
-    bool "hi35xx pwm driver"
-    depends on PWM
-    help
-      Answer Y to enable hi35xx pwm driver
-
 config DRIVERS_HDF_PLATFORM_PWM
     bool "Enable HDF platform pwm driver"
     depends on DRIVERS_HDF_PLATFORM
@@ -85,3 +79,9 @@ config DRIVERS_HDF_PLATFORM_RTC
     depends on DRIVERS_HDF_PLATFORM
     help
       Answer Y to enable HDF platform rtc driver.
+
+config PWM_HI35XX
+    bool "hi35xx pwm driver"
+    depends on PWM
+    help
+      Answer Y to enable hi35xx pwm driver
