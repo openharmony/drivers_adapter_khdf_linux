@@ -13,7 +13,7 @@
 #
 
 obj-y  += osal_workqueue.o osal_thread.o osal_firmware.o osal_irq.o osal_mem.o osal_mutex.o osal_sem.o osal_spinlock.o \
-			osal_time.o osal_file.o osal_timer.o osal_cdev.o
+			osal_time.o osal_file.o osal_timer.o osal_cdev.o osal_deal_log_format.o
 ccflags-y += -Iinclude/hdf \
 			 -Iinclude/hdf/osal \
 			 -Iinclude/hdf/utils \
