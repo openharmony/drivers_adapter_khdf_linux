@@ -51,9 +51,8 @@ bool deal_format(const char *fmt, char *dest, size_t size)
 					break;
 				}
 			}
-			if (i == NUMBER) {
+			if (i == NUMBER)
 				ptr_cur++;
-			}
 		} else {
 			ptr_cur++;
 		}
