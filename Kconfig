@@ -1,17 +1,18 @@
 
-config DRIVERS_HDF
-    bool "Enable HDF manager"
-    default y
+menuconfig DRIVERS_HDF
+    bool "HDF driver framework support"
+    default n
     help
       Answer Y to enable Linux support HDF.
 
+if DRIVERS_HDF
 config HDF_SUPPORT_LEVEL
-    int "Set HDF support platform"
-    default 1
+    int "Set HDF support level"
+    default 2
     range 0 5
     depends on DRIVERS_HDF
     help
-      Answer 1 on OHOS L1, 2 on OHOS L2, etc
+      Answer 1 on small OHOS, 2 on standard OHOS
 
 source "drivers/hdf/khdf/platform/Kconfig"
 source "drivers/hdf/khdf/test/Kconfig"
@@ -26,3 +27,5 @@ source "drivers/hdf/khdf/model/usb/device/Kconfig"
 source "drivers/hdf/khdf/model/audio/Kconfig"
 source "drivers/hdf/khdf/model/misc/vibrator/Kconfig"
 source "drivers/hdf/khdf/model/misc/dsoftbus/Kconfig"
+
+endif
