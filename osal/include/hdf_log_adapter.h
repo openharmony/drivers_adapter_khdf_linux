@@ -27,16 +27,26 @@ extern "C" {
 
 #define _HDF_FMT_TAG(TAG, LEVEL) "[" #LEVEL "/" #TAG "] "
 #define HDF_FMT_TAG(TAG, LEVEL) _HDF_FMT_TAG(TAG, LEVEL)
+#define HDF_LOG_BUF_SIZE 256
 
-#define HDF_LOGV_WRAPPER(fmt, args...) printk(KERN_DEBUG HDF_FMT_TAG(HDF_LOG_TAG, V) fmt "\r\n", ## args)
+bool deal_format(const char *fmt, char *str, size_t size);
 
-#define HDF_LOGD_WRAPPER(fmt, args...) printk(KERN_DEBUG HDF_FMT_TAG(HDF_LOG_TAG, D) fmt "\r\n", ## args)
+#define HDF_LOG_WRAPPER(fmt, args...) \
+	do { \
+		char tmp_fmt[HDF_LOG_BUF_SIZE] = {0}; \
+		if (deal_format(fmt, tmp_fmt, sizeof(tmp_fmt))) \
+			printk(tmp_fmt, ##args); \
+	} while (0)
 
-#define HDF_LOGI_WRAPPER(fmt, args...) printk(KERN_INFO HDF_FMT_TAG(HDF_LOG_TAG, I) fmt "\r\n", ## args)
+#define HDF_LOGV_WRAPPER(fmt, args...) HDF_LOG_WRAPPER(KERN_DEBUG HDF_FMT_TAG(HDF_LOG_TAG, V) fmt "\r\n", ## args)
 
-#define HDF_LOGW_WRAPPER(fmt, args...) printk(KERN_WARNING HDF_FMT_TAG(HDF_LOG_TAG, W) fmt "\r\n", ## args)
+#define HDF_LOGD_WRAPPER(fmt, args...) HDF_LOG_WRAPPER(KERN_DEBUG HDF_FMT_TAG(HDF_LOG_TAG, D) fmt "\r\n", ## args)
 
-#define HDF_LOGE_WRAPPER(fmt, args...) printk(KERN_ERR HDF_FMT_TAG(HDF_LOG_TAG, E) fmt "\r\n", ## args)
+#define HDF_LOGI_WRAPPER(fmt, args...) HDF_LOG_WRAPPER(KERN_INFO HDF_FMT_TAG(HDF_LOG_TAG, I) fmt "\r\n", ## args)
+
+#define HDF_LOGW_WRAPPER(fmt, args...) HDF_LOG_WRAPPER(KERN_WARNING HDF_FMT_TAG(HDF_LOG_TAG, W) fmt "\r\n", ## args)
+
+#define HDF_LOGE_WRAPPER(fmt, args...) HDF_LOG_WRAPPER(KERN_ERR HDF_FMT_TAG(HDF_LOG_TAG, E) fmt "\r\n", ## args)
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
