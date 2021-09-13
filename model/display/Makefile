@@ -38,20 +38,20 @@ obj-$(CONFIG_DRIVERS_HDF_LCD_ST7789) += \
          $(DISPLAY_ROOT_DIR)/panel/ssp_st7789.o
 
 ccflags-y += -lm -lc -lgcc \
-             -Iinclude/../drivers/hdf/framework/model/display/driver \
-             -Iinclude/../drivers/hdf/framework/model/display/driver/adapter_soc \
-             -Iinclude/../drivers/hdf/framework/model/display/driver/backlight \
-             -Iinclude/../drivers/hdf/framework/include/utils \
-             -Iinclude/../drivers/hdf/framework/include/core \
-             -Iinclude/../drivers/hdf/framework/core/common/include/host \
-             -Iinclude/../drivers/hdf/framework/ability/sbuf/include \
-             -Iinclude/../drivers/hdf/framework/include \
-             -Iinclude/../drivers/hdf/framework/include/osal \
-             -Iinclude/../drivers/hdf/framework/include/platform \
-             -Iinclude/../drivers/hdf/framework/include/config \
-             -Iinclude/../drivers/hdf/khdf/osal/include \
+             -Idrivers/hdf/framework/model/display/driver \
+             -Idrivers/hdf/framework/model/display/driver/adapter_soc \
+             -Idrivers/hdf/framework/include/utils \
+             -Idrivers/hdf/framework/model/display/driver/backlight \
+             -Idrivers/hdf/framework/include/core \
+             -Idrivers/hdf/framework/core/common/include/host \
+             -Idrivers/hdf/framework/ability/sbuf/include \
+             -Idrivers/hdf/framework/include \
+             -Idrivers/hdf/framework/include/osal \
+             -Idrivers/hdf/framework/include/platform \
+             -Idrivers/hdf/framework/include/config \
+             -Idrivers/hdf/khdf/osal/include \
              -Iinclude/linux \
              -Iinclude/drm
-ccflags-y += -I$(PROJECT_ROOT)/third_party/bounds_checking_function/include
+ccflags-y += -Ibounds_checking_function/include
 
 endif

@@ -54,7 +54,7 @@ HDF_WIFI_ADAPTER_INC := \
     -Idrivers/hdf/khdf/network/include
 
 HDF_WIFI_VENDOR_INC := \
-    -I$(PROJECT_ROOT)/device/hisilicon/drivers/wifi/driver/core
+    -Idrivers/hdf/wifi/driver/core
 
 SECURE_LIB_INC := \
-    -I$(PROJECT_ROOT)/third_party/bounds_checking_function/include
+    -Ibounds_checking_function/include
