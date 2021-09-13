@@ -12,11 +12,6 @@
 #
 #
 
-SEC_LIB_SOURCES = memcpy_s.c memmove_s.c memset_s.c securecutil.c secureinput_a.c secureprintoutput_a.c snprintf_s.c sprintf_s.c  strcat_s.c strcpy_s.c strncat_s.c strncpy_s.c strtok_s.c  vsnprintf_s.c vsprintf_s.c 
-
-PWD:=$(shell pwd)
-SEC_OBJECTS:=$(patsubst %.c,%.o,$(SEC_LIB_SOURCES))
-
 VIBRATOR_ROOT_DIR = ../../../../../../framework/model/misc/vibrator/driver
 
 obj-$(CONFIG_DRIVERS_HDF_VIBRATOR) += \
@@ -26,17 +21,17 @@ obj-$(CONFIG_DRIVERS_HDF_VIBRATOR_LINEAR) += \
               $(VIBRATOR_ROOT_DIR)/chipset/vibrator_linear_driver.o
 
 
-ccflags-y += -Iinclude/../drivers/hdf/framework/model/misc/vibrator/driver/include \
-             -Iinclude/../drivers/hdf/framework/model/misc/vibrator/driver/chipset \
-             -Iinclude/../drivers/hdf/framework/include/core \
-             -Iinclude/../drivers/hdf/framework/core/common/include/host \
-             -Iinclude/../drivers/hdf/framework/include/utils \
-             -Iinclude/../drivers/hdf/framework/include/osal \
-             -Iinclude/../drivers/hdf/framework/ability/sbuf/include \
-             -Iinclude/../drivers/hdf/framework/include/platform \
-             -Iinclude/../drivers/hdf/framework/include/config \
-             -Iinclude/../drivers/hdf/framework/core/host/include \
-             -Iinclude/../drivers/hdf/framework/core/shared/include \
-             -Iinclude/../drivers/hdf/framework/utils/include \
-             -Iinclude/../drivers/hdf/khdf/osal/include \
-             -I$(PROJECT_ROOT)/third_party/bounds_checking_function/include
+ccflags-y += -Idrivers/hdf/framework/model/misc/vibrator/driver/include \
+             -Idrivers/hdf/framework/model/misc/vibrator/driver/chipset \
+             -Idrivers/hdf/framework/include/core \
+             -Idrivers/hdf/framework/core/common/include/host \
+             -Idrivers/hdf/framework/include/utils \
+             -Idrivers/hdf/framework/include/osal \
+             -Idrivers/hdf/framework/ability/sbuf/include \
+             -Idrivers/hdf/framework/include/platform \
+             -Idrivers/hdf/framework/include/config \
+             -Idrivers/hdf/framework/core/host/include \
+             -Idrivers/hdf/framework/core/shared/include \
+             -Idrivers/hdf/framework/utils/include \
+             -Idrivers/hdf/khdf/osal/include \
+             -Ibounds_checking_function/include
