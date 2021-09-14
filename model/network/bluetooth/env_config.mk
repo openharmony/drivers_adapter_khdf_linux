@@ -38,4 +38,4 @@ HDF_BT_FRAMEWORKS_INC := \
     -Idrivers/hdf/framework/model/network/bluetooth
 
 SECURE_LIB_INC := \
-    -I$(PROJECT_ROOT)/third_party/bounds_checking_function/include
+    -Ibounds_checking_function/include

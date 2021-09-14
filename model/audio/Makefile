@@ -13,10 +13,11 @@
 #
 
 KHDF_AUDIO_BASE_ROOT_DIR = ../../../../../..
-KHDF_AUDIO_KHDF_ROOT_DIR = ../drivers/hdf/khdf
-KHDF_FRAMEWORK_ROOT_DIR = ../drivers/hdf/framework
+KHDF_AUDIO_KHDF_ROOT_DIR = drivers/hdf/khdf
+KHDF_FRAMEWORK_ROOT_DIR = drivers/hdf/framework
 KHDF_AUDIO_ROOT_DIR = ../../../../../framework/model/audio
 KHDF_AUDIO_HI3516DV300_DIR = $(KHDF_AUDIO_BASE_ROOT_DIR)/drivers/peripheral/audio/chipsets/hi3516dv300
+KHDF_AUDIO_HI3516DV300_INC_DIR = drivers/hdf/framework/../peripheral/audio/chipsets/hi3516dv300
 
 obj-y += \
           $(KHDF_AUDIO_ROOT_DIR)/core/src/audio_core.o \
@@ -43,22 +44,21 @@ obj-$(CONFIG_ARCH_HI3516DV300) += \
           $(KHDF_AUDIO_HI3516DV300_DIR)/soc/src/hi3516_platform_adapter.o
 
 ccflags-y += -lm -lc -lgcc -std=gnu99 -Werror \
-             -Iinclude/$(KHDF_AUDIO_BASE_ROOT_DIR)/third_party/bounds_checking_function/include \
-	     -Iinclude/$(KHDF_AUDIO_BASE_ROOT_DIR)/utils/native/base/include \
-             -Iinclude/$(KHDF_AUDIO_KHDF_ROOT_DIR)/osal/include \
-             -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/include/core \
-             -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/include/utils \
-             -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/include/osal \
-             -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/include/platform \
-             -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/include/config \
-             -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/include/audio \
-             -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/ability/sbuf/include \
-             -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/core/common/include/host \
-             -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/model/audio/core/include \
-             -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/model/audio/sapm/include \
-             -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/model/audio/dispatch/include \
-             -Iinclude/$(KHDF_FRAMEWORK_ROOT_DIR)/model/audio/common/include \
-             -Iinclude/$(KHDF_AUDIO_HI3516DV300_DIR)/codec/include \
-             -Iinclude/$(KHDF_AUDIO_HI3516DV300_DIR)/soc/include \
-             -Iinclude/$(KHDF_AUDIO_HI3516DV300_DIR)/include \
-             -Iinclude/$(KHDF_AUDIO_HI3516DV300_DIR)/../tfa9879/accessory/include
+             -I$(KHDF_AUDIO_KHDF_ROOT_DIR)/osal/include \
+             -I$(KHDF_FRAMEWORK_ROOT_DIR)/include/core \
+             -I$(KHDF_FRAMEWORK_ROOT_DIR)/include/utils \
+             -I$(KHDF_FRAMEWORK_ROOT_DIR)/include/osal \
+             -I$(KHDF_FRAMEWORK_ROOT_DIR)/include/platform \
+             -I$(KHDF_FRAMEWORK_ROOT_DIR)/include/config \
+             -I$(KHDF_FRAMEWORK_ROOT_DIR)/include/audio \
+             -I$(KHDF_FRAMEWORK_ROOT_DIR)/ability/sbuf/include \
+             -I$(KHDF_FRAMEWORK_ROOT_DIR)/core/common/include/host \
+             -I$(KHDF_FRAMEWORK_ROOT_DIR)/model/audio/core/include \
+             -I$(KHDF_FRAMEWORK_ROOT_DIR)/model/audio/sapm/include \
+             -I$(KHDF_FRAMEWORK_ROOT_DIR)/model/audio/dispatch/include \
+             -I$(KHDF_FRAMEWORK_ROOT_DIR)/model/audio/common/include \
+             -I$(KHDF_AUDIO_HI3516DV300_INC_DIR)/codec/include \
+             -I$(KHDF_AUDIO_HI3516DV300_INC_DIR)/soc/include \
+             -I$(KHDF_AUDIO_HI3516DV300_INC_DIR)/include \
+             -I$(KHDF_AUDIO_HI3516DV300_INC_DIR)/../tfa9879/accessory/include \
+             -Ibounds_checking_function/include

@@ -12,7 +12,6 @@
 #
 #
 
-export HDF_ROOT := drivers/hdf
 obj-$(CONFIG_DRIVERS_HDF)  += osal/
 obj-$(CONFIG_DRIVERS_HDF)  += network/
 obj-$(CONFIG_DRIVERS_HDF)  += config/
