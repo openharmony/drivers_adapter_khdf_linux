@@ -11,7 +11,7 @@
 
 config DRIVERS_HDF_USB_PNP_NOTIFY
     bool "Enable HDF USB PNP Notify driver"
-    default y
+    default n
     depends on DRIVERS_HDF
     help
         Answer Y to choice HDF USB PNP Notify driver.
