@@ -17,6 +17,6 @@ obj-y  += osal_workqueue.o osal_thread.o osal_firmware.o osal_irq.o osal_mem.o o
 ccflags-y += -Iinclude/hdf \
 			 -Iinclude/hdf/osal \
 			 -Iinclude/hdf/utils \
-			 -Iinclude/../drivers/hdf/framework/utils/include \
+			 -Idrivers/hdf/framework/utils/include \
 			 -Idrivers/hdf/khdf/osal/include \
-			 -I$(PROJECT_ROOT)/third_party/bounds_checking_function/include
+			 -Ibounds_checking_function/include

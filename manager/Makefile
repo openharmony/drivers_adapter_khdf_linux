@@ -12,71 +12,70 @@
 #
 #
 
-#SOURCES=$(wildcard *.c)
-SEC_LIB_SOURCES =   memcpy_s.c memmove_s.c memset_s.c securecutil.c secureinput_a.c secureprintoutput_a.c snprintf_s.c sprintf_s.c  strcat_s.c strcpy_s.c strncat_s.c strncpy_s.c strtok_s.c  vsnprintf_s.c vsprintf_s.c
+OHOS_SOURCE_ROOT := ../../../../../
+HDF_FRAMEWORK_SRC_DIR := ../../../../
 
-#SEC_LIB_SOURCES += fwscanf_s.c secureinput_w.c secureprintoutput_w.c swprintf_s.c swscanf_s.c vfwscanf_s.c vswprintf_s.c vswscanf_s.c vwscanf_s.c wcscat_s.c wcscpy_s.c wcsncat_s.c wcsncpy_s.c wcstok_s.c wmemcpy_s.c wmemmove_s.c wscanf_s.c
-#SEC_LIB_SOURCES:=$(wildcard ../../framework/libc_sec/src/*.c)
-#$(warning SEC_LIB_SOURCES $(SEC_LIB_SOURCES))
-PWD:=$(shell pwd)
-SEC_OBJECTS:=$(patsubst %.c,%.o,$(SEC_LIB_SOURCES))
-OBJECTS:=$(addprefix ../../../../../third_party/bounds_checking_function/src/,${SEC_OBJECTS})
+SEC_LIB_SOURCES = memcpy_s.c memmove_s.c memset_s.c securecutil.c secureinput_a.c secureprintoutput_a.c snprintf_s.c \
+                  sprintf_s.c strcat_s.c strcpy_s.c strncat_s.c strncpy_s.c strtok_s.c  vsnprintf_s.c vsprintf_s.c
+SEC_FUNCTION_OBJECTS := $(patsubst %.c,%.o,$(SEC_LIB_SOURCES))
+SEC_FUNCTION_OBJECTS := $(addprefix $(OHOS_SOURCE_ROOT)/third_party/bounds_checking_function/src/,${SEC_FUNCTION_OBJECTS})
+
 obj-y += \
-              ../../../../framework/utils/src/hdf_cstring.o \
-              ../../../../framework/utils/src/hdf_slist.o \
-              ../../../../framework/utils/src/hdf_sref.o \
-              ../../../../framework/utils/src/hdf_map.o \
-              ../../../../framework/ability/sbuf/src/hdf_sbuf.o \
-              ../../../../framework/ability/sbuf/src/hdf_sbuf_impl_raw.o \
-              ../../../../framework/core/host/src/devhost_service.o \
-              ../../../../framework/core/host/src/devmgr_service_clnt.o \
-              ../../../../framework/core/host/src/devsvc_manager_clnt.o \
-              ../../../../framework/core/host/src/hdf_device.o \
-              ../../../../framework/core/host/src/hdf_device_node.o \
-              ../../../../framework/core/host/src/hdf_device_token.o \
-              ../../../../framework/core/host/src/hdf_driver_loader.o \
-              ../../../../framework/core/host/src/hdf_observer_record.o \
-              ../../../../framework/core/host/src/hdf_service_subscriber.o \
-              ../../../../framework/core/host/src/hdf_device_object.o \
-              ../../../../framework/core/host/src/hdf_service_observer.o \
-              ../../../../framework/core/host/src/power_state_token.o \
-              ../../../../framework/core/manager/src/devhost_service_clnt.o \
-              ../../../../framework/core/manager/src/device_token_clnt.o \
-              ../../../../framework/core/manager/src/devmgr_service.o \
-              ../../../../framework/core/manager/src/devsvc_manager.o \
-              ../../../../framework/core/manager/src/hdf_driver_installer.o \
-              ../../../../framework/core/manager/src/hdf_host_info.o \
-              ../../../../framework/core/manager/src/power_state_token_clnt.o \
-              ../../../../framework/core/shared/src/hdf_service_record.o \
-              ../../../../framework/core/shared/src/hdf_device_info.o \
-              ../../../../framework/core/shared/src/hdf_object_manager.o \
-              ../../../../framework/core/shared/src/hdf_io_service.o \
-              ../../../../framework/core/common/src/devlite_object_config.o \
-              ../../../../framework/core/common/src/hdf_attribute.o \
-              ../../../../framework/core/common/src/load_driver_entry.o \
-              ../../../../framework/core/common/src/devmgr_service_start.o \
-              ../../../../framework/core/common/src/hdf_device_node_ext.o \
-              ../../../../framework/core/adapter/vnode/src/hdf_vnode_adapter.o \
-              ./src/devmgr_load.o \
-              $(OBJECTS)
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/utils/src/hdf_cstring.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/utils/src/hdf_slist.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/utils/src/hdf_sref.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/utils/src/hdf_map.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/ability/sbuf/src/hdf_sbuf.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/ability/sbuf/src/hdf_sbuf_impl_raw.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/host/src/devhost_service.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/host/src/devmgr_service_clnt.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/host/src/devsvc_manager_clnt.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/host/src/hdf_device.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/host/src/hdf_device_node.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/host/src/hdf_device_token.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/host/src/hdf_driver_loader.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/host/src/hdf_observer_record.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/host/src/hdf_service_subscriber.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/host/src/hdf_device_object.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/host/src/hdf_service_observer.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/host/src/power_state_token.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/manager/src/devhost_service_clnt.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/manager/src/device_token_clnt.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/manager/src/devmgr_service.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/manager/src/devsvc_manager.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/manager/src/hdf_driver_installer.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/manager/src/hdf_host_info.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/manager/src/power_state_token_clnt.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/shared/src/hdf_service_record.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/shared/src/hdf_device_info.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/shared/src/hdf_object_manager.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/shared/src/hdf_io_service.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/common/src/devlite_object_config.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/common/src/hdf_attribute.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/common/src/load_driver_entry.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/common/src/devmgr_service_start.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/common/src/hdf_device_node_ext.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/adapter/vnode/src/hdf_vnode_adapter.o \
+        ./src/devmgr_load.o \
+        $(SEC_FUNCTION_OBJECTS)
 
-ccflags-y += -Iinclude/../drivers/hdf/framework/include \
-             -Iinclude/../drivers/hdf/framework/include/osal \
-             -Iinclude/../drivers/hdf/framework/include/utils \
-             -Iinclude/../drivers/hdf/framework/include \
-             -Iinclude/../drivers/hdf/framework/utils/include \
-             -Iinclude/../drivers/hdf/framework/include/core \
-             -Iinclude/../drivers/hdf/framework/ability/sbuf/include \
-             -Iinclude/../drivers/hdf/framework/core/host/include \
-             -Iinclude/../drivers/hdf/framework/core/manager/include \
-             -Iinclude/../drivers/hdf/framework/core/shared/include \
-             -Iinclude/../drivers/hdf/framework/core/common/include/host \
-             -Iinclude/../drivers/hdf/framework/core/common/include/manager \
-             -Iinclude/../drivers/hdf/framework/core/adapter/vnode/include \
-             -I$(PROJECT_ROOT)/third_party/bounds_checking_function/include \
-             -Iinclude/../drivers/hdf/framework/ability/config/hcs_parser/include \
-             -Iinclude/../drivers/hdf/framework/include/config \
-             -Iinclude/../drivers/hdf/framework/ability/config/hcs_parser/include \
-             -Iinclude/../drivers/hdf/khdf/osal/include \
-             -Iinclude/uapi/linux
-
+ccflags-y += \
+        -Idrivers/hdf/framework/include \
+        -Idrivers/hdf/framework/include/osal \
+        -Idrivers/hdf/framework/include/utils \
+        -Idrivers/hdf/framework/include \
+        -Idrivers/hdf/framework/utils/include \
+        -Idrivers/hdf/framework/include/core \
+        -Idrivers/hdf/framework/ability/sbuf/include \
+        -Idrivers/hdf/framework/core/host/include \
+        -Idrivers/hdf/framework/core/manager/include \
+        -Idrivers/hdf/framework/core/shared/include \
+        -Idrivers/hdf/framework/core/common/include/host \
+        -Idrivers/hdf/framework/core/common/include/manager \
+        -Idrivers/hdf/framework/core/adapter/vnode/include \
+        -Idrivers/hdf/framework/ability/config/hcs_parser/include \
+        -Idrivers/hdf/framework/include/config \
+        -Idrivers/hdf/framework/ability/config/hcs_parser/include \
+        -Idrivers/hdf/khdf/osal/include \
+        -Iinclude/uapi/linux \
+        -Ibounds_checking_function/include

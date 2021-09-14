@@ -22,16 +22,16 @@ obj-$(CONFIG_DRIVERS_HDF_DSOFTBUS) += $(DSOFTBUS_ROOT_DIR)/src/wlan_param_monito
 ccflags-$(CONFIG_DRIVERS_HDF_DSOFTBUS) +=-DENABLE_WLAN_PARAM_MONITOR
 endif
 
-ccflags-y += -Iinclude/../drivers/hdf/framework/model/misc/dsoftbus/include \
-             -Iinclude/../drivers/hdf/framework/core/common/include/host \
-             -Iinclude/../drivers/hdf/framework/include/core \
-             -Iinclude/../drivers/hdf/framework/include/osal \
-             -Iinclude/../drivers/hdf/framework/include/utils \
-             -Iinclude/../drivers/hdf/framework/ability/sbuf/include \
-             -Iinclude/../drivers/hdf/framework/include/platform \
-             -Iinclude/../drivers/hdf/framework/include/config \
-             -Iinclude/../drivers/hdf/framework/core/host/include \
-             -Iinclude/../drivers/hdf/framework/core/shared/include \
-             -Iinclude/../drivers/hdf/framework/utils/include \
-             -Iinclude/../drivers/hdf/khdf/osal/include \
-             -I$(PROJECT_ROOT)/third_party/bounds_checking_function/include
+ccflags-y += -Idrivers/hdf/framework/model/misc/dsoftbus/include \
+             -Idrivers/hdf/framework/core/common/include/host \
+             -Idrivers/hdf/framework/include/core \
+             -Idrivers/hdf/framework/include/osal \
+             -Idrivers/hdf/framework/include/utils \
+             -Idrivers/hdf/framework/ability/sbuf/include \
+             -Idrivers/hdf/framework/include/platform \
+             -Idrivers/hdf/framework/include/config \
+             -Idrivers/hdf/framework/core/host/include \
+             -Idrivers/hdf/framework/core/shared/include \
+             -Idrivers/hdf/framework/utils/include \
+             -Idrivers/hdf/khdf/osal/include \
+             -Ibounds_checking_function/include

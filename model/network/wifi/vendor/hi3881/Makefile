@@ -18,7 +18,7 @@ HDF_VENDOR_PREFIX := ../../../../../../../../../
 
 include drivers/hdf/khdf/model/network/wifi/hdfwifi.mk
 
-INC_TOP_PATH := $(PROJECT_ROOT)
+INC_TOP_PATH := drivers/hdf/wifi/driver/
 VENDOR_WIFI_PATH := device/hisilicon/drivers/wifi/driver
 WIFI_DRIVER_DIR := hi3881
 
@@ -39,7 +39,7 @@ ccflags-$(CONFIG_DRIVERS_HDF_WIFI) += \
     $(HDF_WIFI_FRAMEWORKS_INC) \
     $(HDF_WIFI_ADAPTER_INC) \
     $(HDF_WIFI_VENDOR_INC) \
-    -I$(INC_TOP_PATH)/$(VENDOR_WIFI_PATH)/$(WIFI_DRIVER_DIR)/linuxkpi/include \
+    -I$(INC_TOP_PATH)/$(WIFI_DRIVER_DIR)/linuxkpi/include \
     $(SECURE_LIB_INC)
 
 include drivers/hdf/khdf/model/network/wifi/vendor/hi3881/env_config.mk
