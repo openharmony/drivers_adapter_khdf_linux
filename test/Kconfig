@@ -10,7 +10,7 @@
 # GNU General Public License for more details.
 
 config DRIVERS_HDF_TEST
-    bool "Enable HDF linux test"
+    bool "Enable HDF test"
         default n
     depends on DRIVERS_HDF
     help
