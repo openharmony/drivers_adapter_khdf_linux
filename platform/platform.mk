@@ -17,7 +17,9 @@ ccflags-$(CONFIG_DRIVERS_HDF_PLATFORM) += -Idrivers/hdf/framework/include/platfo
     -Idrivers/hdf/framework/support/platform/include \
     -Idrivers/hdf/framework/support/platform/include/mmc \
     -Idrivers/hdf/framework/support/platform/include/common \
-    -Idrivers/hdf/framework/model/storage/include/common \
+    -Idrivers/hdf/framework/model/storage/include \
+    -Idrivers/hdf/framework/model/storage/include/mmc \
+    -Idrivers/hdf/framework/model/storage/include/mtd \
     -Iinclude/hdf \
     -Iinclude/hdf/osal \
     -Iinclude/hdf/utils \

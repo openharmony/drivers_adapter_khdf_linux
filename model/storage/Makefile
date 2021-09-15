@@ -12,10 +12,10 @@
 STORAGE_ROOT_DIR = ../../../../../framework/model/storage
 
 obj-$(CONFIG_DRIVERS_HDF_STORAGE) += \
-               $(STORAGE_ROOT_DIR)/src/common/storage_block.o \
-               ./storage_block_linux.o
+               $(STORAGE_ROOT_DIR)/src/mmc/mmc_block.o \
+               ./mmc_block_linux.o
 
-ccflags-y += -Idrivers/hdf/framework/model/storage/include/common \
+ccflags-y += -Idrivers/hdf/framework/model/storage/include/ \
              -Idrivers/hdf/framework/include/core \
              -Idrivers/hdf/framework/core/common/include/host \
              -Idrivers/hdf/framework/include/utils \
@@ -24,6 +24,7 @@ ccflags-y += -Idrivers/hdf/framework/model/storage/include/common \
              -Idrivers/hdf/framework/ability/sbuf/include \
              -Idrivers/hdf/framework/include/platform \
              -Idrivers/hdf/framework/support/platform/include/common \
+             -Idrivers/hdf/framework/support/platform/include/mmc \
              -Idrivers/hdf/framework/include/config \
              -Idrivers/hdf/khdf/osal/include \
              -Ibounds_checking_function/include
