@@ -19,5 +19,4 @@ obj-y  += $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/mmc/mmc_core.o \
           $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/mmc/mmc_sdio.o \
           $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/mmc/mmc_dispatch.o \
 	  $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/mmc/mmc_if.o \
-	  $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/mmc/mmc_block.o \
 	  $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/mmc/mmc_protocol.o
