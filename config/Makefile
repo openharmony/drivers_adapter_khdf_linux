@@ -17,11 +17,11 @@ obj-y  += ../../../../framework/ability/config/device_resource_if.o \
           ../../../../framework/ability/config/hcs_parser/src/hcs_generate_tree.o \
           ../../../../framework/ability/config/hcs_parser/src/hcs_parser.o \
           ../../../../framework/ability/config/hcs_parser/src/hcs_tree_if.o
-ccflags-y += -Iinclude/hdf \
-             -Iinclude/hdf/osal \
-             -Iinclude/hdf/utils \
-             -Idrivers/hdf/khdf/osal/include \
-             -Idrivers/hdf/framework/include \
-             -Idrivers/hdf/framework/include/utils \
-             -Idrivers/hdf/framework/include/config \
-             -Idrivers/hdf/framework/ability/config/hcs_parser/include
+ccflags-y +=-I$(srctree)/include/hdf \
+            -I$(srctree)/include/hdf/osal \
+            -I$(srctree)/include/hdf/utils \
+            -I$(srctree)/drivers/hdf/khdf/osal/include \
+            -I$(srctree)/drivers/hdf/framework/include \
+            -I$(srctree)/drivers/hdf/framework/include/utils \
+            -I$(srctree)/drivers/hdf/framework/include/config \
+            -I$(srctree)/drivers/hdf/framework/ability/config/hcs_parser/include

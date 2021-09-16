@@ -15,11 +15,11 @@
 obj-$(CONFIG_DRIVERS_HDF_WIFI)  += net_device_adapter.o netbuf_adapter.o
 
 ccflags-$(CONFIG_DRIVERS_HDF_WIFI) += \
-             -Idrivers/hdf/framework/model/network/common/netdevice \
-             -Idrivers/hdf/framework/include/net\
-             -Idrivers/hdf/khdf/network/include \
-             -Idrivers/hdf/khdf/osal/include \
-             -Iinclude/hdf/wifi \
-             -Iinclude/hdf/utils \
-             -Iinclude/hdf/osal \
-             -Ibounds_checking_function/include
+            -I$(srctree)/drivers/hdf/framework/model/network/common/netdevice \
+            -I$(srctree)/drivers/hdf/framework/include/net\
+            -I$(srctree)/drivers/hdf/khdf/network/include \
+            -I$(srctree)/drivers/hdf/khdf/osal/include \
+            -I$(srctree)/include/hdf/wifi \
+            -I$(srctree)/include/hdf/utils \
+            -I$(srctree)/include/hdf/osal \
+            -I$(srctree)/bounds_checking_function/include
