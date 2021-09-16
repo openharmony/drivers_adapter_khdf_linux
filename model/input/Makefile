@@ -28,18 +28,18 @@ obj-$(CONFIG_DRIVERS_HDF_TP_5P5_GT911) += \
 obj-$(CONFIG_DRIVERS_HDF_TP_2P35_FT6236) += \
               $(INPUT_ROOT_DIR)/touchscreen/touch_ft6336.o
 
-ccflags-y += -Idrivers/hdf/framework/model/input/driver \
-             -Idrivers/hdf/framework/model/input/driver/input_bus_ops \
-             -Idrivers/hdf/framework/include/core \
-             -Idrivers/hdf/framework/core/common/include/host \
-             -Idrivers/hdf/framework/include/utils \
-             -Idrivers/hdf/framework/include/osal \
-             -Idrivers/hdf/framework/ability/sbuf/include \
-             -Idrivers/hdf/framework/include/platform \
-             -Idrivers/hdf/framework/include/config \
-             -Idrivers/hdf/framework/core/host/include \
-             -Idrivers/hdf/framework/core/shared/include \
-             -Idrivers/hdf/framework/utils/include \
-             -Idrivers/hdf/khdf/osal/include
-ccflags-y += -Ibounds_checking_function/include \
-             -Idrivers/hdf/evdev
+ccflags-y +=-I$(srctree)/drivers/hdf/framework/model/input/driver \
+            -I$(srctree)/drivers/hdf/framework/model/input/driver/input_bus_ops \
+            -I$(srctree)/drivers/hdf/framework/include/core \
+            -I$(srctree)/drivers/hdf/framework/core/common/include/host \
+            -I$(srctree)/drivers/hdf/framework/include/utils \
+            -I$(srctree)/drivers/hdf/framework/include/osal \
+            -I$(srctree)/drivers/hdf/framework/ability/sbuf/include \
+            -I$(srctree)/drivers/hdf/framework/include/platform \
+            -I$(srctree)/drivers/hdf/framework/include/config \
+            -I$(srctree)/drivers/hdf/framework/core/host/include \
+            -I$(srctree)/drivers/hdf/framework/core/shared/include \
+            -I$(srctree)/drivers/hdf/framework/utils/include \
+            -I$(srctree)/drivers/hdf/khdf/osal/include
+ccflags-y +=-I$(srctree)/bounds_checking_function/include \
+            -I$(srctree)/drivers/hdf/evdev
