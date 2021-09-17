@@ -39,7 +39,7 @@ ccflags-$(CONFIG_DRIVERS_HDF_WIFI) += \
     $(HDF_WIFI_FRAMEWORKS_INC) \
     $(HDF_WIFI_ADAPTER_INC) \
     $(HDF_WIFI_VENDOR_INC) \
-    -I$(INC_TOP_PATH)/$(WIFI_DRIVER_DIR)/linuxkpi/include \
+   -I$(srctree)/$(INC_TOP_PATH)/$(WIFI_DRIVER_DIR)/linuxkpi/include \
     $(SECURE_LIB_INC)
 
 include drivers/hdf/khdf/model/network/wifi/vendor/hi3881/env_config.mk

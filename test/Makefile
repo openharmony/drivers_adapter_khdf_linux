@@ -61,33 +61,33 @@ obj-$(CONFIG_DRIVERS_HDF_AUDIO_TEST) += $(HDF_FRAMWORK_TEST_ROOT)/model/audio/sr
                                         $(HDF_FRAMWORK_TEST_ROOT)/model/audio/src/audio_sapm_test.o \
                                         $(HDF_FRAMWORK_TEST_ROOT)/model/audio/src/audio_stream_dispatch_test.o
 
-ccflags-y += -Idrivers/hdf/framework/include \
-             -Idrivers/hdf/framework/include/osal \
-             -Idrivers/hdf/framework/include/utils \
-             -Idrivers/hdf/framework/include \
-             -Idrivers/hdf/framework/utils/include \
-             -Idrivers/hdf/framework/include/core \
-             -Idrivers/hdf/framework/ability/sbuf/include \
-             -Idrivers/hdf/framework/core/host/include \
-             -Idrivers/hdf/framework/core/manager/include \
-             -Idrivers/hdf/framework/core/shared/include \
-             -Idrivers/hdf/framework/core/common/include/host \
-             -Idrivers/hdf/framework/core/common/include/manager \
-             -Idrivers/hdf/framework/core/adapter/vnode/include \
-             -Ibounds_checking_function/include \
-             -Idrivers/hdf/framework/ability/config/hcs_parser/include \
-             -Idrivers/hdf/framework/test/unittest/config \
-             -Idrivers/hdf/framework/test/unittest/ability/config/hcs_parser/unittest \
-             -Idrivers/hdf/framework/include/config \
-             -Idrivers/hdf/framework/ability/config/hcs_parser/include \
-             -Idrivers/hdf/framework/test/unittest/osal \
-             -Idrivers/hdf/khdf/osal/include \
-             -Idrivers/hdf/framework/model/audio/include \
-             -Idrivers/hdf/framework/model/audio/sapm/include \
-             -Idrivers/hdf/framework/model/audio/dispatch/include \
-             -Idrivers/hdf/framework/test/unittest/model/audio/include \
-             -Idrivers/hdf/framework/../peripheral/audio/interfaces/include \
-             -Idrivers/hdf/framework/model/audio/dispatch/include \
-             -Idrivers/hdf/framework/model/audio/device/codec/include \
-             -Idrivers/hdf/framework/model/audio/device/soc/include \
-             -Idrivers/hdf/framework/model/audio/device/accessory/include
+ccflags-y +=-I$(srctree)/drivers/hdf/framework/include \
+            -I$(srctree)/drivers/hdf/framework/include/osal \
+            -I$(srctree)/drivers/hdf/framework/include/utils \
+            -I$(srctree)/drivers/hdf/framework/include \
+            -I$(srctree)/drivers/hdf/framework/utils/include \
+            -I$(srctree)/drivers/hdf/framework/include/core \
+            -I$(srctree)/drivers/hdf/framework/ability/sbuf/include \
+            -I$(srctree)/drivers/hdf/framework/core/host/include \
+            -I$(srctree)/drivers/hdf/framework/core/manager/include \
+            -I$(srctree)/drivers/hdf/framework/core/shared/include \
+            -I$(srctree)/drivers/hdf/framework/core/common/include/host \
+            -I$(srctree)/drivers/hdf/framework/core/common/include/manager \
+            -I$(srctree)/drivers/hdf/framework/core/adapter/vnode/include \
+            -I$(srctree)/bounds_checking_function/include \
+            -I$(srctree)/drivers/hdf/framework/ability/config/hcs_parser/include \
+            -I$(srctree)/drivers/hdf/framework/test/unittest/config \
+            -I$(srctree)/drivers/hdf/framework/test/unittest/ability/config/hcs_parser/unittest \
+            -I$(srctree)/drivers/hdf/framework/include/config \
+            -I$(srctree)/drivers/hdf/framework/ability/config/hcs_parser/include \
+            -I$(srctree)/drivers/hdf/framework/test/unittest/osal \
+            -I$(srctree)/drivers/hdf/khdf/osal/include \
+            -I$(srctree)/drivers/hdf/framework/model/audio/include \
+            -I$(srctree)/drivers/hdf/framework/model/audio/sapm/include \
+            -I$(srctree)/drivers/hdf/framework/model/audio/dispatch/include \
+            -I$(srctree)/drivers/hdf/framework/test/unittest/model/audio/include \
+            -I$(srctree)/drivers/hdf/framework/../peripheral/audio/interfaces/include \
+            -I$(srctree)/drivers/hdf/framework/model/audio/dispatch/include \
+            -I$(srctree)/drivers/hdf/framework/model/audio/device/codec/include \
+            -I$(srctree)/drivers/hdf/framework/model/audio/device/soc/include \
+            -I$(srctree)/drivers/hdf/framework/model/audio/device/accessory/include
