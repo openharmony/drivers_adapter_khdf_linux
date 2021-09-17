@@ -60,22 +60,22 @@ obj-y += \
         $(SEC_FUNCTION_OBJECTS)
 
 ccflags-y += \
-        -Idrivers/hdf/framework/include \
-        -Idrivers/hdf/framework/include/osal \
-        -Idrivers/hdf/framework/include/utils \
-        -Idrivers/hdf/framework/include \
-        -Idrivers/hdf/framework/utils/include \
-        -Idrivers/hdf/framework/include/core \
-        -Idrivers/hdf/framework/ability/sbuf/include \
-        -Idrivers/hdf/framework/core/host/include \
-        -Idrivers/hdf/framework/core/manager/include \
-        -Idrivers/hdf/framework/core/shared/include \
-        -Idrivers/hdf/framework/core/common/include/host \
-        -Idrivers/hdf/framework/core/common/include/manager \
-        -Idrivers/hdf/framework/core/adapter/vnode/include \
-        -Idrivers/hdf/framework/ability/config/hcs_parser/include \
-        -Idrivers/hdf/framework/include/config \
-        -Idrivers/hdf/framework/ability/config/hcs_parser/include \
-        -Idrivers/hdf/khdf/osal/include \
-        -Iinclude/uapi/linux \
-        -Ibounds_checking_function/include
+       -I$(srctree)/drivers/hdf/framework/include \
+       -I$(srctree)/drivers/hdf/framework/include/osal \
+       -I$(srctree)/drivers/hdf/framework/include/utils \
+       -I$(srctree)/drivers/hdf/framework/include \
+       -I$(srctree)/drivers/hdf/framework/utils/include \
+       -I$(srctree)/drivers/hdf/framework/include/core \
+       -I$(srctree)/drivers/hdf/framework/ability/sbuf/include \
+       -I$(srctree)/drivers/hdf/framework/core/host/include \
+       -I$(srctree)/drivers/hdf/framework/core/manager/include \
+       -I$(srctree)/drivers/hdf/framework/core/shared/include \
+       -I$(srctree)/drivers/hdf/framework/core/common/include/host \
+       -I$(srctree)/drivers/hdf/framework/core/common/include/manager \
+       -I$(srctree)/drivers/hdf/framework/core/adapter/vnode/include \
+       -I$(srctree)/drivers/hdf/framework/ability/config/hcs_parser/include \
+       -I$(srctree)/drivers/hdf/framework/include/config \
+       -I$(srctree)/drivers/hdf/framework/ability/config/hcs_parser/include \
+       -I$(srctree)/drivers/hdf/khdf/osal/include \
+       -I$(srctree)/include/uapi/linux \
+       -I$(srctree)/bounds_checking_function/include

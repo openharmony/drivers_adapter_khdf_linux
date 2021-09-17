@@ -16,7 +16,7 @@
  *
  */
 
-#include "mmc/mmc_block.h"
+#include "mmc_block.h"
 
 int32_t MmcBlockOsInit(struct MmcDevice *mmcDevice)
 {

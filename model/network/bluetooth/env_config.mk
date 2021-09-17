@@ -13,29 +13,29 @@
 #
 
 HDF_FRAMEWORKS_INC := \
-    -I./ \
-    -Idrivers/hdf/framework/ability/sbuf/include \
-    -Idrivers/hdf/framework/core/common/include/host \
-    -Idrivers/hdf/framework/core/host/include \
-    -Idrivers/hdf/framework/core/manager/include \
-    -Idrivers/hdf/framework/core/shared/include \
-    -Idrivers/hdf/framework/include \
-    -Idrivers/hdf/framework/include/config \
-    -Idrivers/hdf/framework/include/core \
-    -Idrivers/hdf/framework/include/platform \
-    -Idrivers/hdf/framework/include/utils \
-    -Idrivers/hdf/framework/support/platform/include \
-    -Idrivers/hdf/framework/support/platform/include/platform \
-    -Idrivers/hdf/framework/utils/include \
-    -Idrivers/hdf/khdf/osal/include \
-    -Idrivers/hdf/khdf/config/include \
-    -Iinclude/hdf \
-    -Iinclude/hdf/osal \
-    -Iinclude/hdf/utils \
-    -Idrivers/hdf/framework/include/bluetooth
+   -I$(srctree)/./ \
+   -I$(srctree)/drivers/hdf/framework/ability/sbuf/include \
+   -I$(srctree)/drivers/hdf/framework/core/common/include/host \
+   -I$(srctree)/drivers/hdf/framework/core/host/include \
+   -I$(srctree)/drivers/hdf/framework/core/manager/include \
+   -I$(srctree)/drivers/hdf/framework/core/shared/include \
+   -I$(srctree)/drivers/hdf/framework/include \
+   -I$(srctree)/drivers/hdf/framework/include/config \
+   -I$(srctree)/drivers/hdf/framework/include/core \
+   -I$(srctree)/drivers/hdf/framework/include/platform \
+   -I$(srctree)/drivers/hdf/framework/include/utils \
+   -I$(srctree)/drivers/hdf/framework/support/platform/include \
+   -I$(srctree)/drivers/hdf/framework/support/platform/include/platform \
+   -I$(srctree)/drivers/hdf/framework/utils/include \
+   -I$(srctree)/drivers/hdf/khdf/osal/include \
+   -I$(srctree)/drivers/hdf/khdf/config/include \
+   -I$(srctree)/include/hdf \
+   -I$(srctree)/include/hdf/osal \
+   -I$(srctree)/include/hdf/utils \
+   -I$(srctree)/drivers/hdf/framework/include/bluetooth
 
 HDF_BT_FRAMEWORKS_INC := \
-    -Idrivers/hdf/framework/model/network/bluetooth
+   -I$(srctree)/drivers/hdf/framework/model/network/bluetooth
 
 SECURE_LIB_INC := \
-    -Ibounds_checking_function/include
+   -I$(srctree)/bounds_checking_function/include

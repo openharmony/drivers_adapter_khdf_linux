@@ -400,6 +400,46 @@ int32_t MipiDsiDevSetCmd(struct MipiDsiCntlr *cntlr, struct DsiCmdDesc *arg)
     return ret;
 }
 
+int32_t MipiDsiDevCmdCopyFromUser(GetDsiCmdDescTag *arg, GetDsiCmdDescTag *temp, uint32_t *size)
+{
+    if (access_ok(
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,6,0)
+        VERIFY_READ,
+#endif
+        arg, *size)) { /* user space */
+        if (CopyFromUser(temp, arg, *size) != 0) {
+            HDF_LOGE("%s: [CopyFromUser] failed.", __func__);
+            return HDF_FAILURE;
+        }
+    } else { /* kernel space */
+        if (memcpy_s(temp, *size, arg, *size) != EOK) {
+            HDF_LOGE("%s: [memcpy_s] failed.", __func__);
+            return HDF_FAILURE;
+        }
+    }
+    return HDF_SUCCESS;
+}
+
+int32_t MipiDsiDevCmdCopyToUser(GetDsiCmdDescTag *arg, GetDsiCmdDescTag *temp, uint32_t *size)
+{
+    if (access_ok(
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,6,0)
+        VERIFY_WRITE,
+#endif
+        arg, *size)) { /* user space */
+        if (CopyToUser(arg, temp, *size) != 0) {
+            HDF_LOGE("%s: [CopyToUser] failed.", __func__);
+            return HDF_FAILURE;
+        }
+    } else { /* kernel space */
+        if (memcpy_s(arg, *size, temp, *size) != EOK) {
+            HDF_LOGE("%s: [memcpy_s] failed.", __func__);
+            return HDF_FAILURE;
+        }
+    }
+    return HDF_SUCCESS;
+}
+
 int32_t MipiDsiDevGetCmd(struct MipiDsiCntlr *cntlr, GetDsiCmdDescTag *arg)
 {
     int32_t ret;
@@ -415,40 +455,16 @@ int32_t MipiDsiDevGetCmd(struct MipiDsiCntlr *cntlr, GetDsiCmdDescTag *arg)
         HDF_LOGE("%s: [OsalMemCalloc] error.", __func__);
         return HDF_ERR_MALLOC_FAIL;
     }
-    if (access_ok(
-#if LINUX_VERSION_CODE < KERNEL_VERSION(5,6,0)
-        VERIFY_READ,
-#endif
-        arg, size)) { /* user space */
-        if (CopyFromUser(temp, arg, size) != 0) {
-            HDF_LOGE("%s: [CopyFromUser] failed.", __func__);
-            goto fail0;
-        }
-    } else { /* kernel space */
-        if (memcpy_s(temp, size, arg, size) != EOK) {
-            HDF_LOGE("%s: [memcpy_s] failed.", __func__);
-            goto fail0;
-        }
+    if (MipiDsiDevCmdCopyFromUser(arg, temp, &size) != HDF_SUCCESS) {
+        goto fail0;
     }
     ret = MipiDsiCntlrRx(cntlr, &temp->readCmd, temp->readLen, temp->out);
     if (ret != HDF_SUCCESS) {
         HDF_LOGE("%s: [MipiDsiCntlrRx] failed.", __func__);
         goto fail0;
     }
-    if (access_ok(
-#if LINUX_VERSION_CODE < KERNEL_VERSION(5,6,0)
-        VERIFY_WRITE,
-#endif
-        arg, size)) { /* user space */
-        if (CopyToUser(arg, temp, size) != 0) {
-            HDF_LOGE("%s: [CopyToUser] failed.", __func__);
-            goto fail0;
-        }
-    } else { /* kernel space */
-        if (memcpy_s(arg, size, temp, size) != EOK) {
-            HDF_LOGE("%s: [memcpy_s] failed.", __func__);
-            goto fail0;
-        }
+    if (MipiDsiDevCmdCopyToUser(arg, temp, &size) != HDF_SUCCESS) {
+        goto fail0;
     }
     OsalMemFree(temp);
     temp = NULL;
