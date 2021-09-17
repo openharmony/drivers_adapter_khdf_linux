@@ -13,24 +13,24 @@
 #
 
 HDF_PLATFORM_FRAMEWORKS_ROOT = ../../../../../framework/support/platform
-ccflags-$(CONFIG_DRIVERS_HDF_PLATFORM) += -Idrivers/hdf/framework/include/platform \
-    -Idrivers/hdf/framework/support/platform/include \
-    -Idrivers/hdf/framework/support/platform/include/mmc \
-    -Idrivers/hdf/framework/support/platform/include/common \
-    -Idrivers/hdf/framework/model/storage/include/common \
-    -Iinclude/hdf \
-    -Iinclude/hdf/osal \
-    -Iinclude/hdf/utils \
-    -Idrivers/hdf/khdf/osal/include \
-    -Idrivers/hdf/framework/include \
-    -Idrivers/hdf/framework/include/utils \
-    -Idrivers/hdf/framework/include/config \
-    -Idrivers/hdf/khdf/config/include \
-    -Idrivers/hdf/framework/core/manager/include \
-    -Idrivers/hdf/framework/core/host/include \
-    -Idrivers/hdf/framework/core/shared/include \
-    -Idrivers/hdf/framework/include/core \
-    -Idrivers/hdf/framework/core/common/include/host \
-    -Idrivers/hdf/framework/ability/sbuf/include \
-    -Idrivers/hdf/framework/utils/include \
-    -Ibounds_checking_function/include
+ccflags-$(CONFIG_DRIVERS_HDF_PLATFORM) +=-I$(srctree)/drivers/hdf/framework/include/platform \
+   -I$(srctree)/drivers/hdf/framework/support/platform/include \
+   -I$(srctree)/drivers/hdf/framework/support/platform/include/mmc \
+   -I$(srctree)/drivers/hdf/framework/support/platform/include/common \
+   -I$(srctree)/drivers/hdf/framework/model/storage/include/common \
+   -I$(srctree)/include/hdf \
+   -I$(srctree)/include/hdf/osal \
+   -I$(srctree)/include/hdf/utils \
+   -I$(srctree)/drivers/hdf/khdf/osal/include \
+   -I$(srctree)/drivers/hdf/framework/include \
+   -I$(srctree)/drivers/hdf/framework/include/utils \
+   -I$(srctree)/drivers/hdf/framework/include/config \
+   -I$(srctree)/drivers/hdf/khdf/config/include \
+   -I$(srctree)/drivers/hdf/framework/core/manager/include \
+   -I$(srctree)/drivers/hdf/framework/core/host/include \
+   -I$(srctree)/drivers/hdf/framework/core/shared/include \
+   -I$(srctree)/drivers/hdf/framework/include/core \
+   -I$(srctree)/drivers/hdf/framework/core/common/include/host \
+   -I$(srctree)/drivers/hdf/framework/ability/sbuf/include \
+   -I$(srctree)/drivers/hdf/framework/utils/include \
+   -I$(srctree)/bounds_checking_function/include

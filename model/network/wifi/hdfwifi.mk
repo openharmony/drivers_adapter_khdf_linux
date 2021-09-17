@@ -16,45 +16,45 @@ HDF_WIFI_FRAMEWORKS_ROOT = $(HDF_DIR_PREFIX)/framework/model/network/wifi
 HDF_WIFI_KHDF_FRAMEWORKS_ROOT = $(HDF_DIR_PREFIX)/adapter/khdf/linux/model/network/wifi
 HDF_WIFI_VENDOR_ROOT = $(HDF_VENDOR_PREFIX)/device/hisilicon/drivers/wifi/driver
 HDF_FRAMEWORKS_INC := \
-    -Idrivers/hdf/framework/ability/sbuf/include \
-    -Idrivers/hdf/framework/core/common/include/host \
-    -Idrivers/hdf/framework/core/host/include \
-    -Idrivers/hdf/framework/core/manager/include \
-    -Idrivers/hdf/framework/core/shared/include \
-    -Idrivers/hdf/framework/include \
-    -Idrivers/hdf/framework/include/config \
-    -Idrivers/hdf/framework/include/core \
-    -Idrivers/hdf/framework/include/platform \
-    -Idrivers/hdf/framework/include/utils \
-    -Idrivers/hdf/framework/support/platform/include \
-    -Idrivers/hdf/framework/support/platform/include/platform \
-    -Idrivers/hdf/framework/utils/include \
-    -Idrivers/hdf/khdf/osal/include \
-    -Idrivers/hdf/khdf/config/include \
-    -Iinclude/hdf \
-    -Iinclude/hdf/osal \
-    -Iinclude/hdf/utils
+   -I$(srctree)/drivers/hdf/framework/ability/sbuf/include \
+   -I$(srctree)/drivers/hdf/framework/core/common/include/host \
+   -I$(srctree)/drivers/hdf/framework/core/host/include \
+   -I$(srctree)/drivers/hdf/framework/core/manager/include \
+   -I$(srctree)/drivers/hdf/framework/core/shared/include \
+   -I$(srctree)/drivers/hdf/framework/include \
+   -I$(srctree)/drivers/hdf/framework/include/config \
+   -I$(srctree)/drivers/hdf/framework/include/core \
+   -I$(srctree)/drivers/hdf/framework/include/platform \
+   -I$(srctree)/drivers/hdf/framework/include/utils \
+   -I$(srctree)/drivers/hdf/framework/support/platform/include \
+   -I$(srctree)/drivers/hdf/framework/support/platform/include/platform \
+   -I$(srctree)/drivers/hdf/framework/utils/include \
+   -I$(srctree)/drivers/hdf/khdf/osal/include \
+   -I$(srctree)/drivers/hdf/khdf/config/include \
+   -I$(srctree)/include/hdf \
+   -I$(srctree)/include/hdf/osal \
+   -I$(srctree)/include/hdf/utils
 
 HDF_WIFI_FRAMEWORKS_INC := \
-    -Idrivers/hdf/framework/model/network/wifi/core/components/eapol \
-    -Idrivers/hdf/framework/model/network/wifi/core/components/softap \
-    -Idrivers/hdf/framework/model/network/wifi/core/components/sta \
-    -Idrivers/hdf/framework/model/network/wifi/include \
-    -Idrivers/hdf/framework/model/network/wifi/core \
-    -Idrivers/hdf/framework/model/network/wifi/core/module \
-    -Idrivers/hdf/framework/model/network/common/netdevice \
-    -Idrivers/hdf/framework/model/network/wifi/platform/include \
-    -Idrivers/hdf/framework/model/network/wifi/platform/include/message \
-    -Idrivers/hdf/framework/model/network/wifi/client/include \
-    -Idrivers/hdf/framework/include/wifi \
-    -Idrivers/hdf/framework/include/net \
-    -Idrivers/hdf/frameworks/model/network/wifi/bus
+   -I$(srctree)/drivers/hdf/framework/model/network/wifi/core/components/eapol \
+   -I$(srctree)/drivers/hdf/framework/model/network/wifi/core/components/softap \
+   -I$(srctree)/drivers/hdf/framework/model/network/wifi/core/components/sta \
+   -I$(srctree)/drivers/hdf/framework/model/network/wifi/include \
+   -I$(srctree)/drivers/hdf/framework/model/network/wifi/core \
+   -I$(srctree)/drivers/hdf/framework/model/network/wifi/core/module \
+   -I$(srctree)/drivers/hdf/framework/model/network/common/netdevice \
+   -I$(srctree)/drivers/hdf/framework/model/network/wifi/platform/include \
+   -I$(srctree)/drivers/hdf/framework/model/network/wifi/platform/include/message \
+   -I$(srctree)/drivers/hdf/framework/model/network/wifi/client/include \
+   -I$(srctree)/drivers/hdf/framework/include/wifi \
+   -I$(srctree)/drivers/hdf/framework/include/net \
+   -I$(srctree)/drivers/hdf/frameworks/model/network/wifi/bus
 
 HDF_WIFI_ADAPTER_INC := \
-    -Idrivers/hdf/khdf/network/include
+   -I$(srctree)/drivers/hdf/khdf/network/include
 
 HDF_WIFI_VENDOR_INC := \
-    -Idrivers/hdf/wifi/driver/core
+   -I$(srctree)/drivers/hdf/wifi/driver/core
 
 SECURE_LIB_INC := \
-    -Ibounds_checking_function/include
+   -I$(srctree)/bounds_checking_function/include
