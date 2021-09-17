@@ -14,16 +14,16 @@ obj-$(CONFIG_DRIVERS_HDF_USB_PNP_NOTIFY) += \
          $(USB_PNP_NOTIFY_ROOT_DIR)/src/usb_pnp_notify.o
 
 ccflags-y += -lm -lc -lgcc \
-             -Idrivers/hdf/khdf/model/usb/host/include \
-             -Idrivers/hdf/framework/include/utils \
-             -Idrivers/hdf/framework/utils/include \
-             -Idrivers/hdf/khdf/osal/include \
-             -Idrivers/hdf/framework/include/core \
-             -Idrivers/hdf/framework/core/common/include/host \
-             -Idrivers/hdf/framework/core/shared/include \
-             -Idrivers/hdf/framework/ability/sbuf/include \
-             -Idrivers/hdf/framework/include \
-             -Idrivers/hdf/framework/include/osal \
-             -Idrivers/hdf/framework/include/platform \
-             -Idrivers/hdf/framework/include/config \
-             -Ibounds_checking_function/include
+            -I$(srctree)/drivers/hdf/khdf/model/usb/host/include \
+            -I$(srctree)/drivers/hdf/framework/include/utils \
+            -I$(srctree)/drivers/hdf/framework/utils/include \
+            -I$(srctree)/drivers/hdf/khdf/osal/include \
+            -I$(srctree)/drivers/hdf/framework/include/core \
+            -I$(srctree)/drivers/hdf/framework/core/common/include/host \
+            -I$(srctree)/drivers/hdf/framework/core/shared/include \
+            -I$(srctree)/drivers/hdf/framework/ability/sbuf/include \
+            -I$(srctree)/drivers/hdf/framework/include \
+            -I$(srctree)/drivers/hdf/framework/include/osal \
+            -I$(srctree)/drivers/hdf/framework/include/platform \
+            -I$(srctree)/drivers/hdf/framework/include/config \
+            -I$(srctree)/bounds_checking_function/include

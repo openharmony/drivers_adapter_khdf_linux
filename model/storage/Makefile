@@ -15,16 +15,17 @@ obj-$(CONFIG_DRIVERS_HDF_STORAGE) += \
                $(STORAGE_ROOT_DIR)/src/mmc/mmc_block.o \
                ./mmc_block_linux.o
 
-ccflags-y += -Idrivers/hdf/framework/model/storage/include/ \
-             -Idrivers/hdf/framework/include/core \
-             -Idrivers/hdf/framework/core/common/include/host \
-             -Idrivers/hdf/framework/include/utils \
-             -Idrivers/hdf/framework/utils/include \
-             -Idrivers/hdf/framework/include/osal \
-             -Idrivers/hdf/framework/ability/sbuf/include \
-             -Idrivers/hdf/framework/include/platform \
-             -Idrivers/hdf/framework/support/platform/include/common \
-             -Idrivers/hdf/framework/support/platform/include/mmc \
-             -Idrivers/hdf/framework/include/config \
-             -Idrivers/hdf/khdf/osal/include \
-             -Ibounds_checking_function/include
+ccflags-y +=-I$(srctree)/drivers/hdf/framework/model/storage/include/mmc \
+            -I$(srctree)/drivers/hdf/framework/model/storage/include/mtd \
+            -I$(srctree)/drivers/hdf/framework/include/core \
+            -I$(srctree)/drivers/hdf/framework/core/common/include/host \
+            -I$(srctree)/drivers/hdf/framework/include/utils \
+            -I$(srctree)/drivers/hdf/framework/utils/include \
+            -I$(srctree)/drivers/hdf/framework/include/osal \
+            -I$(srctree)/drivers/hdf/framework/ability/sbuf/include \
+            -I$(srctree)/drivers/hdf/framework/include/platform \
+            -I$(srctree)/drivers/hdf/framework/support/platform/include/common \
+            -I$(srctree)/drivers/hdf/framework/support/platform/include/mmc \
+            -I$(srctree)/drivers/hdf/framework/include/config \
+            -I$(srctree)/drivers/hdf/khdf/osal/include \
+            -I$(srctree)/bounds_checking_function/include
