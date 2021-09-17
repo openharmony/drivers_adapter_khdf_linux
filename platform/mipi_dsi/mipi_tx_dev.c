@@ -616,18 +616,18 @@ static int MipiDsiDevProcOpen(struct inode *inode, struct file *file)
 }
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0)
-static const struct proc_ops g_procMipiDsiDevOps = {
+static struct proc_ops g_procMipiDsiDevOps = {
     .proc_open = MipiDsiDevProcOpen,
     .proc_read = seq_read,
 };
 #else
-static const struct file_operations g_procMipiDsiDevOps = {
+static struct file_operations g_procMipiDsiDevOps = {
     .open = MipiDsiDevProcOpen,
     .read = seq_read,
 };
 #endif
 
-static const struct file_operations g_mipiTxfOps = {
+static struct file_operations g_mipiTxfOps = {
     .open = MipiDsiDevOpen,
     .release = MipiDsiDevRelease,
     .unlocked_ioctl = MipiDsiDevIoctl,

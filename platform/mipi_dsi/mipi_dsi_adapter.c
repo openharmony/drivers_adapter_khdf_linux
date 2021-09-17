@@ -28,7 +28,7 @@
 
 #define HDF_LOG_TAG mipi_dsi_drm_adapter
 
-static struct mipi_dsi_device *GetLinuxPanel(struct MipiDsiCntlr *cntlr)
+static struct mipi_dsi_device *GetLinuxPanel(const struct MipiDsiCntlr *cntlr)
 {
     if (cntlr == NULL) {
         HDF_LOGE("%s: dev is NULL!", __func__);
@@ -237,7 +237,7 @@ static int32_t MipiDsiAdapterInit(struct HdfDeviceObject *device)
     return HDF_SUCCESS;
 }
 
-static void MipiDsiAdapterRelease(struct HdfDeviceObject *device)
+static void MipiDsiAdapterRelease(const struct HdfDeviceObject *device)
 {
     struct MipiDsiCntlr *cntlr;
 
