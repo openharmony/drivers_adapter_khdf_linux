@@ -1771,7 +1771,7 @@ static int ffs_epfiles_create(struct ffs_data *ffs)
 				return -EFAULT;
 			}
 		} else {
-			if (sprintf_s(epfile->name, MAX_NAMELEN, "%s.ep%u", ffs->dev_name, i) < 0 ){
+			if (sprintf_s(epfile->name, MAX_NAMELEN, "%s.ep%u", ffs->dev_name, i) < 0) {
 				return -EFAULT;
 			}
 		}
@@ -2866,7 +2866,7 @@ static int __ffs_func_bind_do_os_desc(enum ffs_os_desc_type type,
 		ext_prop->data = ext_prop_data;
 
 		memcpy_s(ext_prop_name, ext_prop->name_len, usb_ext_prop_name_ptr(data),
-		       ext_prop->name_len);
+			ext_prop->name_len);
 		/* property name reported to the host as "WCHAR"s */
 		ext_prop->name_len *= 2;
 		ext_prop->name = ext_prop_name;
