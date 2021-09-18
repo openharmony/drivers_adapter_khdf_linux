@@ -16,15 +16,15 @@
  *
  */
 
-#include "storage_block.h"
+#include "mmc_block.h"
 
-int32_t StorageBlockOsInit(struct StorageBlock *sb)
+int32_t MmcBlockOsInit(struct MmcDevice *mmcDevice)
 {
-    (void)sb;
+    (void)mmcDevice;
     return HDF_SUCCESS;
 }
 
-void StorageBlockOsUninit(struct StorageBlock *sb)
+void MmcBlockOsUninit(struct MmcDevice *mmcDevice)
 {
-    (void)sb;
+    (void)mmcDevice;
 }
