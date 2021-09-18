@@ -12,10 +12,11 @@
 STORAGE_ROOT_DIR = ../../../../../framework/model/storage
 
 obj-$(CONFIG_DRIVERS_HDF_STORAGE) += \
-               $(STORAGE_ROOT_DIR)/src/common/storage_block.o \
-               ./storage_block_linux.o
+               $(STORAGE_ROOT_DIR)/src/mmc/mmc_block.o \
+               ./mmc_block_linux.o
 
-ccflags-y +=-I$(srctree)/drivers/hdf/framework/model/storage/include/common \
+ccflags-y +=-I$(srctree)/drivers/hdf/framework/model/storage/include/mmc \
+            -I$(srctree)/drivers/hdf/framework/model/storage/include/mtd \
             -I$(srctree)/drivers/hdf/framework/include/core \
             -I$(srctree)/drivers/hdf/framework/core/common/include/host \
             -I$(srctree)/drivers/hdf/framework/include/utils \
@@ -24,6 +25,7 @@ ccflags-y +=-I$(srctree)/drivers/hdf/framework/model/storage/include/common \
             -I$(srctree)/drivers/hdf/framework/ability/sbuf/include \
             -I$(srctree)/drivers/hdf/framework/include/platform \
             -I$(srctree)/drivers/hdf/framework/support/platform/include/common \
+            -I$(srctree)/drivers/hdf/framework/support/platform/include/mmc \
             -I$(srctree)/drivers/hdf/framework/include/config \
             -I$(srctree)/drivers/hdf/khdf/osal/include \
             -I$(srctree)/bounds_checking_function/include
