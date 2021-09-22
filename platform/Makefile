@@ -14,6 +14,7 @@
 
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM)           += common/
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_MIPI_DSI)  += mipi_dsi/
+obj-$(CONFIG_DRIVERS_HDF_PLATFORM_MIPI_CSI)  += mipi_csi/
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_GPIO)      += gpio/
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_I2C)       += i2c/
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_WATCHDOG)  += watchdog/
