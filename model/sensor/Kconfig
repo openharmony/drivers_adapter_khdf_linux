@@ -39,7 +39,7 @@ config DRIVERS_HDF_SENSOR_ALS_BH1745
     default n
     depends on DRIVERS_HDF_SENSOR_ALS
     help
-      Answer Y to enable HDF accel bh1745 sensor driver.
+      Answer Y to enable HDF als bh1745 sensor driver.
 config DRIVERS_HDF_SENSOR_GYRO
     bool "Enable HDF gyro sensor driver"
     default n
