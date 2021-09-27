@@ -25,7 +25,6 @@ obj-y += \
           $(KHDF_AUDIO_ROOT_DIR)/core/src/audio_parse.o \
           $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_accessory_base.o \
           $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_codec_base.o \
-          $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_dsp_base.o \
           $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_platform_base.o \
           $(KHDF_AUDIO_ROOT_DIR)/sapm/src/audio_sapm.o \
           $(KHDF_AUDIO_ROOT_DIR)/dispatch/src/audio_stream_dispatch.o \
@@ -47,7 +46,6 @@ obj-$(CONFIG_ARCH_HI3516DV300) += \
           $(KHDF_AUDIO_ROOT_DIR)/core/src/audio_parse.o \
           $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_accessory_base.o \
           $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_codec_base.o \
-          $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_dsp_base.o \
           $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_platform_base.o \
           $(KHDF_AUDIO_ROOT_DIR)/sapm/src/audio_sapm.o \
           $(KHDF_AUDIO_ROOT_DIR)/dispatch/src/audio_stream_dispatch.o \
