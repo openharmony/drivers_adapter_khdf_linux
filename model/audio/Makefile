@@ -50,7 +50,6 @@ ccflags-y += -lm -lc -lgcc -std=gnu99 -Werror \
             -I$(srctree)/$(KHDF_FRAMEWORK_ROOT_DIR)/include/platform \
             -I$(srctree)/$(KHDF_FRAMEWORK_ROOT_DIR)/include/config \
             -I$(srctree)/$(KHDF_FRAMEWORK_ROOT_DIR)/include/audio \
-            -I$(srctree)/$(KHDF_FRAMEWORK_ROOT_DIR)/ability/sbuf/include \
             -I$(srctree)/$(KHDF_FRAMEWORK_ROOT_DIR)/core/common/include/host \
             -I$(srctree)/$(KHDF_FRAMEWORK_ROOT_DIR)/model/audio/core/include \
             -I$(srctree)/$(KHDF_FRAMEWORK_ROOT_DIR)/model/audio/sapm/include \

@@ -6,7 +6,6 @@ ccflags-y += -lm -lc -lgcc \
             -I$(srctree)/drivers/hdf/khdf/osal/include \
             -I$(srctree)/drivers/hdf/framework/include/core \
             -I$(srctree)/drivers/hdf/framework/core/common/include/host \
-            -I$(srctree)/drivers/hdf/framework/ability/sbuf/include \
             -I$(srctree)/drivers/hdf/framework/include \
             -I$(srctree)/drivers/hdf/framework/include/osal \
             -I$(srctree)/drivers/hdf/framework/include/platform \

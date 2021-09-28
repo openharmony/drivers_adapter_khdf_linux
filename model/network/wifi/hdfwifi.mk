@@ -16,7 +16,6 @@ HDF_WIFI_FRAMEWORKS_ROOT = $(HDF_DIR_PREFIX)/framework/model/network/wifi
 HDF_WIFI_KHDF_FRAMEWORKS_ROOT = $(HDF_DIR_PREFIX)/adapter/khdf/linux/model/network/wifi
 HDF_WIFI_VENDOR_ROOT = $(HDF_VENDOR_PREFIX)/device/hisilicon/drivers/wifi/driver
 HDF_FRAMEWORKS_INC := \
-   -I$(srctree)/drivers/hdf/framework/ability/sbuf/include \
    -I$(srctree)/drivers/hdf/framework/core/common/include/host \
    -I$(srctree)/drivers/hdf/framework/core/host/include \
    -I$(srctree)/drivers/hdf/framework/core/manager/include \
