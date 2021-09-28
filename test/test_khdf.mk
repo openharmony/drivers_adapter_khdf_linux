@@ -44,8 +44,6 @@ ccflags-$(CONFIG_DRIVERS_HDF_TEST) += -I$(srctree)/drivers/hdf/framework/include
     -I$(srctree)/$(HDF_FRAMEWORK_ROOT)/core/shared/include \
     -I$(srctree)/$(HDF_FRAMEWORK_ROOT)/include/core \
     -I$(srctree)/$(HDF_FRAMEWORK_ROOT)/core/common/include/host \
-    -I$(srctree)/$(HDF_FRAMEWORK_ROOT)/ability/sbuf/include \
-    -I$(srctree)/$(HDF_FRAMEWORK_ROOT)/ability/config/hcs_parser/include \
     -I$(srctree)/$(HDF_FRAMEWORK_ROOT)/utils/include \
     -I$(srctree)/$(HDF_FRAMEWORK_ROOT)/include/wifi \
     -I$(srctree)/$(HDF_FRAMEWORK_ROOT)/include/net \

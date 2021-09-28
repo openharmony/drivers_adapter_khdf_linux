@@ -14,7 +14,7 @@
 
 obj-$(CONFIG_DRIVERS_HDF)  += osal/
 obj-$(CONFIG_DRIVERS_HDF)  += network/
-obj-$(CONFIG_DRIVERS_HDF)  += config/
+obj-$(CONFIG_DRIVERS_HDF)  += utils/
 
 SUPPORT_LEVEL_STD_H := $(shell [ "$(CONFIG_HDF_SUPPORT_LEVEL)" -ge 2 ] && echo true)
 
