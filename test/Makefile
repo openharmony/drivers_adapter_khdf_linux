@@ -19,8 +19,8 @@ obj-y  += $(HDF_FRAMWORK_TEST_ROOT)/common/hdf_main_test.o \
           $(HDF_FRAMWORK_TEST_ROOT)/osal/osal_work_test.o \
           $(HDF_FRAMWORK_TEST_ROOT)/osal/osal_get_case_test.o \
           $(HDF_FRAMWORK_TEST_ROOT)/manager/sample_driver_test.o \
-          $(HDF_FRAMWORK_TEST_ROOT)/ability/config/hcs_parser/unittest/hcs_config_test.o \
-          $(HDF_FRAMWORK_TEST_ROOT)/config/hdf_config_test.o
+          $(HDF_FRAMWORK_TEST_ROOT)/utils/hcs_parser/unittest/hcs_config_test.o \
+          $(HDF_FRAMWORK_TEST_ROOT)/utils/hcs_parser/unittest/hcs_parser_test.o
 
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_GPIO) += $(HDF_FRAMWORK_TEST_ROOT)/platform/common/gpio_test.o \
                                            $(HDF_FRAMWORK_TEST_ROOT)/platform/hdf_gpio_entry_test.o
@@ -67,7 +67,6 @@ ccflags-y +=-I$(srctree)/drivers/hdf/framework/include \
             -I$(srctree)/drivers/hdf/framework/include \
             -I$(srctree)/drivers/hdf/framework/utils/include \
             -I$(srctree)/drivers/hdf/framework/include/core \
-            -I$(srctree)/drivers/hdf/framework/ability/sbuf/include \
             -I$(srctree)/drivers/hdf/framework/core/host/include \
             -I$(srctree)/drivers/hdf/framework/core/manager/include \
             -I$(srctree)/drivers/hdf/framework/core/shared/include \
@@ -75,11 +74,9 @@ ccflags-y +=-I$(srctree)/drivers/hdf/framework/include \
             -I$(srctree)/drivers/hdf/framework/core/common/include/manager \
             -I$(srctree)/drivers/hdf/framework/core/adapter/vnode/include \
             -I$(srctree)/bounds_checking_function/include \
-            -I$(srctree)/drivers/hdf/framework/ability/config/hcs_parser/include \
             -I$(srctree)/drivers/hdf/framework/test/unittest/config \
-            -I$(srctree)/drivers/hdf/framework/test/unittest/ability/config/hcs_parser/unittest \
+            -I$(srctree)/drivers/hdf/framework/test/unittest/utils/hcs_parser/unittest \
             -I$(srctree)/drivers/hdf/framework/include/config \
-            -I$(srctree)/drivers/hdf/framework/ability/config/hcs_parser/include \
             -I$(srctree)/drivers/hdf/framework/test/unittest/osal \
             -I$(srctree)/drivers/hdf/khdf/osal/include \
             -I$(srctree)/drivers/hdf/framework/model/audio/include \

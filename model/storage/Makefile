@@ -22,7 +22,6 @@ ccflags-y +=-I$(srctree)/drivers/hdf/framework/model/storage/include/mmc \
             -I$(srctree)/drivers/hdf/framework/include/utils \
             -I$(srctree)/drivers/hdf/framework/utils/include \
             -I$(srctree)/drivers/hdf/framework/include/osal \
-            -I$(srctree)/drivers/hdf/framework/ability/sbuf/include \
             -I$(srctree)/drivers/hdf/framework/include/platform \
             -I$(srctree)/drivers/hdf/framework/support/platform/include/common \
             -I$(srctree)/drivers/hdf/framework/support/platform/include/mmc \
