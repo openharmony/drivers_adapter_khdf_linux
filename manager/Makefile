@@ -25,8 +25,8 @@ obj-y += \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/utils/src/hdf_slist.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/utils/src/hdf_sref.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/utils/src/hdf_map.o \
-        $(HDF_FRAMEWORK_SRC_DIR)/framework/ability/sbuf/src/hdf_sbuf.o \
-        $(HDF_FRAMEWORK_SRC_DIR)/framework/ability/sbuf/src/hdf_sbuf_impl_raw.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/utils/src/hdf_sbuf.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/utils/src/hdf_sbuf_impl_raw.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/host/src/devhost_service.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/host/src/devmgr_service_clnt.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/host/src/devsvc_manager_clnt.o \
@@ -66,16 +66,13 @@ ccflags-y += \
        -I$(srctree)/drivers/hdf/framework/include \
        -I$(srctree)/drivers/hdf/framework/utils/include \
        -I$(srctree)/drivers/hdf/framework/include/core \
-       -I$(srctree)/drivers/hdf/framework/ability/sbuf/include \
        -I$(srctree)/drivers/hdf/framework/core/host/include \
        -I$(srctree)/drivers/hdf/framework/core/manager/include \
        -I$(srctree)/drivers/hdf/framework/core/shared/include \
        -I$(srctree)/drivers/hdf/framework/core/common/include/host \
        -I$(srctree)/drivers/hdf/framework/core/common/include/manager \
        -I$(srctree)/drivers/hdf/framework/core/adapter/vnode/include \
-       -I$(srctree)/drivers/hdf/framework/ability/config/hcs_parser/include \
        -I$(srctree)/drivers/hdf/framework/include/config \
-       -I$(srctree)/drivers/hdf/framework/ability/config/hcs_parser/include \
        -I$(srctree)/drivers/hdf/khdf/osal/include \
        -I$(srctree)/include/uapi/linux \
        -I$(srctree)/bounds_checking_function/include

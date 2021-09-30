@@ -34,7 +34,6 @@ ccflags-y +=-I$(srctree)/drivers/hdf/framework/model/input/driver \
             -I$(srctree)/drivers/hdf/framework/core/common/include/host \
             -I$(srctree)/drivers/hdf/framework/include/utils \
             -I$(srctree)/drivers/hdf/framework/include/osal \
-            -I$(srctree)/drivers/hdf/framework/ability/sbuf/include \
             -I$(srctree)/drivers/hdf/framework/include/platform \
             -I$(srctree)/drivers/hdf/framework/include/config \
             -I$(srctree)/drivers/hdf/framework/core/host/include \

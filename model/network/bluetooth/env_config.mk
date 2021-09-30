@@ -14,7 +14,6 @@
 
 HDF_FRAMEWORKS_INC := \
    -I$(srctree)/./ \
-   -I$(srctree)/drivers/hdf/framework/ability/sbuf/include \
    -I$(srctree)/drivers/hdf/framework/core/common/include/host \
    -I$(srctree)/drivers/hdf/framework/core/host/include \
    -I$(srctree)/drivers/hdf/framework/core/manager/include \
