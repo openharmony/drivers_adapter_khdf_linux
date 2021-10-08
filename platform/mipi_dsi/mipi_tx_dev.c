@@ -156,11 +156,13 @@ static int32_t ProcRegister(const char *name, uint8_t id, unsigned short mode, c
 
 static void UnregisterDevice(uint8_t id)
 {
+    struct miscdevice *dev = NULL;
+
     if (id >= MAX_CNTLR_CNT) {
         HDF_LOGE("%s: id error.", __func__);
         return;
     }
-    struct miscdevice *dev = g_vfsPara[id].miscdev;
+    dev = g_vfsPara[id].miscdev;
     if (dev == NULL) {
         HDF_LOGE("%s: dev is NULL.", __func__);
         return;
@@ -305,6 +307,7 @@ static int32_t MipiDsiDevSetCfg(struct MipiDsiCntlr *cntlr, struct MipiCfg *arg)
 {
     int32_t ret;
     struct MipiCfg *temp = NULL;
+    uint32_t size;
 
     if (arg == NULL) {
         HDF_LOGE("%s: arg is invalid.", __func__);
@@ -316,7 +319,7 @@ static int32_t MipiDsiDevSetCfg(struct MipiDsiCntlr *cntlr, struct MipiCfg *arg)
         return HDF_ERR_INVALID_PARAM;
     }
 
-    uint32_t size = sizeof(struct MipiCfg);
+    size = sizeof(struct MipiCfg);
     temp = (struct MipiCfg *)OsalMemCalloc(size);
     if (temp == NULL) {
         HDF_LOGE("%s: OsalMemCalloc error.", __func__);
@@ -355,6 +358,7 @@ int32_t MipiDsiDevSetCmd(struct MipiDsiCntlr *cntlr, struct DsiCmdDesc *arg)
 {
     int32_t ret;
     struct DsiCmdDesc *temp = NULL;
+    uint32_t size;
 
     if (arg == NULL) {
         HDF_LOGE("%s: arg is invalid.", __func__);
@@ -366,7 +370,7 @@ int32_t MipiDsiDevSetCmd(struct MipiDsiCntlr *cntlr, struct DsiCmdDesc *arg)
         return HDF_ERR_INVALID_PARAM;
     }
 
-    uint32_t size = sizeof(struct DsiCmdDesc);
+    size = sizeof(struct DsiCmdDesc);
     temp = (struct DsiCmdDesc *)OsalMemCalloc(size);
     if (temp == NULL) {
         HDF_LOGE("%s: [OsalMemCalloc] error.", __func__);
@@ -444,12 +448,14 @@ int32_t MipiDsiDevGetCmd(struct MipiDsiCntlr *cntlr, GetDsiCmdDescTag *arg)
 {
     int32_t ret;
     GetDsiCmdDescTag *temp = NULL;
+    uint32_t size;
+
     if ((cntlr == NULL) || (arg == NULL)) {
         HDF_LOGE("%s: cntlr or arg is NULL.", __func__);
         return HDF_ERR_INVALID_PARAM;
     }
 
-    uint32_t size = sizeof(GetDsiCmdDescTag);
+    size = sizeof(GetDsiCmdDescTag);
     temp = (GetDsiCmdDescTag *)OsalMemCalloc(size);
     if (temp == NULL) {
         HDF_LOGE("%s: [OsalMemCalloc] error.", __func__);
@@ -480,12 +486,13 @@ static long MipiDsiDevIoctl(struct file *filep, unsigned int cmd, unsigned long 
 {
     int32_t ret = HDF_SUCCESS;
     void *pArg = (void *)arg;
+    struct MipiDsiCntlr *cntlr = NULL;
 
     if (filep == NULL || pArg == NULL) {
         HDF_LOGE("%s: filep or pArg is NULL.", __func__);
         return HDF_FAILURE;
     }
-    struct MipiDsiCntlr *cntlr = GetCntlrFromFilep(filep);
+    cntlr = GetCntlrFromFilep(filep);
     if (cntlr == NULL) {
         HDF_LOGE("%s: cntlr is NULL.", __func__);
         return HDF_FAILURE;
