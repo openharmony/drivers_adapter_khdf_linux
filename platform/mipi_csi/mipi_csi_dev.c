@@ -137,11 +137,13 @@ static int32_t RegisterDevice(const char *name, uint8_t id, unsigned short mode,
 
 static void UnregisterDevice(uint8_t id)
 {
+    struct miscdevice *dev = NULL;
+
     if (id >= MAX_CNTLR_CNT) {
         HDF_LOGE("%s: id error.", __func__);
         return;
     }
-    struct miscdevice *dev = g_vfsPara.miscDev;
+    dev = g_vfsPara.miscDev;
     if (dev == NULL) {
         HDF_LOGE("%s: dev is NULL.", __func__);
         return;
