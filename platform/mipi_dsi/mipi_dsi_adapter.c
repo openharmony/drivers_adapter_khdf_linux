@@ -237,7 +237,7 @@ static int32_t MipiDsiAdapterInit(struct HdfDeviceObject *device)
     return HDF_SUCCESS;
 }
 
-static void MipiDsiAdapterRelease(const struct HdfDeviceObject *device)
+static void MipiDsiAdapterRelease(struct HdfDeviceObject *device)
 {
     struct MipiDsiCntlr *cntlr;
 
