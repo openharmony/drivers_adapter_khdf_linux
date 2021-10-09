@@ -1644,7 +1644,6 @@ static struct ffs_data *ffs_data_new(const char *dev_name)
 	init_waitqueue_head(&ffs->wait_que);
 	init_completion(&ffs->ep0req_completion);
 	INIT_LIST_HEAD(&ffs->memory_list);
-	/* XXX REVISIT need to update it in some places, or do we? */
 	ffs->ev.can_stall = 1;
 
 	return ffs;
