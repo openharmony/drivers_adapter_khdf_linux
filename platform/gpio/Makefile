@@ -14,6 +14,7 @@
 
 include drivers/hdf/khdf/platform/platform.mk
 
-obj-y  += $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/gpio_core.o \
-          $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/gpio_if.o \
+obj-y  += $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/gpio/gpio_core.o \
+          $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/gpio/gpio_if.o \
+          $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/gpio/gpio_service.o \
           ./gpio_adapter.o

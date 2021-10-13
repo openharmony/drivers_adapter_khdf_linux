@@ -21,7 +21,7 @@
 #include <linux/interrupt.h>
 #include <linux/list.h>
 #include "device_resource_if.h"
-#include "gpio_core.h"
+#include "gpio/gpio_core.h"
 #include "hdf_base.h"
 #include "hdf_device_desc.h"
 #include "hdf_dlist.h"
