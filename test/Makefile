@@ -43,6 +43,8 @@ obj-$(CONFIG_DRIVERS_HDF_PLATFORM_WATCHDOG) += $(HDF_FRAMWORK_TEST_ROOT)/platfor
                                                $(HDF_FRAMWORK_TEST_ROOT)/platform/hdf_watchdog_entry_test.o
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_MIPI_DSI) += $(HDF_FRAMWORK_TEST_ROOT)/platform/common/mipi_dsi_test.o \
                                                $(HDF_FRAMWORK_TEST_ROOT)/platform/hdf_mipi_dsi_entry_test.o
+obj-$(CONFIG_DRIVERS_HDF_PLATFORM_MIPI_CSI) += $(HDF_FRAMWORK_TEST_ROOT)/platform/common/mipi_csi_test.o \
+                                               $(HDF_FRAMWORK_TEST_ROOT)/platform/hdf_mipi_csi_entry_test.o
 
 obj-$(CONFIG_DRIVERS_HDF_WIFI) += $(HDF_FRAMWORK_TEST_ROOT)/wifi/hdf_wifi_test.o \
                                   $(HDF_FRAMWORK_TEST_ROOT)/model/network/wifi/unittest/netdevice/net_device_test.o \
