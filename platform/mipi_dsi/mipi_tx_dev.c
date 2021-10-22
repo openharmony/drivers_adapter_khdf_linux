@@ -69,19 +69,19 @@ static int32_t RegisterDevice(const char *name, uint8_t id, unsigned short mode,
 
     if ((name == NULL) || (ops == NULL) || (id >= MAX_CNTLR_CNT)) {
         HDF_LOGE("%s: name, ops or id is error.", __func__);
-        return HDF_FAILURE;
+        return HDF_ERR_INVALID_PARAM;
     }
     dev = OsalMemCalloc(sizeof(struct miscdevice));
     if (dev == NULL) {
         HDF_LOGE("%s: [OsalMemCalloc] failed.", __func__);
-        return HDF_FAILURE;
+        return HDF_ERR_MALLOC_FAIL;
     }
     dev->fops = ops;
     dev->name = OsalMemCalloc(NAME_LEN + 1);
     if (dev->name == NULL) {
         OsalMemFree(dev);
         HDF_LOGE("%s: [OsalMemCalloc] failed.", __func__);
-        return HDF_FAILURE;
+        return HDF_ERR_MALLOC_FAIL;
     }
     if (id != 0) { /* 0 : id */
         if (snprintf_s((char *)dev->name, NAME_LEN + 1, NAME_LEN, "%s%u", name, id) < 0) {
@@ -95,7 +95,7 @@ static int32_t RegisterDevice(const char *name, uint8_t id, unsigned short mode,
             OsalMemFree((char *)dev->name);
             OsalMemFree(dev);
             HDF_LOGE("%s: [memcpy_s] failed.", __func__);
-            return HDF_FAILURE;
+            return HDF_ERR_IO;
         }
     }
     ops->owner = THIS_MODULE;
@@ -130,11 +130,11 @@ static int32_t ProcRegister(const char *name, uint8_t id, unsigned short mode, c
 
     if ((name == NULL) || (ops == NULL) || (id >= MAX_CNTLR_CNT)) {
         HDF_LOGE("%s: name, ops or id is error.", __func__);
-        return HDF_FAILURE;
+        return HDF_ERR_INVALID_PARAM;
     }
     if (memset_s(procName, NAME_LEN + 1, 0, NAME_LEN + 1) != EOK) {
         HDF_LOGE("%s: [memcpy_s] failed.", __func__);
-        return HDF_FAILURE;
+        return HDF_ERR_IO;
     }
     if (id != 0) {
         ret = snprintf_s(procName, NAME_LEN + 1, NAME_LEN, "%s%u", name, id);
@@ -207,7 +207,7 @@ static int32_t SemaInit(struct semaphore *sem, uint16_t val)
 {
     if (sem == NULL) {
         HDF_LOGE("%s: sem is NULL", __func__);
-        return HDF_FAILURE;
+        return HDF_ERR_INVALID_OBJECT;
     }
     sema_init(sem, val);
     return HDF_SUCCESS;
@@ -216,8 +216,7 @@ static int32_t SemaInit(struct semaphore *sem, uint16_t val)
 static void SemaDestroy(struct semaphore *sem)
 {
     // don't support sema_destory(sem)!
-    (void *)sem;
-    return;
+    (void)sem;
 }
 
 static int32_t SemaDownInterruptable(struct semaphore *sem)
@@ -335,14 +334,14 @@ static int32_t MipiDsiDevSetCfg(struct MipiDsiCntlr *cntlr, struct MipiCfg *arg)
             OsalMemFree(temp);
             temp = NULL;
             HDF_LOGE("%s: [CopyFromUser] failed.", __func__);
-            return HDF_FAILURE;
+            return HDF_ERR_IO;
         }
     } else { /* kernel space */
         if (memcpy_s(temp, size, arg, size) != EOK) {
             OsalMemFree(temp);
             temp = NULL;
             HDF_LOGE("%s: [memcpy_s] failed.", __func__);
-            return HDF_FAILURE;
+            return HDF_ERR_IO;
         }
     }
 
@@ -386,14 +385,14 @@ int32_t MipiDsiDevSetCmd(struct MipiDsiCntlr *cntlr, struct DsiCmdDesc *arg)
             OsalMemFree(temp);
             temp = NULL;
             HDF_LOGE("%s: [CopyFromUser] failed.", __func__);
-            return HDF_FAILURE;
+            return HDF_ERR_IO;
         }
     } else { /* kernel space */
         if (memcpy_s(temp, size, arg, size) != EOK) {
             OsalMemFree(temp);
             temp = NULL;
             HDF_LOGE("%s: [memcpy_s] failed.", __func__);
-            return HDF_FAILURE;
+            return HDF_ERR_IO;
         }
     }
 
@@ -413,12 +412,12 @@ int32_t MipiDsiDevCmdCopyFromUser(GetDsiCmdDescTag *arg, GetDsiCmdDescTag *temp,
         arg, *size)) { /* user space */
         if (CopyFromUser(temp, arg, *size) != 0) {
             HDF_LOGE("%s: [CopyFromUser] failed.", __func__);
-            return HDF_FAILURE;
+            return HDF_ERR_IO;
         }
     } else { /* kernel space */
         if (memcpy_s(temp, *size, arg, *size) != EOK) {
             HDF_LOGE("%s: [memcpy_s] failed.", __func__);
-            return HDF_FAILURE;
+            return HDF_ERR_IO;
         }
     }
     return HDF_SUCCESS;
@@ -433,12 +432,12 @@ int32_t MipiDsiDevCmdCopyToUser(GetDsiCmdDescTag *arg, GetDsiCmdDescTag *temp, u
         arg, *size)) { /* user space */
         if (CopyToUser(arg, temp, *size) != 0) {
             HDF_LOGE("%s: [CopyToUser] failed.", __func__);
-            return HDF_FAILURE;
+            return HDF_ERR_IO;
         }
     } else { /* kernel space */
         if (memcpy_s(arg, *size, temp, *size) != EOK) {
             HDF_LOGE("%s: [memcpy_s] failed.", __func__);
-            return HDF_FAILURE;
+            return HDF_ERR_IO;
         }
     }
     return HDF_SUCCESS;
@@ -487,21 +486,22 @@ static long MipiDsiDevIoctl(struct file *filep, unsigned int cmd, unsigned long 
     int32_t ret = HDF_SUCCESS;
     void *pArg = (void *)arg;
     struct MipiDsiCntlr *cntlr = NULL;
+    struct semaphore *sem = NULL;
 
     if (filep == NULL || pArg == NULL) {
         HDF_LOGE("%s: filep or pArg is NULL.", __func__);
-        return HDF_FAILURE;
+        return HDF_ERR_INVALID_OBJECT;
     }
     cntlr = GetCntlrFromFilep(filep);
     if (cntlr == NULL) {
         HDF_LOGE("%s: cntlr is NULL.", __func__);
-        return HDF_FAILURE;
+        return HDF_ERR_INVALID_OBJECT;
     }
 
-    struct semaphore *sem = GetSemaFromFilep(filep);
+    sem = GetSemaFromFilep(filep);
     if (sem == NULL) {
         HDF_LOGE("%s: sem is NULL.", __func__);
-        return HDF_FAILURE;
+        return HDF_ERR_INVALID_OBJECT;
     }
 
     (void)SemaDownInterruptable(sem);
@@ -517,11 +517,11 @@ static long MipiDsiDevIoctl(struct file *filep, unsigned int cmd, unsigned long 
             break;
         case HI_MIPI_TX_ENABLE:
             MipiDsiCntlrSetHsMode(cntlr);
-            HDF_LOGI("%s: [MipiDsiCntlrSetHsMode] do.", __func__);
+            HDF_LOGI("%s: [MipiDsiCntlrSetHsMode] done.", __func__);
             break;
         case HI_MIPI_TX_DISABLE:
             MipiDsiCntlrSetLpMode(cntlr);
-            HDF_LOGI("%s: [MipiDsiCntlrSetLpMode] do.", __func__);
+            HDF_LOGI("%s: [MipiDsiCntlrSetLpMode] done.", __func__);
             break;
         default:
             HDF_LOGE("%s: [default] failed.", __func__);
@@ -575,7 +575,7 @@ static void MipiDsiDevProcDevShow(struct seq_file *s)
     t = &(cfg->timing);
 
     /* mipi tx device config */
-    seq_printf(s, "----------MIPI_Tx DEV CONFIG---------------------------\n");
+    seq_printf(s, "MIPI_Tx DEV CONFIG\n");
     seq_printf(s, "%8s%15s%15s%15s%15s%15s\n",
         "lane", "output_mode", "phy_data_rate", "pixel_clk(KHz)",
         "video_mode", "output_fmt");
@@ -588,7 +588,7 @@ static void MipiDsiDevProcDevShow(struct seq_file *s)
         cfg->format);
     seq_printf(s, "\r\n");
     /* mipi tx device sync config */
-    seq_printf(s, "----------MIPI_Tx SYNC CONFIG---------------------------\n");
+    seq_printf(s, "MIPI_Tx SYNC CONFIG\n");
     seq_printf(s, "%14s%14s%14s%14s%14s%14s%14s%14s%14s\n",
         "pkt_size", "hsa_pixels", "hbp_pixels", "hline_pixels", "vsa_lines", "vbp_lines",
         "vfp_lines", "active_lines", "edpi_cmd_size");
@@ -646,12 +646,12 @@ int32_t MipiDsiDevModuleInit(uint8_t id)
 
     /* 0660 : node mode */
     ret = RegisterDevice(MIPI_TX_DEV_NAME, id, 0660, (struct file_operations *)&g_mipiTxfOps);
-    if (ret < 0) {
+    if (ret != HDF_SUCCESS) {
         HDF_LOGE("%s: [RegisterDevice] fail: %d.", __func__, ret);
         return ret;
     }
     ret = ProcRegister(MIPI_TX_PROC_NAME, id, 0440, &g_procMipiDsiDevOps); /* 0440 : proc file mode */
-    if (ret < 0) {
+    if (ret != HDF_SUCCESS) {
         UnregisterDevice(id);
         HDF_LOGE("%s: [ProcRegister] fail: %d.", __func__, ret);
         return ret;
@@ -662,10 +662,10 @@ int32_t MipiDsiDevModuleInit(uint8_t id)
         UnregisterDevice(id);
         ProcUnregister(MIPI_TX_PROC_NAME, id);
         HDF_LOGE("%s: [SemaInit] failed.", __func__);
-        return HDF_FAILURE;
+        return ret;
     }
     HDF_LOGI("%s: success!", __func__);
-    return HDF_SUCCESS;
+    return ret;
 }
 
 void MipiDsiDevModuleExit(uint8_t id)
