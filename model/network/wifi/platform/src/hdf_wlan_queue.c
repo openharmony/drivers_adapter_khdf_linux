@@ -75,7 +75,7 @@ void *PopQueue(HdfWlanQueue *queue)
 {
     int32_t ret;
     HdfWlanQueueImpl *impl = NULL;
-	void *result = NULL;
+    void *result = NULL;
     if (queue == NULL) {
         return NULL;
     }
@@ -105,7 +105,7 @@ int32_t PushQueue(HdfWlanQueue *queue, void *context)
 {
     int32_t ret;
     HdfWlanQueueImpl *impl = NULL;
-	uint16_t tailIndex;
+    uint16_t tailIndex;
     if (queue == NULL) {
         return HDF_FAILURE;
     }
