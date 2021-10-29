@@ -75,11 +75,11 @@ void *PopQueue(HdfWlanQueue *queue)
 {
     int32_t ret;
     HdfWlanQueueImpl *impl = NULL;
+    void *result = NULL;
     if (queue == NULL) {
         return NULL;
     }
     impl = (HdfWlanQueueImpl *)queue;
-    void *result = NULL;
     if (queue == NULL) {
         return NULL;
     }
@@ -105,6 +105,7 @@ int32_t PushQueue(HdfWlanQueue *queue, void *context)
 {
     int32_t ret;
     HdfWlanQueueImpl *impl = NULL;
+    uint16_t tailIndex;
     if (queue == NULL) {
         return HDF_FAILURE;
     }
@@ -121,7 +122,7 @@ int32_t PushQueue(HdfWlanQueue *queue, void *context)
             break;
         }
 
-        uint16_t tailIndex = impl->tailIndex;
+        tailIndex = impl->tailIndex;
         /* Saves the address of the element in the queue */
         impl->elements[tailIndex++] = context;
         impl->tailIndex = ((tailIndex >= impl->maxElements) ? 0 : tailIndex);
