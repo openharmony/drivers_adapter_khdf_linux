@@ -16,20 +16,15 @@
  *
  */
 
-#include <asm/uaccess.h>
+#include "pwm_hi35xx.h"
 #include <linux/clk.h>
-#include <linux/err.h>
-#include <linux/errno.h>
-#include <linux/fcntl.h>
-#include <linux/init.h>
-#include <linux/io.h>
 #include <linux/module.h>
 #include <linux/of_platform.h>
-#include <linux/proc_fs.h>
 #include <linux/pwm.h>
 #include <linux/version.h>
-#include "pwm_hi35xx.h"
+#include "hdf_log.h"
 
+#define HDF_LOG_TAG pwm_hi35xx_linux
 #define PWM_ENABLE_MASK 0x1
 #define PWM_HI35XX_N_CELLS 2
 
@@ -50,41 +45,50 @@ static int Hi35xxPwmApply(struct pwm_chip *chip, struct pwm_device *pwm, struct 
     struct Hi35xxPwmChip *hi35xxChip = (struct Hi35xxPwmChip *)chip;
 
     if (hi35xxChip == NULL || pwm == NULL || state == NULL) {
-        pr_err("%s: parameter is null\n", __func__);
+        HDF_LOGE("%s: parameter is null\n", __func__);
         return -EINVAL;
     }
     reg = (struct HiPwmRegs *)hi35xxChip->base;
     if (state->polarity != PWM_POLARITY_NORMAL && state->polarity != PWM_POLARITY_INVERSED) {
-        pr_err("%s: polarity %u is invalid", __func__, state->polarity);
+        HDF_LOGE("%s: polarity %u is invalid", __func__, state->polarity);
         return -EINVAL;
     }
 
     if (state->period < PWM_MIN_PERIOD) {
-        pr_err("%s: period %u is not support, min period %u", __func__, state->period, PWM_MIN_PERIOD);
+        HDF_LOGE("%s: period %llu is not support, min period %d", __func__, state->period, PWM_MIN_PERIOD);
         return -EINVAL;
     }
     if (state->duty_cycle < 1 || state->duty_cycle > state->period) {
-        pr_err("%s: duty_cycle %u is not support, min duty_cycle 1 max duty_cycle %u",
-               __func__, state->duty_cycle , state->period);
+        HDF_LOGE("%s: duty %llu is not support, duty must in [1, period = %llu].",
+            __func__, state->duty_cycle , state->period);
         return -EINVAL;
     }
 
     HiPwmDisable(reg);
+    HDF_LOGI("%s: [HiPwmDisable] done.", __func__);
     if (pwm->state.polarity != state->polarity) {
         HiPwmSetPolarity(reg, state->polarity);
+        HDF_LOGI("%s: [HiPwmSetPolarity] done, polarity: %u -> %u.", __func__, pwm->state.polarity, state->polarity);
     }
     if (pwm->state.period != state->period) {
         HiPwmSetPeriod(reg, state->period);
+        HDF_LOGI("%s: [HiPwmSetPeriod] done, period: %llu -> %llu.", __func__, pwm->state.period, state->period);
     }
     if (pwm->state.duty_cycle != state->duty_cycle) {
         HiPwmSetDuty(reg, state->duty_cycle);
+        HDF_LOGI("%s: [HiPwmSetDuty] done, duty: %llu -> %llu.", __func__, pwm->state.duty_cycle, state->duty_cycle);
     }
     if (state->enabled) {
         HiPwmAlwaysOutput(reg);
+        HDF_LOGI("%s: [HiPwmAlwaysOutput] done, then enable.", __func__);
     }
+
+    HDF_LOGI("%s: set PwmConfig done: number none, period %llu, duty %llu, polarity %u, enable %u.",
+        __func__, state->period, state->duty_cycle, state->polarity, state->enabled);
+    HDF_LOGI("%s: success.", __func__);
+
     return 0;
 }
-
 
 static void Hi35xxGetState(struct pwm_chip *chip, struct pwm_device *pwm, struct pwm_state *state)
 {
@@ -96,9 +100,13 @@ static void Hi35xxGetState(struct pwm_chip *chip, struct pwm_device *pwm, struct
         return;
     }
     reg = (struct HiPwmRegs *)hi35xxChip->base;
-    state->period = reg->cfg0;
-    state->duty_cycle = reg->cfg1;
+    state->period = reg->cfg0 * PWM_CLK_PERIOD;
+    state->duty_cycle = reg->cfg1 * PWM_CLK_PERIOD;
+    state->polarity = (reg->ctrl & (1 << PWM_INV_OFFSET)) >> PWM_INV_OFFSET;
     state->enabled = reg->ctrl & PWM_ENABLE_MASK;
+
+    HDF_LOGI("%s: get PwmConfig: number none, period %llu, duty %llu, polarity %u, enable %u.",
+        __func__, state->period, state->duty_cycle, state->polarity, state->enabled);
 }
 
 static struct pwm_ops Hi35xxPwmOps = {

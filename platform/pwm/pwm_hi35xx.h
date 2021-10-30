@@ -36,9 +36,9 @@
 #define PWM_INV_OFFSET  1
 #define PWM_KEEP_OFFSET 2
 
-#define PWM_DEFAULT_PERIOD     0x018F
+#define PWM_DEFAULT_PERIOD     0x3E7 // 999
 #define PWM_DEFAULT_POLARITY   0
-#define PWM_DEFAULT_DUTY_CYCLE 0x00C7
+#define PWM_DEFAULT_DUTY_CYCLE 0x14D // 333
 
 struct HiPwmRegs {
     volatile uint32_t cfg0;
@@ -55,7 +55,7 @@ static inline void HiPwmDisable(struct HiPwmRegs *reg)
     if (reg == NULL) {
         return;
     }
-    reg->ctrl = PWM_DISABLE;
+    reg->ctrl &= ~ 1;
 }
 
 static inline void HiPwmAlwaysOutput(struct HiPwmRegs *reg)
