@@ -18,14 +18,11 @@
 
 #include <linux/pwm.h>
 #include "device_resource_if.h"
-#include "hdf_base.h"
 #include "hdf_log.h"
-#include "osal_io.h"
 #include "osal_mem.h"
 #include "pwm_core.h"
-#include "pwm_if.h"
 
-#define HDF_LOG_TAG HDF_PWM_LINUX_ADAPTER
+#define HDF_LOG_TAG pwm_adapter
 
 int32_t HdfPwmOpen(struct PwmDev *pwm)
 {
@@ -60,6 +57,7 @@ int32_t HdfPwmClose(struct PwmDev *pwm)
 
 int32_t HdfPwmSetConfig(struct PwmDev *pwm, struct PwmConfig *config)
 {
+    int32_t ret;
     struct pwm_state state;
 
     if (pwm == NULL || pwm->priv == NULL || config == NULL) {
@@ -71,7 +69,15 @@ int32_t HdfPwmSetConfig(struct PwmDev *pwm, struct PwmConfig *config)
     state.enabled = (config->status == PWM_ENABLE_STATUS) ? true : false;
     state.period = config->period;
     state.polarity = config->polarity;
-    return pwm_apply_state(pwm->priv, &state);
+    HDF_LOGI("%s: set PwmConfig: number %u, period %u, duty %u, polarity %u, enable %u.",
+        __func__, config->number, config->period, config->duty, config->polarity, config->status);
+    ret = pwm_apply_state(pwm->priv, &state);
+    if (ret < 0) {
+        HDF_LOGE("%s: [pwm_apply_state] failed.", __func__);
+        return HDF_FAILURE;
+    }
+    HDF_LOGI("%s: success.", __func__);
+    return HDF_SUCCESS;
 }
 
 struct PwmMethod g_pwmOps = {
