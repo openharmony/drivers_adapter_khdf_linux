@@ -28,6 +28,8 @@ obj-$(CONFIG_DRIVERS_HDF_SENSOR_ALS_BH1745) += $(SENSOR_ROOT_DIR)/chipset/als/al
 
 obj-$(CONFIG_DRIVERS_HDF_SENSOR_PROXIMITY) += $(SENSOR_ROOT_DIR)/proximity/sensor_proximity_driver.o
 
+obj-$(CONFIG_DRIVERS_HDF_SENSOR_PROXIMITY_APDS9960) += $(SENSOR_ROOT_DIR)/chipset/proximity/proximity_apds9960.o
+
 obj-$(CONFIG_DRIVERS_HDF_SENSOR_GYRO) += $(SENSOR_ROOT_DIR)/gyro/sensor_gyro_driver.o \
                $(SENSOR_ROOT_DIR)/chipset/gyro/gyro_bmi160.o
 
@@ -58,6 +60,7 @@ ccflags-y += -I$(srctree)/drivers/hdf/framework/model/sensor/driver/include \
              -I$(srctree)/drivers/hdf/framework/model/sensor/driver/chipset/magnetic \
              -I$(srctree)/drivers/hdf/framework/model/sensor/driver/magnetic \
              -I$(srctree)/drivers/hdf/framework/model/sensor/driver/proximity \
+             -I$(srctree)/drivers/hdf/framework/model/sensor/driver/chipset/proximity \
              -I$(srctree)/drivers/hdf/framework/include/core \
              -I$(srctree)/drivers/hdf/framework/core/common/include/host \
              -I$(srctree)/drivers/hdf/framework/include/utils \
