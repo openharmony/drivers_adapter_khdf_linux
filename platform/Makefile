@@ -12,7 +12,7 @@
 #
 #
 
-obj-$(CONFIG_DRIVERS_HDF_PLATFORM)           += common/
+obj-$(CONFIG_DRIVERS_HDF_PLATFORM)           += fwk/
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_MIPI_DSI)  += mipi_dsi/
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_MIPI_CSI)  += mipi_csi/
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_GPIO)      += gpio/
@@ -20,8 +20,5 @@ obj-$(CONFIG_DRIVERS_HDF_PLATFORM_I2C)       += i2c/
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_WATCHDOG)  += watchdog/
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_PWM)       += pwm/
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_UART)      += uart/
-obj-$(CONFIG_DRIVERS_HDF_PLATFORM_MMC)       += mmc/
-obj-$(CONFIG_DRIVERS_HDF_PLATFORM_SDIO)      += sdio/
-obj-$(CONFIG_DRIVERS_HDF_PLATFORM_EMMC)      += emmc/
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_SPI)       += spi/
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_RTC)       += rtc/

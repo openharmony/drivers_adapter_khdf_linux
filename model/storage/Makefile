@@ -9,11 +9,9 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 
-STORAGE_ROOT_DIR = ../../../../../framework/model/storage
+include drivers/hdf/khdf/platform/platform.mk
 
-obj-$(CONFIG_DRIVERS_HDF_STORAGE) += \
-               $(STORAGE_ROOT_DIR)/src/mmc/mmc_block.o \
-               ./mmc_block_linux.o
+STORAGE_ROOT_DIR = ../../../../../framework/model/storage
 
 ccflags-y +=-I$(srctree)/drivers/hdf/framework/model/storage/include/mmc \
             -I$(srctree)/drivers/hdf/framework/model/storage/include/mtd \
@@ -23,8 +21,24 @@ ccflags-y +=-I$(srctree)/drivers/hdf/framework/model/storage/include/mmc \
             -I$(srctree)/drivers/hdf/framework/utils/include \
             -I$(srctree)/drivers/hdf/framework/include/osal \
             -I$(srctree)/drivers/hdf/framework/include/platform \
-            -I$(srctree)/drivers/hdf/framework/support/platform/include/common \
-            -I$(srctree)/drivers/hdf/framework/support/platform/include/mmc \
+            -I$(srctree)/drivers/hdf/framework/support/platform/include/fwk \
+            -I$(srctree)/drivers/hdf/framework/model/storage/include/mmc \
             -I$(srctree)/drivers/hdf/framework/include/config \
             -I$(srctree)/drivers/hdf/khdf/osal/include \
             -I$(srctree)/bounds_checking_function/include
+
+obj-$(CONFIG_DRIVERS_HDF_STORAGE) += \
+             ./mmc_block_linux.o \
+             $(STORAGE_ROOT_DIR)/src/mmc/mmc_block.o \
+             $(STORAGE_ROOT_DIR)/src/mmc/mmc_core.o \
+             $(STORAGE_ROOT_DIR)/src/mmc/mmc_emmc.o \
+             $(STORAGE_ROOT_DIR)/src/mmc/mmc_sdio.o \
+             $(STORAGE_ROOT_DIR)/src/mmc/mmc_dispatch.o \
+             $(STORAGE_ROOT_DIR)/src/mmc/mmc_if.o \
+             $(STORAGE_ROOT_DIR)/src/mmc/mmc_protocol.o
+
+obj-y  += $(STORAGE_ROOT_DIR)/src/mmc/emmc_if.o \
+          ./emmc_adapter.o
+
+obj-y  += $(STORAGE_ROOT_DIR)/src/mmc/sdio_if.o \
+          ./sdio_adapter.o

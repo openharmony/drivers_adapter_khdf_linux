@@ -14,6 +14,6 @@
 
 include drivers/hdf/khdf/platform/platform.mk
 
-obj-y  += $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/i2c_core.o \
-          $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/i2c_if.o \
+obj-y  += $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/i2c/i2c_core.o \
+          $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/i2c/i2c_if.o \
           ./i2c_adapter.o
