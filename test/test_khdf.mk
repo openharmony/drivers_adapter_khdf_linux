@@ -17,7 +17,8 @@ HDF_FRAMEWORK_ROOT = drivers/hdf/framework
 
 ccflags-$(CONFIG_DRIVERS_HDF_TEST) += -I$(srctree)/drivers/hdf/framework/include/platform \
     -I$(srctree)/$(HDF_FRAMEWORK_ROOT)/support/platform/include \
-    -I$(srctree)/$(HDF_FRAMEWORK_ROOT)/support/platform/include/platform \
+    -I$(srctree)/$(HDF_FRAMEWORK_ROOT)/support/platform/include/fwk \
+    -I$(srctree)/$(HDF_FRAMEWORK_ROOT)/support/platform/include/rtc \
     -I$(srctree)/include/hdf \
     -I$(srctree)/include/hdf/osal \
     -I$(srctree)/include/hdf/utils \
