@@ -45,8 +45,6 @@ obj-$(CONFIG_DRIVERS_HDF_AUDIO_CODEC) += \
           $(KHDF_AUDIO_HI3516DV300_DIR)/soc/src/hi3516_aiao_impl.o \
           $(KHDF_AUDIO_HI3516DV300_DIR)/soc/src/hi3516_dma_ops.o \
           $(KHDF_AUDIO_HI3516DV300_DIR)/soc/src/hi3516_dma_adapter.o \
-          $(KHDF_AUDIO_HI3516DV300_DIR)/soc/src/hi3516_platform_ops.o \
-          $(KHDF_AUDIO_HI3516DV300_DIR)/soc/src/hi3516_platform_adapter.o
 
 ccflags-$(CONFIG_DRIVERS_HDF_AUDIO) += -lm -lc -lgcc -std=gnu99 -Werror \
              -I$(srctree)/$(KHDF_AUDIO_KHDF_ROOT_DIR)/osal/include \
