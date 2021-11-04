@@ -25,7 +25,10 @@ obj-$(CONFIG_DRIVERS_HDF_AUDIO) += \
           $(KHDF_AUDIO_ROOT_DIR)/core/src/audio_parse.o \
           $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_accessory_base.o \
           $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_codec_base.o \
+          $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_dsp_base.o \
+          $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_dai_base.o \
           $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_platform_base.o \
+          $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_dma_base.o \
           $(KHDF_AUDIO_ROOT_DIR)/sapm/src/audio_sapm.o \
           $(KHDF_AUDIO_ROOT_DIR)/dispatch/src/audio_stream_dispatch.o \
           $(KHDF_AUDIO_ROOT_DIR)/dispatch/src/audio_control_dispatch.o
@@ -38,9 +41,10 @@ obj-$(CONFIG_DRIVERS_HDF_AUDIO_CODEC) += \
           $(KHDF_AUDIO_HI3516DV300_DIR)/codec/src/hi3516_codec_ops.o \
           $(KHDF_AUDIO_HI3516DV300_DIR)/dsp/src/dsp_adapter.o \
           $(KHDF_AUDIO_HI3516DV300_DIR)/soc/src/hi3516_dai_adapter.o \
+          $(KHDF_AUDIO_HI3516DV300_DIR)/soc/src/hi3516_dai_ops.o \
           $(KHDF_AUDIO_HI3516DV300_DIR)/soc/src/hi3516_aiao_impl.o \
-          $(KHDF_AUDIO_HI3516DV300_DIR)/soc/src/hi3516_platform_ops.o \
-          $(KHDF_AUDIO_HI3516DV300_DIR)/soc/src/hi3516_platform_adapter.o
+          $(KHDF_AUDIO_HI3516DV300_DIR)/soc/src/hi3516_dma_ops.o \
+          $(KHDF_AUDIO_HI3516DV300_DIR)/soc/src/hi3516_dma_adapter.o \
 
 ccflags-$(CONFIG_DRIVERS_HDF_AUDIO) += -lm -lc -lgcc -std=gnu99 -Werror \
              -I$(srctree)/$(KHDF_AUDIO_KHDF_ROOT_DIR)/osal/include \
