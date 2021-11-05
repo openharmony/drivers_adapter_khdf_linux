@@ -4,7 +4,7 @@ config DRIVERS_HDF_AUDIO
     depends on DRIVERS_HDF
     help
         Answer Y to choice HDF Audio driver.
-config DRIVERS_HDF_AUDIO_CODEC
+config DRIVERS_HDF_AUDIO_HI3516CODEC
     bool "Enable HDF Audio Codec driver"
     default n
     depends on DRIVERS_HDF_AUDIO
