@@ -33,18 +33,19 @@ obj-$(CONFIG_DRIVERS_HDF_AUDIO) += \
           $(KHDF_AUDIO_ROOT_DIR)/dispatch/src/audio_stream_dispatch.o \
           $(KHDF_AUDIO_ROOT_DIR)/dispatch/src/audio_control_dispatch.o
 
-obj-$(CONFIG_DRIVERS_HDF_AUDIO_CODEC) += \
+obj-$(CONFIG_DRIVERS_HDF_AUDIO_HI3516CODEC) += \
           $(KHDF_AUDIO_HI3516DV300_DIR)/../tfa9879/accessory/src/tfa9879_accessory_adapter.o \
           $(KHDF_AUDIO_HI3516DV300_DIR)/../tfa9879/accessory/src/tfa9879_accessory_impl.o \
           $(KHDF_AUDIO_HI3516DV300_DIR)/codec/src/hi3516_codec_adapter.o \
           $(KHDF_AUDIO_HI3516DV300_DIR)/codec/src/hi3516_codec_impl.o \
           $(KHDF_AUDIO_HI3516DV300_DIR)/codec/src/hi3516_codec_ops.o \
           $(KHDF_AUDIO_HI3516DV300_DIR)/dsp/src/dsp_adapter.o \
+          $(KHDF_AUDIO_HI3516DV300_DIR)/dsp/src/dsp_ops.o \
           $(KHDF_AUDIO_HI3516DV300_DIR)/soc/src/hi3516_dai_adapter.o \
           $(KHDF_AUDIO_HI3516DV300_DIR)/soc/src/hi3516_dai_ops.o \
           $(KHDF_AUDIO_HI3516DV300_DIR)/soc/src/hi3516_aiao_impl.o \
           $(KHDF_AUDIO_HI3516DV300_DIR)/soc/src/hi3516_dma_ops.o \
-          $(KHDF_AUDIO_HI3516DV300_DIR)/soc/src/hi3516_dma_adapter.o \
+          $(KHDF_AUDIO_HI3516DV300_DIR)/soc/src/hi3516_dma_adapter.o
 
 ccflags-$(CONFIG_DRIVERS_HDF_AUDIO) += -lm -lc -lgcc -std=gnu99 -Werror \
              -I$(srctree)/$(KHDF_AUDIO_KHDF_ROOT_DIR)/osal/include \
@@ -62,8 +63,8 @@ ccflags-$(CONFIG_DRIVERS_HDF_AUDIO) += -lm -lc -lgcc -std=gnu99 -Werror \
              -I$(srctree)/$(KHDF_FRAMEWORK_ROOT_DIR)/model/audio/common/include \
              -I$(srctree)/bounds_checking_function/include
 
-ccflags-$(CONFIG_DRIVERS_HDF_AUDIO_CODEC) += \
+ccflags-$(CONFIG_DRIVERS_HDF_AUDIO_HI3516CODEC) += \
              -I$(srctree)/$(KHDF_AUDIO_HI3516DV300_INC_DIR)/codec/include \
              -I$(srctree)/$(KHDF_AUDIO_HI3516DV300_INC_DIR)/soc/include \
-             -I$(srctree)/$(KHDF_AUDIO_HI3516DV300_INC_DIR)/include \
+             -I$(srctree)/$(KHDF_AUDIO_HI3516DV300_INC_DIR)/dsp/include \
              -I$(srctree)/$(KHDF_AUDIO_HI3516DV300_INC_DIR)/../tfa9879/accessory/include
