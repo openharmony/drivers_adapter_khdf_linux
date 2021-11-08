@@ -10,6 +10,8 @@
 # GNU General Public License for more details.
 include drivers/hdf/khdf/test/test_khdf.mk
 HDF_FRAMWORK_TEST_ROOT = ../../../../framework/test/unittest
+HDF_FRAMEWOEK_AUDIO_ADM_PATH = drivers/hdf/framework/model/audio
+HDF_CODEC_DRIVER_TEST_ROOT = ../../../../peripheral/audio/chipsets/unittest
 
 obj-y  += $(HDF_FRAMWORK_TEST_ROOT)/common/hdf_main_test.o \
           $(HDF_FRAMWORK_TEST_ROOT)/osal/osal_test_entry.o \
@@ -61,32 +63,59 @@ obj-$(CONFIG_DRIVERS_HDF_AUDIO_TEST) += $(HDF_FRAMWORK_TEST_ROOT)/model/audio/sr
                                         $(HDF_FRAMWORK_TEST_ROOT)/model/audio/src/audio_core_test.o \
                                         $(HDF_FRAMWORK_TEST_ROOT)/model/audio/src/audio_parse_test.o \
                                         $(HDF_FRAMWORK_TEST_ROOT)/model/audio/src/audio_sapm_test.o \
-                                        $(HDF_FRAMWORK_TEST_ROOT)/model/audio/src/audio_stream_dispatch_test.o
+                                        $(HDF_FRAMWORK_TEST_ROOT)/model/audio/src/audio_accessory_base_test.o \
+                                        $(HDF_FRAMWORK_TEST_ROOT)/model/audio/src/audio_codec_base_test.o \
+                                        $(HDF_FRAMWORK_TEST_ROOT)/model/audio/src/audio_dai_base_test.o \
+                                        $(HDF_FRAMWORK_TEST_ROOT)/model/audio/src/audio_dma_base_test.o \
+                                        $(HDF_FRAMWORK_TEST_ROOT)/model/audio/src/audio_dsp_base_test.o \
+                                        $(HDF_FRAMWORK_TEST_ROOT)/model/audio/src/audio_platform_base_test.o \
+                                        $(HDF_CODEC_DRIVER_TEST_ROOT)/model/hi3516dv300/src/hdf_audio_driver_test.o \
+                                        $(HDF_CODEC_DRIVER_TEST_ROOT)/model/hi3516dv300/src/hi3516_common_func.o \
+                                        $(HDF_CODEC_DRIVER_TEST_ROOT)/model/hi3516dv300/src/hi3516_dai_ops_test.o \
+                                        $(HDF_CODEC_DRIVER_TEST_ROOT)/model/hi3516dv300/src/hi3516_dma_ops_test.o \
+                                        $(HDF_CODEC_DRIVER_TEST_ROOT)/model/hi3516dv300/src/hi3516_codec_ops_test.o \
+                                        $(HDF_CODEC_DRIVER_TEST_ROOT)/model/hi3516dv300/src/hi3516_codec_impl_test.o \
+                                        $(HDF_CODEC_DRIVER_TEST_ROOT)/model/hi3516dv300/src/hi3516_aiao_impl_test.o
 
-ccflags-y +=-I$(srctree)/drivers/hdf/framework/include \
-            -I$(srctree)/drivers/hdf/framework/include/osal \
-            -I$(srctree)/drivers/hdf/framework/include/utils \
-            -I$(srctree)/drivers/hdf/framework/include \
-            -I$(srctree)/drivers/hdf/framework/utils/include \
-            -I$(srctree)/drivers/hdf/framework/include/core \
-            -I$(srctree)/drivers/hdf/framework/core/host/include \
-            -I$(srctree)/drivers/hdf/framework/core/manager/include \
-            -I$(srctree)/drivers/hdf/framework/core/shared/include \
-            -I$(srctree)/drivers/hdf/framework/core/common/include/host \
-            -I$(srctree)/drivers/hdf/framework/core/common/include/manager \
-            -I$(srctree)/drivers/hdf/framework/core/adapter/vnode/include \
-            -I$(srctree)/bounds_checking_function/include \
-            -I$(srctree)/drivers/hdf/framework/test/unittest/config \
-            -I$(srctree)/drivers/hdf/framework/test/unittest/utils/hcs_parser/unittest \
-            -I$(srctree)/drivers/hdf/framework/include/config \
-            -I$(srctree)/drivers/hdf/framework/test/unittest/osal \
-            -I$(srctree)/drivers/hdf/khdf/osal/include \
-            -I$(srctree)/drivers/hdf/framework/model/audio/include \
-            -I$(srctree)/drivers/hdf/framework/model/audio/sapm/include \
-            -I$(srctree)/drivers/hdf/framework/model/audio/dispatch/include \
-            -I$(srctree)/drivers/hdf/framework/test/unittest/model/audio/include \
-            -I$(srctree)/drivers/hdf/framework/../peripheral/audio/interfaces/include \
-            -I$(srctree)/drivers/hdf/framework/model/audio/dispatch/include \
-            -I$(srctree)/drivers/hdf/framework/model/audio/device/codec/include \
-            -I$(srctree)/drivers/hdf/framework/model/audio/device/soc/include \
-            -I$(srctree)/drivers/hdf/framework/model/audio/device/accessory/include
+ccflags-y += -I$(srctree)/drivers/hdf/framework/include \
+             -I$(srctree)/drivers/hdf/framework/include/osal \
+             -I$(srctree)/drivers/hdf/framework/include/utils \
+             -I$(srctree)/drivers/hdf/framework/include \
+             -I$(srctree)/drivers/hdf/framework/utils/include \
+             -I$(srctree)/drivers/hdf/framework/include/core \
+             -I$(srctree)/drivers/hdf/framework/core/host/include \
+             -I$(srctree)/drivers/hdf/framework/core/manager/include \
+             -I$(srctree)/drivers/hdf/framework/core/shared/include \
+             -I$(srctree)/drivers/hdf/framework/core/common/include/host \
+             -I$(srctree)/drivers/hdf/framework/core/common/include/manager \
+             -I$(srctree)/drivers/hdf/framework/core/adapter/vnode/include \
+             -I$(srctree)/bounds_checking_function/include \
+             -I$(srctree)/drivers/hdf/framework/test/unittest/config \
+             -I$(srctree)/drivers/hdf/framework/test/unittest/utils/hcs_parser/unittest \
+             -I$(srctree)/drivers/hdf/framework/include/config \
+             -I$(srctree)/drivers/hdf/framework/test/unittest/osal \
+             -I$(srctree)/drivers/hdf/khdf/osal/include \
+             -I$(srctree)/$(HDF_FRAMEWOEK_AUDIO_ADM_PATH)/include \
+             -I$(srctree)/$(HDF_FRAMEWOEK_AUDIO_ADM_PATH)/sapm/include \
+             -I$(srctree)/$(HDF_FRAMEWOEK_AUDIO_ADM_PATH)/dispatch/include \
+             -I$(srctree)/$(HDF_FRAMEWOEK_AUDIO_ADM_PATH)/core/include \
+             -I$(srctree)/$(HDF_FRAMEWOEK_AUDIO_ADM_PATH)/device/codec/include \
+             -I$(srctree)/$(HDF_FRAMEWOEK_AUDIO_ADM_PATH)/device/soc/include \
+             -I$(srctree)/$(HDF_FRAMEWOEK_AUDIO_ADM_PATH)/device/accessory/include \
+             -I$(srctree)/drivers/hdf/framework/model/audio/include \
+             -I$(srctree)/drivers/hdf/framework/model/audio/sapm/include \
+             -I$(srctree)/drivers/hdf/framework/model/audio/dispatch/include \
+             -I$(srctree)/drivers/hdf/framework/test/unittest/model/audio/include \
+             -I$(srctree)/drivers/hdf/framework/../peripheral/audio/interfaces/include \
+             -I$(srctree)/drivers/hdf/framework/model/audio/dispatch/include \
+             -I$(srctree)/drivers/hdf/framework/model/audio/device/codec/include \
+             -I$(srctree)/drivers/hdf/framework/model/audio/device/soc/include \
+             -I$(srctree)/drivers/hdf/framework/model/audio/device/accessory/include \
+             -I$(srctree)/drivers/hdf/framework/../peripheral/audio/chipsets/unittest/model/hi3516dv300/include \
+             -I$(srctree)/drivers/hdf/framework/model/audio/common/include \
+             -I$(srctree)/drivers/hdf/framework/include/audio \
+             -I$(srctree)/drivers/hdf/framework/model/audio/core/include \
+             -I$(srctree)/drivers/hdf/framework/model/audio/sapm/include \
+             -I$(srctree)/drivers/hdf/framework/../peripheral/audio/chipsets/hi3516dv300/codec/include \
+             -I$(srctree)/drivers/hdf/framework/../peripheral/audio/chipsets/hi3516dv300/soc/include \
+             -I$(srctree)/drivers/hdf/framework/../peripheral/audio/chipsets/hi3516dv300/include
