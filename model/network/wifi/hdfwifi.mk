@@ -38,6 +38,7 @@ HDF_WIFI_FRAMEWORKS_INC := \
    -I$(srctree)/drivers/hdf/framework/model/network/wifi/core/components/eapol \
    -I$(srctree)/drivers/hdf/framework/model/network/wifi/core/components/softap \
    -I$(srctree)/drivers/hdf/framework/model/network/wifi/core/components/sta \
+   -I$(srctree)/drivers/hdf/framework/model/network/wifi/core/components/p2p \
    -I$(srctree)/drivers/hdf/framework/model/network/wifi/include \
    -I$(srctree)/drivers/hdf/framework/model/network/wifi/core \
    -I$(srctree)/drivers/hdf/framework/model/network/wifi/core/module \
