@@ -30,8 +30,9 @@ obj-$(CONFIG_DRIVERS_HDF_SENSOR_PROXIMITY) += $(SENSOR_ROOT_DIR)/proximity/senso
 
 obj-$(CONFIG_DRIVERS_HDF_SENSOR_PROXIMITY_APDS9960) += $(SENSOR_ROOT_DIR)/chipset/proximity/proximity_apds9960.o
 
-obj-$(CONFIG_DRIVERS_HDF_SENSOR_GYRO) += $(SENSOR_ROOT_DIR)/gyro/sensor_gyro_driver.o \
-               $(SENSOR_ROOT_DIR)/chipset/gyro/gyro_bmi160.o
+obj-$(CONFIG_DRIVERS_HDF_SENSOR_GYRO) += $(SENSOR_ROOT_DIR)/gyro/sensor_gyro_driver.o 
+               
+obj-$(CONFIG_DRIVERS_HDF_SENSOR_GYRO_BMI160) += $(SENSOR_ROOT_DIR)/chipset/gyro/gyro_bmi160.o
 
 obj-$(CONFIG_DRIVERS_HDF_SENSOR_BAROMETER) += $(SENSOR_ROOT_DIR)/barometer/sensor_barometer_driver.o
 
@@ -51,8 +52,8 @@ ccflags-y += -I$(srctree)/drivers/hdf/framework/model/sensor/driver/include \
              -I$(srctree)/drivers/hdf/framework/model/sensor/driver/accel \
              -I$(srctree)/drivers/hdf/framework/model/sensor/driver/als \
              -I$(srctree)/drivers/hdf/framework/model/sensor/driver/chipset/als \
-             -I$(srctree)/drivers/hdf/framework/model/sensor/driver/chipset/gyro \
              -I$(srctree)/drivers/hdf/framework/model/sensor/driver/gyro \
+             -I$(srctree)/drivers/hdf/framework/model/sensor/driver/chipset/gyro \
              -I$(srctree)/drivers/hdf/framework/model/sensor/driver/barometer \
              -I$(srctree)/drivers/hdf/framework/model/sensor/driver/chipset/barometer \
              -I$(srctree)/drivers/hdf/framework/model/sensor/driver/hall \
