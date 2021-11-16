@@ -20,7 +20,6 @@
 #include <linux/mmc/core.h>
 #include <linux/mmc/host.h>
 #include <linux/mmc/sdio_func.h>
-#include "plat_log.h"
 #include "device_resource_if.h"
 #include "mmc_corex.h"
 #include "mmc_sdio.h"
