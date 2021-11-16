@@ -36,6 +36,11 @@
 struct mmc_host *himci_get_mmc_host(int slot);
 void hisi_sdio_rescan(int slot);
 
+enum SleepTime {
+    MS_10 = 10,
+    MS_50 = 50,
+};
+
 static struct sdio_func *Hi35xxLinuxSdioGetFunc(struct SdioDevice *dev)
 {
     if (dev == NULL) {
@@ -457,7 +462,7 @@ static int32_t Hi35xxLinuxSdioRescan(struct MmcCntlr *cntlr)
 
     hisi_sdio_rescan(cntlr->index);
     while (rescanFinish == false && count < SDIO_RESCAN_WAIT_TIME) {
-        OsalMSleep(50);
+        OsalMSleep(MS_50);
         count++;
         rescanFinish = Hi35xxLinuxSdioRescanFinish(cntlr);
     }
@@ -467,7 +472,7 @@ static int32_t Hi35xxLinuxSdioRescan(struct MmcCntlr *cntlr)
         return HDF_FAILURE;
     }
 
-    OsalMSleep(10);
+    OsalMSleep(MS_10);
     return HDF_SUCCESS;
 }
 
