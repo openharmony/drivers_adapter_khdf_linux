@@ -220,13 +220,14 @@ struct OsalCdev* OsalAllocCdev(const struct OsalCdevOps* fops)
 int OsalRegisterCdev(struct OsalCdev* cdev, const char* name, unsigned int mode, void* priv)
 {
     const char* lastSlash;
+    int ret;
     (void)mode;
     if (cdev == NULL || name == NULL) {
         return HDF_ERR_INVALID_PARAM;
     }
 
     lastSlash = StringRfindChar(name, '/');
-    int ret = RegisterDev(cdev, lastSlash == NULL ? name : lastSlash + 1);
+    ret = RegisterDev(cdev, lastSlash == NULL ? name : lastSlash + 1);
     if (ret == HDF_SUCCESS) {
         cdev->priv = priv;
     }
