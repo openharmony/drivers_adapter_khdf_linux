@@ -46,13 +46,13 @@ obj-y += \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/manager/src/hdf_driver_installer.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/manager/src/hdf_host_info.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/manager/src/power_state_token_clnt.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/manager/src/driver_manager.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/shared/src/hdf_service_record.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/shared/src/hdf_device_info.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/shared/src/hdf_object_manager.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/shared/src/hdf_io_service.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/common/src/devlite_object_config.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/common/src/hdf_attribute.o \
-        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/common/src/load_driver_entry.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/common/src/devmgr_service_start.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/common/src/hdf_device_node_ext.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/adapter/vnode/src/hdf_vnode_adapter.o \
