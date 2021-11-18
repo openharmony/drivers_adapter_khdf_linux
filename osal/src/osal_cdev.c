@@ -227,7 +227,7 @@ int OsalRegisterCdev(struct OsalCdev* cdev, const char* name, unsigned int mode,
     }
 
     lastSlash = StringRfindChar(name, '/');
-    ret = RegisterDev(cdev, lastSlash == NULL ? name : lastSlash + 1);
+    ret = RegisterDev(cdev, lastSlash == NULL ? name : (lastSlash + 1));
     if (ret == HDF_SUCCESS) {
         cdev->priv = priv;
     }
