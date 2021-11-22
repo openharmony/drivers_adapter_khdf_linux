@@ -228,7 +228,6 @@ int LinuxGpioMatchProbe(struct gpio_chip *chip, void *data)
         return HDF_ERR_MALLOC_FAIL;
     }
 
-    cntlr->device = (struct HdfDeviceObject *)data;
     cntlr->ops = &g_method;
     cntlr->start = (uint16_t)chip->base;
     cntlr->count = (uint16_t)chip->ngpio;
@@ -248,7 +247,6 @@ int LinuxGpioMatchProbe(struct gpio_chip *chip, void *data)
 static int32_t LinuxGpioInit(struct HdfDeviceObject *device)
 {
     int32_t ret;
-    struct GpioCntlr *cntlr = NULL;
     struct gpio_device *gdev = NULL;
 
     HDF_LOGI("%s: Enter", __func__);
