@@ -20,6 +20,7 @@ include drivers/hdf/khdf/model/network/wifi/hdfwifi.mk
 
 WAP_PATH := core/components/softap
 WSTA_PATH := core/components/sta
+WP2P_PATH := core/components/p2p
 WEAPOL_PATH := core/components/eapol
 NETDEV_PATH := ../common/netdevice
 MODULE_PATH := core/module
@@ -33,6 +34,7 @@ obj-$(CONFIG_DRIVERS_HDF_WIFI) += $(MODULE_NAME).o
 $(MODULE_NAME)-objs := $(HDF_WIFI_FRAMEWORKS_ROOT)/$(WAP_PATH)/ap.o \
                        $(HDF_WIFI_FRAMEWORKS_ROOT)/$(WEAPOL_PATH)/eapol.o \
                        $(HDF_WIFI_FRAMEWORKS_ROOT)/$(WSTA_PATH)/sta.o \
+                       $(HDF_WIFI_FRAMEWORKS_ROOT)/$(WP2P_PATH)/p2p.o \
                        $(HDF_WIFI_FRAMEWORKS_ROOT)/$(NETDEV_PATH)/net_device.o \
                        $(HDF_WIFI_FRAMEWORKS_ROOT)/$(MODULE_PATH)/wifi_module.o \
                        $(HDF_WIFI_FRAMEWORKS_ROOT)/$(MODULE_PATH)/wifi_base.o \
