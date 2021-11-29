@@ -31,25 +31,25 @@ cp_list=(
     $OHOS_SOURCE_ROOT/third_party/FreeBSD/sys/dev/evdev     drivers/hdf/
 )
 
-function copy_external_compents
+function copy_external_compents()
 {
     for ((i=0; i<${#cp_list[*]}; i+=2))
     do
-        dst_dir=${cp_list[`expr $i + 1`]}/${cp_list[$i]##*/}
+        dst_dir=${cp_list[$(expr $i + 1)]}/${cp_list[$i]##*/}
         mkdir -p $dst_dir
         cp -arfL ${cp_list[$i]}/* $dst_dir/
     done
 }
 
-function ln_hdf_repos
+function ln_hdf_repos()
 {
     for ((i=0; i<${#ln_list[*]}; i+=2))
     do
-        ln -sf ${ln_list[$i]} ${ln_list[`expr $i + 1`]}
+        ln -sf ${ln_list[$i]} ${ln_list[$(expr $i + 1)]}
     done
 }
 
-function main
+function main()
 {
     cd $KERNEL_BUILD_ROOT
     patch -p1 < $HDF_PATCH_FILE
