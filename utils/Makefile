@@ -15,6 +15,7 @@
 obj-y  += ../../../../framework/utils/src/hcs_parser/device_resource_if.o \
           ../../../../framework/utils/src/hcs_parser/hcs_blob_if.o \
           ../../../../framework/utils/src/hcs_parser/hcs_generate_tree.o \
+          ../../../../framework/utils/src/hcs_parser/hcs_buildin_parser.o \
           ../../../../framework/utils/src/hcs_parser/hcs_parser.o \
           ../../../../framework/utils/src/hcs_parser/hcs_tree_if.o
 ccflags-y +=-I$(srctree)/include/hdf \

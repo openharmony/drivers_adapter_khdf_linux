@@ -55,6 +55,7 @@ obj-y += \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/common/src/hdf_attribute.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/common/src/devmgr_service_start.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/common/src/hdf_device_node_ext.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/common/src/buildin_config_entry.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/adapter/vnode/src/hdf_vnode_adapter.o \
         ./src/devmgr_load.o \
         $(SEC_FUNCTION_OBJECTS)

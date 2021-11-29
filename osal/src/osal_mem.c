@@ -149,7 +149,6 @@ void OsalMemFree(void *buf)
 	struct mem_block *block = NULL;
 
 	if (buf == NULL) {
-		HDF_LOGE("%s try to free null", __func__);
 		return;
 	}
 
