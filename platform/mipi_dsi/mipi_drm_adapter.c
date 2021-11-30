@@ -17,9 +17,9 @@
  */
 
 #include <drm/drm_mipi_dsi.h>
+#include "hdf_base.h"
 #include <linux/of.h>
 #include <video/mipi_display.h>
-#include "hdf_base.h"
 #include "hdf_device_desc.h"
 #include "hdf_log.h"
 #include "mipi_dsi_core.h"
