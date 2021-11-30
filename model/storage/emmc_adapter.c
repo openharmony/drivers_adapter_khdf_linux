@@ -19,11 +19,11 @@
 #include <linux/mmc/card.h>
 #include <linux/mmc/host.h>
 #include <securec.h>
-#include "mmc_corex.h"
-#include "mmc_emmc.h"
 #include "device_resource_if.h"
 #include "emmc_if.h"
 #include "hdf_log.h"
+#include "mmc_corex.h"
+#include "mmc_emmc.h"
 
 #define HDF_LOG_TAG emmc_adapter_c
 
