@@ -16,6 +16,7 @@ include drivers/hdf/khdf/platform/platform.mk
 
 obj-y  += $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/mipi/mipi_csi_core.o \
           $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/mipi/mipi_csi_if.o
+obj-$(CONFIG_VIDEO_V4L2) += mipi_v4l2_adapter.o
 
 obj-y  += mipi_csi_dev.o \
 
