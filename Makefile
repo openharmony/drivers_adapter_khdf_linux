@@ -11,29 +11,34 @@
 # GNU General Public License for more details.
 #
 #
+CURRENT_DIR := $(abspath $(dir $(realpath $(lastword $(MAKEFILE_LIST)))))
 
-obj-$(CONFIG_DRIVERS_HDF)  += osal/
-obj-$(CONFIG_DRIVERS_HDF)  += network/
-obj-$(CONFIG_DRIVERS_HDF)  += utils/
-
-SUPPORT_LEVEL_STD_H := $(shell [ "$(CONFIG_HDF_SUPPORT_LEVEL)" -ge 2 ] && echo true)
+obj-$(CONFIG_DRIVERS_HDF) += osal/
+obj-$(CONFIG_DRIVERS_HDF) += network/
+obj-$(CONFIG_DRIVERS_HDF) += utils/
 
 $(warning PRODUCT_PATH=$(PRODUCT_PATH))
 ifeq ($(PRODUCT_PATH),)
-$(error PRODUCT_PATH not)
+$(error PRODUCT_PATH is not set)
 endif
 
-# for L2+, hcs config should in vendor/product_company/product_name/config/khdf
-ifeq ($(SUPPORT_LEVEL_STD_H), true)
-SUB_DIR:=khdf/
+HCS_DIR := ../../../../$(PRODUCT_PATH)/hdf_config/khdf
+ifeq ($(wildcard $(CURRENT_DIR)/$(HCS_DIR)),)
+HCS_DIR := ../../../../$(PRODUCT_PATH)/hdf_config
 endif
 
 ifeq ($(CONFIG_DRIVERS_HDF), y)
+ifeq ($(wildcard $(CURRENT_DIR)/$(HCS_DIR)),)
+HCS_ABS_DIR := $(abspath $(CURRENT_DIR)/$(HCS_DIR)
+$(error miss hcs config in $(HCS_ABS_DIR) for small system\
+ or $(HCS_ABS_DIR)/khdf for standrad system)
+endif
+
 ifeq ($(CONFIG_DRIVERS_HDF_TEST), y)
-obj-$(CONFIG_DRIVERS_HDF) += ../../../../$(PRODUCT_PATH)/hdf_config/$(SUB_DIR)/hdf_test/
-obj-$(CONFIG_DRIVERS_HDF) += test/
+obj-$(CONFIG_DRIVERS_HDF_TEST) += test/
+obj-$(CONFIG_DRIVERS_HDF_TEST) += $(HCS_DIR)/hdf_test/
 else
-obj-$(CONFIG_DRIVERS_HDF) += ../../../../$(PRODUCT_PATH)/hdf_config/$(SUB_DIR)
+obj-$(CONFIG_DRIVERS_HDF) += $(HCS_DIR)/
 endif
 endif
 
