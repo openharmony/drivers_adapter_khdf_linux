@@ -22,7 +22,8 @@ obj-y  += $(HDF_FRAMWORK_TEST_ROOT)/common/hdf_main_test.o \
           $(HDF_FRAMWORK_TEST_ROOT)/osal/osal_get_case_test.o \
           $(HDF_FRAMWORK_TEST_ROOT)/manager/sample_driver_test.o \
           $(HDF_FRAMWORK_TEST_ROOT)/utils/hcs_parser/unittest/hcs_config_test.o \
-          $(HDF_FRAMWORK_TEST_ROOT)/utils/hcs_parser/unittest/hcs_parser_test.o
+          $(HDF_FRAMWORK_TEST_ROOT)/utils/hcs_parser/unittest/hcs_parser_test.o \
+          $(HDF_FRAMWORK_TEST_ROOT)/pm/pm_driver_test.o
 
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_GPIO) += $(HDF_FRAMWORK_TEST_ROOT)/platform/common/gpio_test.o \
                                            $(HDF_FRAMWORK_TEST_ROOT)/platform/entry/hdf_gpio_entry_test.o
