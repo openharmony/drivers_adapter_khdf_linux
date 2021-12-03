@@ -57,7 +57,7 @@ static int DevmgrPmResume(void)
 
 static int DevmgrPmNotifier(struct notifier_block *nb, unsigned long mode, void *data)
 {
-	int ret = HDF_SUCCESS;
+    int ret = HDF_SUCCESS;
     switch (mode) {
         case PM_SUSPEND_PREPARE:
             ret = DevmgrPmSuspend();
