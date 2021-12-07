@@ -55,7 +55,7 @@ config DRIVERS_HDF_SENSOR_GYRO
 config DRIVERS_HDF_SENSOR_GYRO_BMI160
     bool "Enable HDF gyro bmi160 sensor driver"
     default n
-    depends on DRIVERS_HDF_SENSOR_GYRO
+    depends on DRIVERS_HDF_SENSOR_ACCEL
     help
       Answer Y to enable HDF gyro bmi160 sensor driver.
 config DRIVERS_HDF_SENSOR_BAROMETER
