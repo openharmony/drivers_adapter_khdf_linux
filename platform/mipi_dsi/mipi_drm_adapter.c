@@ -78,7 +78,7 @@ static int32_t MipiDsiAdapterAttach(struct MipiDsiCntlr *cntlr, uint8_t *name)
     return HDF_SUCCESS;
 }
 
-static int32_t MipiDsiAdapterSetDrvData(struct MipiDsiCntlr *cntlr, DevHandle *panelData)
+static int32_t MipiDsiAdapterSetDrvData(struct MipiDsiCntlr *cntlr, void *panelData)
 {
     struct mipi_dsi_device *linuxPanel;
 
