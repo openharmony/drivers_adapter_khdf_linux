@@ -872,7 +872,6 @@ static int32_t UsbPnpNotifyInit(struct HdfDeviceObject *device)
             (void *)device, "usb pnp notify handle kthread");
         if (g_usbPnpNotifyReportThread == NULL) {
             HDF_LOGE("%s: kthread_run g_usbPnpNotifyReportThread is NULL", __func__);
-            return HDF_ERR_INVALID_OBJECT;
         }
     } else {
         HDF_LOGI("%s: g_usbPnpNotifyReportThread is already running!", __func__);
@@ -884,7 +883,6 @@ static int32_t UsbPnpNotifyInit(struct HdfDeviceObject *device)
             (void *)device, "gadget pnp notify handle kthread");
         if (g_usbPnpNotifyReportThread == NULL) {
             HDF_LOGE("%s: kthread_run g_usbPnpNotifyReportThread is NULL", __func__);
-            return HDF_ERR_INVALID_OBJECT;
         }
     } else {
         HDF_LOGI("%s: g_devPnpNotifyReportThread is already running!", __func__);
