@@ -22,7 +22,6 @@
 #include "hdf_base.h"
 #include "hdf_log.h"
 
-#define HDF_MODULE_NAME "devmgr_pm"
 #define HDF_LOG_TAG devmgr_pm
 
 static int DevmgrPmSuspend(void)
