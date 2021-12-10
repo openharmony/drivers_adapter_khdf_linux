@@ -666,7 +666,7 @@ static int UsbPnpNotifyCallback(struct notifier_block *self, unsigned long actio
         case USB_GADGET_ADD:
         case USB_GADGET_REMOVE:
             OsalMutexLock(&g_gadgetSendEventLock);  
-            if(g_preAcion == action){
+            if (g_preAcion == action) {
                 OsalMutexUnlock(&g_gadgetSendEventLock);
                 break;
             }
