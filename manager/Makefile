@@ -27,6 +27,7 @@ obj-y += \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/utils/src/hdf_map.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/utils/src/hdf_sbuf.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/utils/src/hdf_sbuf_impl_raw.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/utils/src/hdf_task_queue.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/host/src/devhost_service.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/host/src/devmgr_service_clnt.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/host/src/devsvc_manager_clnt.o \
@@ -37,6 +38,7 @@ obj-y += \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/host/src/hdf_observer_record.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/host/src/hdf_service_subscriber.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/host/src/hdf_device_object.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/host/src/hdf_power_manager.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/host/src/hdf_service_observer.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/host/src/power_state_token.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/manager/src/devhost_service_clnt.o \
