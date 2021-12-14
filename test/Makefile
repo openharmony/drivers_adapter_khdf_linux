@@ -26,6 +26,7 @@ obj-y  += $(HDF_FRAMWORK_TEST_ROOT)/common/hdf_main_test.o \
           $(HDF_FRAMWORK_TEST_ROOT)/pm/hdf_pm_driver_test.o
 
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_GPIO) += $(HDF_FRAMWORK_TEST_ROOT)/platform/common/gpio_test.o \
+	                                   $(HDF_FRAMWORK_TEST_ROOT)/platform/common/gpio_driver_test.o \
                                            $(HDF_FRAMWORK_TEST_ROOT)/platform/entry/hdf_gpio_entry_test.o
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_I2C) += $(HDF_FRAMWORK_TEST_ROOT)/platform/common/i2c_test.o \
                                           $(HDF_FRAMWORK_TEST_ROOT)/platform/common/i2c_driver_test.o \
