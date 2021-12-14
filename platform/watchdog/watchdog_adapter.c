@@ -65,6 +65,10 @@ static int32_t WdtOpenFile(struct WatchdogCntlr *wdt)
     fp = filp_open(name, O_RDWR, 0600); /* 0600 : for open mode */
     if (IS_ERR(fp)) {
         HDF_LOGE("filp_open %s fail", name);
+        if (PTR_ERR(fp) == HDF_ERR_DEVICE_BUSY) {
+            set_fs(oldfs);
+            return -HDF_ERR_DEVICE_BUSY;
+        }
         set_fs(oldfs);
         return HDF_FAILURE;
     }
