@@ -45,6 +45,8 @@ obj-y += \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/manager/src/device_token_clnt.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/manager/src/devmgr_service.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/manager/src/devsvc_manager.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/manager/src/devsvc_manager_ext.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/manager/src/servstat_listener_holder.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/manager/src/hdf_driver_installer.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/manager/src/hdf_host_info.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/manager/src/power_state_token_clnt.o \
@@ -53,6 +55,7 @@ obj-y += \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/shared/src/hdf_device_info.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/shared/src/hdf_object_manager.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/shared/src/hdf_io_service.o \
+        $(HDF_FRAMEWORK_SRC_DIR)/framework/core/shared/src/service_status.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/common/src/devlite_object_config.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/common/src/hdf_attribute.o \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/common/src/devmgr_service_start.o \
