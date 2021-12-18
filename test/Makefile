@@ -48,6 +48,10 @@ obj-$(CONFIG_DRIVERS_HDF_PLATFORM_MIPI_DSI) += $(HDF_FRAMWORK_TEST_ROOT)/platfor
                                                $(HDF_FRAMWORK_TEST_ROOT)/platform/entry/hdf_mipi_dsi_entry_test.o
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_MIPI_CSI) += $(HDF_FRAMWORK_TEST_ROOT)/platform/common/mipi_csi_test.o \
                                                $(HDF_FRAMWORK_TEST_ROOT)/platform/entry/hdf_mipi_csi_entry_test.o
+obj-$(CONFIG_DRIVERS_HDF_PLATFORM_REGULATOR) += $(HDF_FRAMWORK_TEST_ROOT)/platform/common/regulator_test.o \
+                                                $(HDF_FRAMWORK_TEST_ROOT)/platform/entry/hdf_regulator_entry_test.o \
+                                                $(HDF_FRAMWORK_TEST_ROOT)/platform/virtual/regulator_linux_voltage_virtual_driver.o \
+                                                $(HDF_FRAMWORK_TEST_ROOT)/platform/virtual/regulator_linux_current_virtual_driver.o
 
 obj-$(CONFIG_DRIVERS_HDF_WIFI) += $(HDF_FRAMWORK_TEST_ROOT)/wifi/hdf_wifi_test.o \
                                   $(HDF_FRAMWORK_TEST_ROOT)/model/network/wifi/unittest/netdevice/net_device_test.o \
