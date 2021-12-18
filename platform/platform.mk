@@ -29,6 +29,7 @@ ccflags-$(CONFIG_DRIVERS_HDF_PLATFORM) +=-I$(srctree)/drivers/hdf/framework/incl
    -I$(srctree)/drivers/hdf/framework/support/platform/include/spi \
    -I$(srctree)/drivers/hdf/framework/support/platform/include/uart \
    -I$(srctree)/drivers/hdf/framework/support/platform/include/watchdog \
+   -I$(srctree)/drivers/hdf/framework/support/platform/include/regulator \
    -I$(srctree)/drivers/hdf/framework/model/storage/include \
    -I$(srctree)/drivers/hdf/framework/model/storage/include/mmc \
    -I$(srctree)/drivers/hdf/framework/model/storage/include/mtd \
