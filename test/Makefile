@@ -25,6 +25,13 @@ obj-y  += $(HDF_FRAMWORK_TEST_ROOT)/common/hdf_main_test.o \
           $(HDF_FRAMWORK_TEST_ROOT)/utils/hcs_parser/unittest/hcs_parser_test.o \
           $(HDF_FRAMWORK_TEST_ROOT)/pm/hdf_pm_driver_test.o
 
+obj-$(CONFIG_DRIVERS_HDF_PLATFORM) += $(HDF_FRAMWORK_TEST_ROOT)/platform/common/platform_device_test.o \
+                                      $(HDF_FRAMWORK_TEST_ROOT)/platform/common/platform_driver_test.o \
+                                      $(HDF_FRAMWORK_TEST_ROOT)/platform/common/platform_event_test.o \
+                                      $(HDF_FRAMWORK_TEST_ROOT)/platform/common/platform_manager_test.o \
+                                      $(HDF_FRAMWORK_TEST_ROOT)/platform/common/platform_queue_test.o \
+                                      $(HDF_FRAMWORK_TEST_ROOT)/platform/entry/hdf_platform_core_entry_test.o
+
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_GPIO) += $(HDF_FRAMWORK_TEST_ROOT)/platform/common/gpio_test.o \
 	                                   $(HDF_FRAMWORK_TEST_ROOT)/platform/common/gpio_driver_test.o \
                                            $(HDF_FRAMWORK_TEST_ROOT)/platform/entry/hdf_gpio_entry_test.o
