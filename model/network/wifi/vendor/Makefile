@@ -19,7 +19,7 @@ HDF_VENDOR_PREFIX := ../../../../../../../../
 include drivers/hdf/khdf/model/network/wifi/hdfwifi.mk
 
 obj-$(CONFIG_DRIVERS_HDF_WIFI) += $(MODULE_NAME).o
-$(MODULE_NAME)-objs := $(HDF_WIFI_VENDOR_ROOT)/core/hdf_wlan_sdio_adapt.o
+$(MODULE_NAME)-objs := $(HDF_WIFI_VENDOR_ROOT)/adapter/hdf_wlan_sdio_adapt.o
 
 ccflags-$(CONFIG_DRIVERS_HDF_WIFI) += \
     $(HDF_FRAMEWORKS_INC) \

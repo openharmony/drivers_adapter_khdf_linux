@@ -18,9 +18,9 @@ HDF_VENDOR_PREFIX := ../../../../../../../../../
 
 include drivers/hdf/khdf/model/network/wifi/hdfwifi.mk
 
-INC_TOP_PATH := drivers/hdf/wifi/driver/
-VENDOR_WIFI_PATH := device/hisilicon/drivers/wifi/driver
-WIFI_DRIVER_DIR := hi3881
+INC_TOP_PATH := drivers/hdf/wifi/hi3881v100/
+VENDOR_WIFI_PATH := device/soc/hisilicon/common/platform/wifi/hi3881v100
+WIFI_DRIVER_DIR := driver
 
 ##################path of compile file :start###############
 #####wifi#####
