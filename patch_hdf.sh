@@ -27,7 +27,7 @@ ln_list=(
 
 cp_list=(
     $OHOS_SOURCE_ROOT/third_party/bounds_checking_function  ./
-    $OHOS_SOURCE_ROOT/device/hisilicon/drivers/wifi         drivers/hdf/
+    $OHOS_SOURCE_ROOT/device/soc/hisilicon/common/platform/wifi         drivers/hdf/
     $OHOS_SOURCE_ROOT/third_party/FreeBSD/sys/dev/evdev     drivers/hdf/
 )
 
