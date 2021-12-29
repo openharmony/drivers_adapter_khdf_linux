@@ -1,0 +1,60 @@
+{
+    "name": "@ohos/drivers_adapter_khdf_linux",
+    "version": "",
+    "description": "Linux的内核态hdf驱动平台",
+    "homePage": "https://gitee.com/openharmony",
+    "license": "GPL-2.0",
+    "repository": "https://gitee.com/openharmony/drivers_adapter_khdf_linux",
+    "domain": "os",
+    "language": "",
+    "publishAs": "code-segment",
+    "private": false,
+    "scripts": {},
+    "tags": [
+        "drivers"
+    ],
+    "keywords": [
+        "drivers",
+        "adapter",
+        "khdf",
+        "linux"
+    ],
+    "envs": [],
+    "dirs": [],
+    "author": {
+        "name": "",
+        "email": "",
+        "url": ""
+    },
+    "contributors": [
+        {
+            "name": "",
+            "email": "",
+            "url": ""
+        }
+    ],
+    "segment": {
+        "destPath": "drivers/adapter/khdf/linux"
+    },
+    "component": {
+        "name": "adapter_linux_khdf",
+        "subsystem": "hdf",
+        "syscap": [],
+        "features": [],
+        "adapted_system_type": [
+            "small",
+            "standard"
+        ],
+        "rom": "",
+        "ram": "",
+        "deps": {
+            "components": [],
+            "third_party": []
+        },
+        "build": {
+            "sub_component": [],
+            "inner_kits": [],
+            "test": []
+        }
+    }
+}
