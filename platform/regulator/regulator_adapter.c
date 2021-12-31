@@ -31,7 +31,7 @@ static int32_t LinuxRegulatorOpen(struct RegulatorNode *node)
     }
 
     struct LinuxRegulatorInfo *info = (struct LinuxRegulatorInfo *)node->priv;
-    if(info->adapterReg == NULL) {
+    if (info->adapterReg == NULL) {
         const char *devname = dev_name(info->dev);
         if ((devname == NULL) || (strcmp(devname, info->devName) != 0)) {
             HDF_LOGE("%s:dev info error [%s][%s]!", __func__, devname, info->devName);
@@ -60,7 +60,7 @@ static int32_t LinuxRegulatorClose(struct RegulatorNode *node)
     }
 
     struct LinuxRegulatorInfo *info = (struct LinuxRegulatorInfo *)node->priv;
-    if(info->adapterReg != NULL) {
+    if (info->adapterReg != NULL) {
         if (regulator_disable(info->adapterReg) != HDF_SUCCESS) {
             HDF_LOGE("%s:regulator_disable[%s][%s] FAIL", __func__, node->regulatorInfo.name, info->supplyName);
         }
@@ -78,7 +78,7 @@ static int32_t LinuxRegulatorRemove(struct RegulatorNode *node)
 
     struct LinuxRegulatorInfo *info = (struct LinuxRegulatorInfo *)node->priv;
     HDF_LOGI("%s:regulator [%s][%s] release!", __func__, info->devName, info->supplyName);
-    if(LinuxRegulatorClose(node) != HDF_SUCCESS) {
+    if (LinuxRegulatorClose(node) != HDF_SUCCESS) {
         HDF_LOGE("%s:LinuxRegulatorClose fail[%s][%s]!", __func__, info->devName, info->supplyName);
     }
 
@@ -345,9 +345,9 @@ static int32_t LinuxRegulatorReadHcs(struct RegulatorNode *regNode, const struct
     regNode->regulatorInfo.status = REGULATOR_STATUS_OFF;
 
     HDF_LOGI("%s: name[%s][%d]--[%d][%d]--[%d][%d]", __func__,
-            regNode->regulatorInfo.name, regNode->regulatorInfo.constraints.mode, 
-            regNode->regulatorInfo.constraints.minUv, regNode->regulatorInfo.constraints.maxUv, 
-            regNode->regulatorInfo.constraints.minUa, regNode->regulatorInfo.constraints.maxUa);
+        regNode->regulatorInfo.name, regNode->regulatorInfo.constraints.mode, 
+        regNode->regulatorInfo.constraints.minUv, regNode->regulatorInfo.constraints.maxUv, 
+        regNode->regulatorInfo.constraints.minUa, regNode->regulatorInfo.constraints.maxUa);
 
     return HDF_SUCCESS;
 }
@@ -368,7 +368,7 @@ static int32_t LinuxRegulatorReadAdapterHcs(struct LinuxRegulatorInfo *info, con
         HDF_LOGE("%s: read devName fail!", __func__);
         return HDF_FAILURE;
     }
-    HDF_LOGI("%s:devName[%s]", __func__,info->devName);
+    HDF_LOGI("%s:devName[%s]", __func__, info->devName);
 
     ret = drsOps->GetString(node, "supplyName", &(info->supplyName), "ERROR");
     if ((ret != HDF_SUCCESS) || (info->supplyName == NULL)) {
@@ -416,10 +416,10 @@ static int32_t LinuxRegulatorParseAndInit(struct HdfDeviceObject *device, const 
         }
 
         HDF_LOGI("%s: name[%s][%d]--[%d][%d]--[%d][%d]--[%s][%s]", __func__,
-                regNode->regulatorInfo.name, regNode->regulatorInfo.constraints.mode, 
-                regNode->regulatorInfo.constraints.minUv, regNode->regulatorInfo.constraints.maxUv, 
-                regNode->regulatorInfo.constraints.minUa, regNode->regulatorInfo.constraints.maxUa, 
-                info->devName, info->supplyName);
+            regNode->regulatorInfo.name, regNode->regulatorInfo.constraints.mode,
+            regNode->regulatorInfo.constraints.minUv, regNode->regulatorInfo.constraints.maxUv,
+            regNode->regulatorInfo.constraints.minUa, regNode->regulatorInfo.constraints.maxUa,
+            info->devName, info->supplyName);
 
         regNode->priv = (void *)info;
         regNode->ops = &g_method;
@@ -429,7 +429,7 @@ static int32_t LinuxRegulatorParseAndInit(struct HdfDeviceObject *device, const 
             HDF_LOGE("%s: add regulator controller fail:%d!", __func__, ret);
             break;
         }
-    } while(0);
+    } while (0);
 
     if (ret != HDF_SUCCESS) {
         HDF_LOGE("%s: fail [%d]!", __func__, ret);
