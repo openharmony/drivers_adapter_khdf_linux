@@ -246,8 +246,6 @@ int LinuxGpioMatchProbe(struct gpio_chip *chip, void *data)
 
 static int32_t LinuxGpioInit(struct HdfDeviceObject *device)
 {
-
-    HDF_LOGI("%s: Enter", __func__);
     if (device == NULL) {
         HDF_LOGE("%s: Fail, device is NULL.", __func__);
         return HDF_ERR_INVALID_OBJECT;
