@@ -57,7 +57,9 @@ int32_t OsalSemWait(struct OsalSem *sem, uint32_t millisec)
 	}
 
 	if (millisec == HDF_WAIT_FOREVER) {
-		down((struct semaphore *)sem->realSemaphore);
+		do {
+			ret = down_interruptible((struct semaphore *)sem->realSemaphore);
+		} while (ret == -EINTR);
 	} else {
 		ret = down_timeout((struct semaphore *)sem->realSemaphore, msecs_to_jiffies(millisec));
 		if (ret != 0) {
