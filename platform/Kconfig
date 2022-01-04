@@ -55,7 +55,7 @@ config DRIVERS_HDF_PLATFORM_UART
 config DRIVERS_HDF_PLATFORM_SDIO
     bool "Enable HDF platform sdio driver"
     default n
-    depends on DRIVERS_HDF_PLATFORM
+    depends on DRIVERS_HDF_PLATFORM && DRIVERS_HDF_PLATFORM_MMC
     help
       Answer Y to enable HDF platform sdio driver.
 
