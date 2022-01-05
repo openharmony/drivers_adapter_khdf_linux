@@ -12,8 +12,7 @@ This repository stores the code and compilation scripts for the OpenHarmony driv
 
 ```
 /drivers/adapter/khdf/linux
-├── config               # Compilation scripts for building and configuring the parsing code
-├── hcs                  # HDF configuration and management
+├── utils                # Compilation scripts for building and configuring the parsing code
 ├── manager              # Code for starting and adapting to the HDF
 ├── model                # Code for adapting to Linux
 │   ├── display          # Display driver model
@@ -33,6 +32,7 @@ This repository stores the code and compilation scripts for the OpenHarmony driv
 │   ├── spi              # SPI APIs
 │   ├── uart             # UART APIs
 │   └── watchdog         # WATCHDOG APIs
+├── test                 # Testcase for testing the Linux kernel driver
 ```
 
 ## Repositories Involved<a name="section1371113476307"></a>
