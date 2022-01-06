@@ -12,8 +12,7 @@
 
 ```
 /drivers/adapter/khdf/linux
-├── config               #linux内核下编译配置解析代码的编译脚本
-├── hcs                  #linux内核下HDF的配置管理目录
+├── utils                #linux内核下编译配置解析代码的编译脚本
 ├── manager              #linux内核下启动适配启动HDF框架代码
 ├── model                #驱动模型适配linux代码
 │   ├── display          #显示驱动模型
@@ -33,6 +32,7 @@
 │   ├── spi              #spi接口
 │   ├── uart             #uart接口
 │   └── watchdog         #watchdog接口
+├── test                 #linux内核测试用例
 ```
 
 ## 相关仓<a name="section1371113476307"></a>
