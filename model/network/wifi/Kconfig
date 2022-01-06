@@ -1,7 +1,7 @@
 config DRIVERS_HDF_WIFI
     bool "Enable HDF wifi"
     default n
-    depends on DRIVERS_HDF
+    depends on DRIVERS_HDF && DRIVERS_HDF_PLATFORM_SDIO
     help
       Answer Y to enable HDF wifi.
 
