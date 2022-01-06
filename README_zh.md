@@ -32,7 +32,7 @@
 │   ├── spi              #spi接口
 │   ├── uart             #uart接口
 │   └── watchdog         #watchdog接口
-├── test                  #linux内核测试用例
+├── test                 #linux内核测试用例
 ```
 
 ## 相关仓<a name="section1371113476307"></a>
