@@ -106,12 +106,15 @@ static int32_t LinuxGpioGetDir(struct GpioCntlr *cntlr, uint16_t local, uint16_t
 static irqreturn_t LinuxGpioIrqBridge(int irq, void *data)
 {
     int gpio = (int)(uintptr_t)data;
-    GpioCntlrIrqCallback(GpioGetCntlr(gpio), GpioToLocal(gpio));
+    struct GpioCntlr *cntlr = NULL;
+
+    cntlr = GpioCntlrGet(gpio);
+    GpioCntlrIrqCallback(cntlr, GpioCntlrGetLocal(cntlr, gpio));
+    GpioCntlrPut(cntlr);
     return IRQ_HANDLED;
 }
 
-static int32_t LinuxGpioSetIrq(struct GpioCntlr *cntlr, uint16_t local, uint16_t mode,
-    GpioIrqFunc func, void *arg)
+static int32_t LinuxGpioSetIrq(struct GpioCntlr *cntlr, uint16_t local, uint16_t mode)
 {
     int ret, irq;
     unsigned long flags = 0;
@@ -131,10 +134,11 @@ static int32_t LinuxGpioSetIrq(struct GpioCntlr *cntlr, uint16_t local, uint16_t
     flags |= (mode & GPIO_IRQ_TRIGGER_FALLING) == 0 ? 0 : IRQF_TRIGGER_FALLING;
     flags |= (mode & GPIO_IRQ_TRIGGER_HIGH) == 0 ? 0 : IRQF_TRIGGER_HIGH;
     flags |= (mode & GPIO_IRQ_TRIGGER_LOW) == 0 ? 0 : IRQF_TRIGGER_LOW;
+    HDF_LOGI("%s: gona request irq:%d\n", __func__, irq);
     ret = request_irq(irq, LinuxGpioIrqBridge, flags,
         "LinuxIrqBridge", (void *)(uintptr_t)gpio);
     if (ret == 0) {
-        disable_irq(irq); // disable on set
+        disable_irq_nosync(irq); // disable on set
     }
     return (ret == 0) ? HDF_SUCCESS : HDF_ERR_BSP_PLT_API_ERR;
 }
@@ -153,7 +157,7 @@ static int32_t LinuxGpioUnsetIrq(struct GpioCntlr *cntlr, uint16_t local)
         HDF_LOGE("%s: gpio(%u) to irq fail:%d", __func__, gpio, irq);
         return HDF_ERR_BSP_PLT_API_ERR;
     }
-    HDF_LOGE("%s: gona free irq:%d\n", __func__, irq);
+    HDF_LOGI("%s: gona free irq:%d\n", __func__, irq);
     free_irq(irq, (void *)(uintptr_t)gpio);
     return HDF_SUCCESS;
 }
