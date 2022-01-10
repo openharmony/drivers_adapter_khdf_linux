@@ -103,6 +103,13 @@ static int32_t LinuxGpioGetDir(struct GpioCntlr *cntlr, uint16_t local, uint16_t
     return HDF_SUCCESS;
 }
 
+static irqreturn_t LinuxGpioIrqDummy(int irq, void *data)
+{
+    (void)irq;
+    (void)data;
+    return IRQ_HANDLED;
+}
+
 static irqreturn_t LinuxGpioIrqBridge(int irq, void *data)
 {
     int gpio = (int)(uintptr_t)data;
@@ -134,9 +141,15 @@ static int32_t LinuxGpioSetIrq(struct GpioCntlr *cntlr, uint16_t local, uint16_t
     flags |= (mode & GPIO_IRQ_TRIGGER_FALLING) == 0 ? 0 : IRQF_TRIGGER_FALLING;
     flags |= (mode & GPIO_IRQ_TRIGGER_HIGH) == 0 ? 0 : IRQF_TRIGGER_HIGH;
     flags |= (mode & GPIO_IRQ_TRIGGER_LOW) == 0 ? 0 : IRQF_TRIGGER_LOW;
-    HDF_LOGI("%s: gona request irq:%d\n", __func__, irq);
+    HDF_LOGI("%s: gona request normal irq:%d(%u)\n", __func__, irq, gpio);
     ret = request_irq(irq, LinuxGpioIrqBridge, flags,
         "LinuxIrqBridge", (void *)(uintptr_t)gpio);
+    if (ret != 0) {
+        HDF_LOGI("%s: gona request threaded irq:%d(%u)\n", __func__, irq, gpio);
+        flags |= IRQF_ONESHOT;
+        ret = request_threaded_irq(irq, LinuxGpioIrqBridge, LinuxGpioIrqDummy, flags,
+            "LinuxIrqBridge", (void *)(uintptr_t)gpio);
+    }
     if (ret == 0) {
         disable_irq_nosync(irq); // disable on set
     }
