@@ -437,6 +437,13 @@ static int32_t UartAdapterSetAttribute(struct UartHost *host, struct UartAttribu
     return ret;
 }
 
+static int32_t UartAdapterSetTransMode(struct UartHost *host, enum UartTransMode mode)
+{
+    (void)host;
+    (void)mode;
+    return HDF_SUCCESS;
+}
+
 static struct UartHostMethod g_uartHostMethod = {
     .Init = UartAdapterInit,
     .Deinit = UartAdapterDeInit,
@@ -446,6 +453,7 @@ static struct UartHostMethod g_uartHostMethod = {
     .GetBaud = UartAdapterGetBaud,
     .SetAttribute = UartAdapterSetAttribute,
     .GetAttribute = UartAdapterGetAttribute,
+    .SetTransMode = UartAdapterSetTransMode,
 };
 
 static int32_t HdfUartBind(struct HdfDeviceObject *obj)
