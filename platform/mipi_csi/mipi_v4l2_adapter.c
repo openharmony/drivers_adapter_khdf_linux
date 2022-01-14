@@ -29,6 +29,10 @@
 
 #define HDF_LOG_TAG          mipi_v4l2_adapter
 #define SENSOR_FLL_MAX       0xffff
+#define PIXEL_RATE_DIVISOR   10
+#define LINKS_COUNT          2
+#define LANES_COUNT          4
+#define CTRLS_COUNT          10
 
 /* Mode : resolution and related config&values */
 struct CameraSensorMode {
@@ -83,9 +87,9 @@ static struct AdapterDrvData g_adapterDrvData;
  */
 static u32 LinuxGetFormatCode(DataType dataType)
 {
-    u32 code = MEDIA_BUS_FMT_SGBRG12_1X12;;
+    u32 code = MEDIA_BUS_FMT_SGBRG12_1X12;
 
-    switch(dataType){
+    switch (dataType) {
         case DATA_TYPE_RAW_8BIT:
             code = MEDIA_BUS_FMT_SBGGR8_1X8;
             break;
@@ -178,8 +182,8 @@ static int LinuxSetPadFormat(struct v4l2_subdev *sd, struct v4l2_subdev_pad_conf
     fmt->format.code = drvData->fmt.format.code;
     LinuxUpdatePadFormat(drvData, mode, fmt);
 
-    pixel_rate = camera->link_freqs * 2 * 4;
-    do_div(pixel_rate, 10);
+    pixel_rate = camera->link_freqs * LINKS_COUNT * LANES_COUNT;
+    do_div(pixel_rate, PIXEL_RATE_DIVISOR);
     __v4l2_ctrl_s_ctrl_int64(camera->pixel_rate, pixel_rate);
     /* Update limits and set FPS to default */
     height = rect->height;
@@ -250,7 +254,7 @@ static int LinuxInitControls(struct AdapterDrvData *drvData)
     ImgRect *rect = &(drvData->attr->imgRect);
 
     if (ctrl_hdlr == NULL) {
-        ret = v4l2_ctrl_handler_init(ctrl_hdlr, 10);
+        ret = v4l2_ctrl_handler_init(ctrl_hdlr, CTRLS_COUNT);
         if (ret) {
             HDF_LOGE("%s: [v4l2_ctrl_handler_init] failed.", __func__);
             return ret;
@@ -267,8 +271,8 @@ static int LinuxInitControls(struct AdapterDrvData *drvData)
 
     if (camera->pixel_rate == NULL) {
         /* pixel_rate = link_freq * 2 * nr_of_lanes / bits_per_sample */
-        pixel_rate = camera->link_freqs * 2 * 4;
-        do_div(pixel_rate, 10);
+        pixel_rate = camera->link_freqs * LINKS_COUNT * LANES_COUNT;
+        do_div(pixel_rate, PIXEL_RATE_DIVISOR);
         /* By default, PIXEL_RATE is read only */
         camera->pixel_rate = v4l2_ctrl_new_std(ctrl_hdlr, NULL,
             V4L2_CID_PIXEL_RATE, pixel_rate, pixel_rate, 1, pixel_rate);
@@ -408,14 +412,18 @@ static int32_t MipiCsiAdapterProbeV4l2(struct MipiCsiCntlr *cntlr)
 static int32_t MipiCsiAdapterSetDrvData(struct MipiCsiCntlr *cntlr, void *cameraData)
 {
     int32_t ret;
-    struct AdapterDrvData *drvData = (struct AdapterDrvData *)cntlr->priv;;
+    struct AdapterDrvData *drvData = (struct AdapterDrvData *)cntlr->priv;
 
     if ((drvData == NULL) || (cameraData == NULL)) {
         HDF_LOGE("%s: drvData or cameraData is NULL!", __func__);
         return HDF_ERR_INVALID_PARAM;
     }
     drvData->camera = (struct CameraDrvData *)cameraData;
-    MipiCsiAdapterTraceCameraCfg(drvData->camera);
+    ret = MipiCsiAdapterTraceCameraCfg(drvData->camera);
+    if (ret != HDF_SUCCESS) {
+        HDF_LOGE("%s: trace Camera Cfg failed!", __func__);
+        return HDF_FAILURE;
+    }
     ret = MipiCsiAdapterProbeV4l2(cntlr);
 
     return ret;

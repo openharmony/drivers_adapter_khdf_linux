@@ -73,7 +73,7 @@ int RegulatorAdapterConsumerInit(void)
     int ret;
 
     ret = platform_device_register(&RegulatorAdapterConsumerPlatformDevice);
-    if(ret != 0) {
+    if (ret != 0) {
         HDF_LOGE("%s: fail", __func__);
         return ret;
     }
@@ -87,7 +87,7 @@ int __init RegulatorAdapterConsumerModuleInit(void)
     int ret;
 
     ret = platform_device_register(&RegulatorAdapterConsumerPlatformDevice);
-    if(ret != 0) {
+    if (ret != 0) {
         HDF_LOGE("%s: fail", __func__);
         return ret;
     }
