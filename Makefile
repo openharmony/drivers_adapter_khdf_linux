@@ -52,6 +52,7 @@ obj-$(CONFIG_DRIVERS_HDF_USB_F_GENERIC) += model/usb/device/
 obj-$(CONFIG_DRIVERS_HDF_SENSOR) += model/sensor/
 obj-$(CONFIG_DRIVERS_HDF_STORAGE) += model/storage/
 obj-$(CONFIG_DRIVERS_HDF_BT) += model/network/bluetooth/
+obj-$(CONFIG_DRIVERS_HDF_LIGHT) += model/misc/light/
 obj-$(CONFIG_DRIVERS_HDF_VIBRATOR) += model/misc/vibrator/
 obj-$(CONFIG_DRIVERS_HDF_AUDIO) += model/audio/
 obj-$(CONFIG_DRIVERS_HDF_DSOFTBUS) += model/misc/dsoftbus/
