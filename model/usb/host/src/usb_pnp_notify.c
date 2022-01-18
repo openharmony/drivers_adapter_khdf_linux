@@ -163,6 +163,7 @@ static HDF_STATUS UsbPnpNotifyDestroyInfo(struct UsbPnpDeviceInfo *deviceInfo)
 static int32_t UsbPnpNotifyAddInitInfo(struct UsbPnpDeviceInfo *deviceInfo, union UsbPnpDeviceInfoData infoData)
 {
     int32_t ret = HDF_SUCCESS;
+    uint8_t i;
 
     deviceInfo->info.usbDevAddr = (uintptr_t)infoData.usbDev;
     deviceInfo->info.devNum = infoData.usbDev->devnum;
@@ -187,7 +188,7 @@ static int32_t UsbPnpNotifyAddInitInfo(struct UsbPnpDeviceInfo *deviceInfo, unio
         goto OUT;
     }
     deviceInfo->info.numInfos = infoData.usbDev->actconfig->desc.bNumInterfaces;
-    for (uint8_t i = 0; i < deviceInfo->info.numInfos; i++) {
+    for (i = 0; i < deviceInfo->info.numInfos; i++) {
         if ((infoData.usbDev->actconfig->interface[i] == NULL) ||
             (infoData.usbDev->actconfig->interface[i]->cur_altsetting == NULL)) {
             HDF_LOGE("%s interface[%d]=%p or interface[%d]->cur_altsetting=%p is NULL",
