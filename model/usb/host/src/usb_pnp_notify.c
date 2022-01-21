@@ -526,9 +526,9 @@ static int32_t GadgetPnpNotifyHdfSendEvent(const struct HdfDeviceObject *deviceO
     return ret;
 }
 
-static int UsbPnpNotifyFirstReport(struct usb_device *usbDev, void *data)
+static int32_t UsbPnpNotifyFirstReport(struct usb_device *usbDev, void *data)
 {
-    int ret;
+    int32_t ret;
     struct HdfDeviceIoClient *client = (struct HdfDeviceIoClient *)data;
 
     ret = UsbPnpNotifyHdfSendEvent(client->device, usbDev);
@@ -538,9 +538,9 @@ static int UsbPnpNotifyFirstReport(struct usb_device *usbDev, void *data)
     return ret;
 }
 
-static int UsbPnpNotifyReportThread(void* arg)
+static int32_t UsbPnpNotifyReportThread(void* arg)
 {
-    int ret;
+    int32_t ret;
     struct HdfDeviceObject *deviceObject = (struct HdfDeviceObject *)arg;
 
     while (!kthread_should_stop()) {
@@ -588,9 +588,9 @@ static int UsbPnpNotifyReportThread(void* arg)
     return 0;
 }
 
-static int GadgetPnpNotifyReportThread(void* arg)
+static int32_t GadgetPnpNotifyReportThread(void* arg)
 {
-    int ret;
+    int32_t ret;
     struct HdfDeviceObject *deviceObject = (struct HdfDeviceObject *)arg;
 
     while (!kthread_should_stop()) {
@@ -614,7 +614,7 @@ static int GadgetPnpNotifyReportThread(void* arg)
     return 0;
 }
 
-static int UsbPnpNotifyCallback(struct notifier_block *self, unsigned long action, void *dev)
+static int32_t UsbPnpNotifyCallback(struct notifier_block *self, unsigned long action, void *dev)
 {
     int32_t ret;
     struct UsbInfoQueryPara infoQueryPara;
@@ -771,7 +771,7 @@ static int32_t UsbPnpGetDevices(struct HdfSBuf *reply)
     return ret;
 }
 
-static int32_t UsbPnpNotifyDispatch(struct HdfDeviceIoClient *client, int cmd,
+static int32_t UsbPnpNotifyDispatch(struct HdfDeviceIoClient *client, int32_t cmd,
     struct HdfSBuf *data, struct HdfSBuf *reply)
 {
     int32_t ret = HDF_SUCCESS;
