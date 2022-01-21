@@ -115,7 +115,7 @@ static irqreturn_t LinuxGpioIrqBridge(int irq, void *data)
     int gpio = (int)(uintptr_t)data;
     struct GpioCntlr *cntlr = NULL;
 
-    cntlr = GpioCntlrGet(gpio);
+    cntlr = GpioCntlrGetByGpio(gpio);
     GpioCntlrIrqCallback(cntlr, GpioCntlrGetLocal(cntlr, gpio));
     GpioCntlrPut(cntlr);
     return IRQ_HANDLED;
@@ -228,11 +228,15 @@ static int32_t LinuxGpioBind(struct HdfDeviceObject *device)
     return HDF_SUCCESS;
 }
 
-int LinuxGpioMatchProbe(struct gpio_chip *chip, void *data)
+static int LinuxGpioMatchProbe(struct gpio_chip *chip, void *data)
 {
     int32_t ret;
     struct GpioCntlr *cntlr = NULL;
 
+    (void)data;
+    if (chip == NULL) {
+        return 0;
+    }
     HDF_LOGI("%s: find gpio chip(start:%d, count:%u)", __func__, chip->base, chip->ngpio);
     if (chip->base >= LINUX_GPIO_NUM_MAX || (chip->base + chip->ngpio) > LINUX_GPIO_NUM_MAX) {
         HDF_LOGW("%s: chip(base:%d-num:%u) exceed range", __func__, chip->base, chip->ngpio);
@@ -273,6 +277,35 @@ static int32_t LinuxGpioInit(struct HdfDeviceObject *device)
     return HDF_SUCCESS;
 }
 
+static int LinuxGpioMatchRelease(struct gpio_chip *chip, void *data)
+{
+    int32_t ret;
+    struct GpioCntlr *cntlr = NULL;
+    struct PlatformManager *manager = GpioManagerGet();
+
+    if (chip == NULL) {
+        return 0;
+    }
+    HDF_LOGI("%s: find gpio chip(start:%d, count:%u)", __func__, chip->base, chip->ngpio);
+    if (chip->base >= LINUX_GPIO_NUM_MAX || (chip->base + chip->ngpio) > LINUX_GPIO_NUM_MAX) {
+        HDF_LOGW("%s: chip(base:%d-num:%u) exceed range", __func__, chip->base, chip->ngpio);
+        return 0;
+    }
+
+    cntlr = GpioCntlrGetByGpio((uint16_t)chip->base);
+    if (cntlr == NULL) {
+        HDF_LOGW("%s: get cntlr failed for base:%d!", __func__, chip->base);
+        return 0;
+    }
+    GpioCntlrPut(cntlr); // !!! be careful to keep the reference count balanced
+
+    HDF_LOGI("%s: gona remove gpio controller(start:%d, count:%u)",
+        __func__, cntlr->start, cntlr->count);
+    GpioCntlrRemove(cntlr);
+    OsalMemFree(cntlr);
+    return 0; // return 0 to continue
+}
+
 static void LinuxGpioRelease(struct HdfDeviceObject *device)
 {
     struct GpioCntlr *cntlr = NULL;
@@ -282,12 +315,7 @@ static void LinuxGpioRelease(struct HdfDeviceObject *device)
         return;
     }
 
-    cntlr = GpioCntlrFromDevice(device);
-    if (cntlr == NULL) {
-        HDF_LOGE("%s: no service binded!", __func__);
-        return;
-    }
-    OsalMemFree(cntlr);
+    (void)gpiochip_find(device, LinuxGpioMatchRelease);
 }
 
 struct HdfDriverEntry g_gpioLinuxDriverEntry = {
