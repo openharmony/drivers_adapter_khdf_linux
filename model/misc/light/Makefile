@@ -15,7 +15,7 @@
 LIGHT_ROOT_DIR = ../../../../../../framework/model/misc/light/driver
 
 obj-$(CONFIG_DRIVERS_HDF_LIGHT) += \
-               $(LIGHT_ROOT_DIR)/src/light_driver.o 
+               $(LIGHT_ROOT_DIR)/src/light_driver.o
 
 ccflags-y +=-I$(srctree)/drivers/hdf/framework/model/misc/light/driver/include \
             -I$(srctree)/drivers/hdf/framework/include/core \
