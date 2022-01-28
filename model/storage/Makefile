@@ -38,7 +38,14 @@ obj-$(CONFIG_DRIVERS_HDF_STORAGE) += \
              $(STORAGE_ROOT_DIR)/src/mmc/mmc_protocol.o
 
 obj-y  += $(STORAGE_ROOT_DIR)/src/mmc/emmc_if.o \
-          ./emmc_adapter.o
+          $(STORAGE_ROOT_DIR)/src/mmc/sdio_if.o \
+          ./emmc_adapter.o \
+		  ./sdio_adapter.o
 
-obj-y  += $(STORAGE_ROOT_DIR)/src/mmc/sdio_if.o \
-          ./sdio_adapter.o
+ifeq ($(CONFIG_ARCH_HI3516DV300), y)
+    obj-y  += \
+	        ./vendor_adapter/hi35xx_mmc_adapter.o
+else
+    obj-y  += \
+	        ./mmc_adapter.o
+endif

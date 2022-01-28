@@ -1,7 +1,7 @@
 /*
  * sdio_adapter.c
  *
- * hi35xx linux sdio driver implement.
+ * linux sdio driver implement.
  *
  * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
  *
@@ -32,37 +32,37 @@
 #define MMC_SLOT_NUM 3
 #define SDIO_RESCAN_WAIT_TIME 40
 
-struct mmc_host *himci_get_mmc_host(int slot);
-void hisi_sdio_rescan(int slot);
+struct mmc_host *GetMmcHost(int32_t slot);
+void SdioRescan(int32_t slot);
 
 enum SleepTime {
     MS_10 = 10,
     MS_50 = 50,
 };
 
-static struct sdio_func *Hi35xxLinuxSdioGetFunc(struct SdioDevice *dev)
+static struct sdio_func *LinuxSdioGetFunc(struct SdioDevice *dev)
 {
     if (dev == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioGetFunc: dev is null.");
+        HDF_LOGE("LinuxSdioGetFunc: dev is null.");
         return NULL;
     }
     return (struct sdio_func *)dev->sd.mmc.priv;
 }
 
-static int32_t Hi35xxLinuxSdioIncrAddrReadBytes(struct SdioDevice *dev,
+static int32_t LinuxSdioIncrAddrReadBytes(struct SdioDevice *dev,
     uint8_t *data, uint32_t addr, uint32_t size)
 {
-    struct sdio_func *func = Hi35xxLinuxSdioGetFunc(dev);
+    struct sdio_func *func = LinuxSdioGetFunc(dev);
     int32_t ret = HDF_SUCCESS;
     uint16_t *output16 = NULL;
     uint32_t *output32 = NULL;
 
     if (func == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioIncrAddrReadBytes: func is NULL.");
+        HDF_LOGE("LinuxSdioIncrAddrReadBytes: func is NULL.");
         return HDF_ERR_INVALID_OBJECT;
     }
     if ((data == NULL) || (size == 0)) {
-        HDF_LOGE("Hi35xxLinuxSdioIncrAddrReadBytes: data or size is invalid.");
+        HDF_LOGE("LinuxSdioIncrAddrReadBytes: data or size is invalid.");
         return HDF_ERR_INVALID_PARAM;
     }
 
@@ -83,18 +83,18 @@ static int32_t Hi35xxLinuxSdioIncrAddrReadBytes(struct SdioDevice *dev,
     return sdio_memcpy_fromio(func, data, addr, size);
 }
 
-static int32_t Hi35xxLinuxSdioIncrAddrWriteBytes(struct SdioDevice *dev,
+static int32_t LinuxSdioIncrAddrWriteBytes(struct SdioDevice *dev,
     uint8_t *data, uint32_t addr, uint32_t size)
 {
     int32_t ret = HDF_SUCCESS;
-    struct sdio_func *func = Hi35xxLinuxSdioGetFunc(dev);
+    struct sdio_func *func = LinuxSdioGetFunc(dev);
 
     if (func == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioIncrAddrWriteBytes: func is NULL.");
+        HDF_LOGE("LinuxSdioIncrAddrWriteBytes: func is NULL.");
         return HDF_ERR_INVALID_OBJECT;
     }
     if ((data == NULL) || (size == 0)) {
-        HDF_LOGE("Hi35xxLinuxSdioIncrAddrWriteBytes: data or size is invalid.");
+        HDF_LOGE("LinuxSdioIncrAddrWriteBytes: data or size is invalid.");
         return HDF_ERR_INVALID_PARAM;
     }
 
@@ -113,60 +113,60 @@ static int32_t Hi35xxLinuxSdioIncrAddrWriteBytes(struct SdioDevice *dev,
     return sdio_memcpy_toio(func, addr, data, size);
 }
 
-static int32_t Hi35xxLinuxSdioFixedAddrReadBytes(struct SdioDevice *dev,
+static int32_t LinuxSdioFixedAddrReadBytes(struct SdioDevice *dev,
     uint8_t *data, uint32_t addr, uint32_t size, uint32_t scatterLen)
 {
-    struct sdio_func *func = Hi35xxLinuxSdioGetFunc(dev);
+    struct sdio_func *func = LinuxSdioGetFunc(dev);
 
     if (func == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioFixedAddrReadBytes: func is NULL.");
+        HDF_LOGE("LinuxSdioFixedAddrReadBytes: func is NULL.");
         return HDF_ERR_INVALID_OBJECT;
     }
     if ((data == NULL) || (size == 0)) {
-        HDF_LOGE("Hi35xxLinuxSdioFixedAddrReadBytes: data or size is invalid.");
+        HDF_LOGE("LinuxSdioFixedAddrReadBytes: data or size is invalid.");
         return HDF_ERR_INVALID_PARAM;
     }
 
     if (scatterLen > 0) {
-        HDF_LOGE("Hi35xxLinuxSdioFixedAddrReadBytes: not support!");
+        HDF_LOGE("LinuxSdioFixedAddrReadBytes: not support!");
         return HDF_ERR_NOT_SUPPORT;
     }
     return sdio_readsb(func, data, addr, size);
 }
 
-static int32_t Hi35xxLinuxSdioFixedAddrWriteBytes(struct SdioDevice *dev,
+static int32_t LinuxSdioFixedAddrWriteBytes(struct SdioDevice *dev,
     uint8_t *data, uint32_t addr, uint32_t size, uint32_t scatterLen)
 {
-    struct sdio_func *func = Hi35xxLinuxSdioGetFunc(dev);
+    struct sdio_func *func = LinuxSdioGetFunc(dev);
 
     if (func == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioFixedAddrWriteBytes: func is NULL.");
+        HDF_LOGE("LinuxSdioFixedAddrWriteBytes: func is NULL.");
         return HDF_ERR_INVALID_OBJECT;
     }
     if ((data == NULL) || (size == 0)) {
-        HDF_LOGE("Hi35xxLinuxSdioFixedAddrReadBytes: data or size is invalid.");
+        HDF_LOGE("LinuxSdioFixedAddrReadBytes: data or size is invalid.");
         return HDF_ERR_INVALID_PARAM;
     }
 
     if (scatterLen > 0) {
-        HDF_LOGE("Hi35xxLinuxSdioFixedAddrWriteBytes: not support!");
+        HDF_LOGE("LinuxSdioFixedAddrWriteBytes: not support!");
         return HDF_ERR_NOT_SUPPORT;
     }
     return sdio_writesb(func, addr, data, size);
 }
 
-static int32_t Hi35xxLinuxSdioFunc0ReadBytes(struct SdioDevice *dev,
+static int32_t LinuxSdioFunc0ReadBytes(struct SdioDevice *dev,
     uint8_t *data, uint32_t addr, uint32_t size)
 {
     int32_t ret = HDF_SUCCESS;
-    struct sdio_func *func = Hi35xxLinuxSdioGetFunc(dev);
+    struct sdio_func *func = LinuxSdioGetFunc(dev);
 
     if (func == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioFunc0ReadBytes: func is NULL.");
+        HDF_LOGE("LinuxSdioFunc0ReadBytes: func is NULL.");
         return HDF_ERR_INVALID_OBJECT;
     }
     if ((data == NULL) || (size == 0)) {
-        HDF_LOGE("Hi35xxLinuxSdioFunc0ReadBytes: data or size is invalid.");
+        HDF_LOGE("LinuxSdioFunc0ReadBytes: data or size is invalid.");
         return HDF_ERR_INVALID_PARAM;
     }
 
@@ -174,18 +174,18 @@ static int32_t Hi35xxLinuxSdioFunc0ReadBytes(struct SdioDevice *dev,
     return ret;
 }
 
-static int32_t Hi35xxLinuxSdioFunc0WriteBytes(struct SdioDevice *dev,
+static int32_t LinuxSdioFunc0WriteBytes(struct SdioDevice *dev,
     uint8_t *data, uint32_t addr, uint32_t size)
 {
     int32_t ret = HDF_SUCCESS;
-    struct sdio_func *func = Hi35xxLinuxSdioGetFunc(dev);
+    struct sdio_func *func = LinuxSdioGetFunc(dev);
 
     if (func == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioFunc0WriteBytes: func is NULL.");
+        HDF_LOGE("LinuxSdioFunc0WriteBytes: func is NULL.");
         return HDF_ERR_INVALID_OBJECT;
     }
     if ((data == NULL) || (size == 0)) {
-        HDF_LOGE("Hi35xxLinuxSdioFunc0WriteBytes: data or size is invalid.");
+        HDF_LOGE("LinuxSdioFunc0WriteBytes: data or size is invalid.");
         return HDF_ERR_INVALID_PARAM;
     }
 
@@ -193,41 +193,41 @@ static int32_t Hi35xxLinuxSdioFunc0WriteBytes(struct SdioDevice *dev,
     return ret;
 }
 
-static int32_t Hi35xxLinuxSdioSetBlockSize(struct SdioDevice *dev, uint32_t blockSize)
+static int32_t LinuxSdioSetBlockSize(struct SdioDevice *dev, uint32_t blockSize)
 {
-    struct sdio_func *func = Hi35xxLinuxSdioGetFunc(dev);
+    struct sdio_func *func = LinuxSdioGetFunc(dev);
 
     if (func == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioSetBlockSize, func is NULL.");
+        HDF_LOGE("LinuxSdioSetBlockSize, func is NULL.");
         return HDF_ERR_INVALID_OBJECT;
     }
     return sdio_set_block_size(func, blockSize);
 }
 
-static int32_t Hi35xxLinuxSdioGetCommonInfo(struct SdioDevice *dev,
+static int32_t LinuxSdioGetCommonInfo(struct SdioDevice *dev,
     SdioCommonInfo *info, uint32_t infoType)
 {
-    struct sdio_func *func = Hi35xxLinuxSdioGetFunc(dev);
+    struct sdio_func *func = LinuxSdioGetFunc(dev);
 
     if (func == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioGetCommonInfo: func is NULL.");
+        HDF_LOGE("LinuxSdioGetCommonInfo: func is NULL.");
         return HDF_ERR_INVALID_OBJECT;
     }
     if (info == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioGetCommonInfo: info is null.");
+        HDF_LOGE("LinuxSdioGetCommonInfo: info is null.");
         return HDF_ERR_INVALID_PARAM;
     }
     if (infoType != SDIO_FUNC_INFO) {
-        HDF_LOGE("Hi35xxLinuxSdioGetCommonInfo: cur type %d is not support.", infoType);
+        HDF_LOGE("LinuxSdioGetCommonInfo: cur type %d is not support.", infoType);
         return HDF_ERR_NOT_SUPPORT;
     }
 
     if (func->card == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioGetCommonInfo fail, card is null.");
+        HDF_LOGE("LinuxSdioGetCommonInfo fail, card is null.");
         return HDF_ERR_INVALID_PARAM;
     }
     if (func->card->host == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioGetCommonInfo fail, host is null.");
+        HDF_LOGE("LinuxSdioGetCommonInfo fail, host is null.");
         return HDF_ERR_INVALID_PARAM;
     }
     info->funcInfo.enTimeout = func->enable_timeout;
@@ -240,30 +240,30 @@ static int32_t Hi35xxLinuxSdioGetCommonInfo(struct SdioDevice *dev,
     return HDF_SUCCESS;
 }
 
-static int32_t Hi35xxLinuxSdioSetCommonInfo(struct SdioDevice *dev,
+static int32_t LinuxSdioSetCommonInfo(struct SdioDevice *dev,
     SdioCommonInfo *info, uint32_t infoType)
 {
-    struct sdio_func *func = Hi35xxLinuxSdioGetFunc(dev);
+    struct sdio_func *func = LinuxSdioGetFunc(dev);
 
     if (func == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioSetCommonInfo: func is NULL.");
+        HDF_LOGE("LinuxSdioSetCommonInfo: func is NULL.");
         return HDF_ERR_INVALID_OBJECT;
     }
     if (info == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioSetCommonInfo: info is null.");
+        HDF_LOGE("LinuxSdioSetCommonInfo: info is null.");
         return HDF_ERR_INVALID_PARAM;
     }
     if (infoType != SDIO_FUNC_INFO) {
-        HDF_LOGE("Hi35xxLinuxSdioSetCommonInfo: cur type %d is not support.", infoType);
+        HDF_LOGE("LinuxSdioSetCommonInfo: cur type %d is not support.", infoType);
         return HDF_ERR_NOT_SUPPORT;
     }
 
     if (func->card == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioSetCommonInfo fail, card is null.");
+        HDF_LOGE("LinuxSdioSetCommonInfo fail, card is null.");
         return HDF_ERR_INVALID_PARAM;
     }
     if (func->card->host == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioSetCommonInfo fail, host is null.");
+        HDF_LOGE("LinuxSdioSetCommonInfo fail, host is null.");
         return HDF_ERR_INVALID_PARAM;
     }
     func->enable_timeout = info->funcInfo.enTimeout;
@@ -274,95 +274,95 @@ static int32_t Hi35xxLinuxSdioSetCommonInfo(struct SdioDevice *dev,
     return HDF_SUCCESS;
 }
 
-static int32_t Hi35xxLinuxSdioFlushData(struct SdioDevice *dev)
+static int32_t LinuxSdioFlushData(struct SdioDevice *dev)
 {
-    struct sdio_func *func = Hi35xxLinuxSdioGetFunc(dev);
+    struct sdio_func *func = LinuxSdioGetFunc(dev);
 
     if (func == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioFlushData: func is NULL.");
+        HDF_LOGE("LinuxSdioFlushData: func is NULL.");
         return HDF_ERR_INVALID_OBJECT;
     }
     if (func->card == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioFlushData: card is NULL.");
+        HDF_LOGE("LinuxSdioFlushData: card is NULL.");
         return HDF_ERR_INVALID_OBJECT;
     }
 
     return mmc_sw_reset(func->card->host);
 }
 
-static int32_t Hi35xxLinuxSdioClaimHost(struct SdioDevice *dev)
+static int32_t LinuxSdioClaimHost(struct SdioDevice *dev)
 {
-    struct sdio_func *func = Hi35xxLinuxSdioGetFunc(dev);
+    struct sdio_func *func = LinuxSdioGetFunc(dev);
 
     if (func == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioClaimHost: func is NULL.");
+        HDF_LOGE("LinuxSdioClaimHost: func is NULL.");
         return HDF_ERR_INVALID_OBJECT;
     }
     sdio_claim_host(func);
     return HDF_SUCCESS;
 }
 
-static int32_t Hi35xxLinuxSdioReleaseHost(struct SdioDevice *dev)
+static int32_t LinuxSdioReleaseHost(struct SdioDevice *dev)
 {
-    struct sdio_func *func = Hi35xxLinuxSdioGetFunc(dev);
+    struct sdio_func *func = LinuxSdioGetFunc(dev);
 
     if (func == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioReleaseHost: func is NULL.");
+        HDF_LOGE("LinuxSdioReleaseHost: func is NULL.");
         return HDF_ERR_INVALID_OBJECT;
     }
     sdio_release_host(func);
     return HDF_SUCCESS;
 }
 
-static int32_t Hi35xxLinuxSdioEnableFunc(struct SdioDevice *dev)
+static int32_t LinuxSdioEnableFunc(struct SdioDevice *dev)
 {
-    struct sdio_func *func = Hi35xxLinuxSdioGetFunc(dev);
+    struct sdio_func *func = LinuxSdioGetFunc(dev);
 
     if (func == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioEnableFunc: func is NULL.");
+        HDF_LOGE("LinuxSdioEnableFunc: func is NULL.");
         return HDF_ERR_INVALID_OBJECT;
     }
     return sdio_enable_func(func);
 }
 
-static int32_t Hi35xxLinuxSdioDisableFunc(struct SdioDevice *dev)
+static int32_t LinuxSdioDisableFunc(struct SdioDevice *dev)
 {
-    struct sdio_func *func = Hi35xxLinuxSdioGetFunc(dev);
+    struct sdio_func *func = LinuxSdioGetFunc(dev);
 
     if (func == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioDisableFunc: func is NULL.");
+        HDF_LOGE("LinuxSdioDisableFunc: func is NULL.");
         return HDF_ERR_INVALID_OBJECT;
     }
     return sdio_disable_func(func);
 }
 
-static int32_t Hi35xxLinuxSdioClaimIrq(struct SdioDevice *dev, SdioIrqHandler *handler)
+static int32_t LinuxSdioClaimIrq(struct SdioDevice *dev, SdioIrqHandler *handler)
 {
-    struct sdio_func *func = Hi35xxLinuxSdioGetFunc(dev);
+    struct sdio_func *func = LinuxSdioGetFunc(dev);
 
     if (func == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioClaimIrq: func is NULL.");
+        HDF_LOGE("LinuxSdioClaimIrq: func is NULL.");
         return HDF_ERR_INVALID_OBJECT;
     }
     if (handler == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioClaimIrq: handler is null.");
+        HDF_LOGE("LinuxSdioClaimIrq: handler is null.");
         return HDF_ERR_INVALID_PARAM;
     }
     return sdio_claim_irq(func, (sdio_irq_handler_t *)handler);
 }
 
-static int32_t Hi35xxLinuxSdioReleaseIrq(struct SdioDevice *dev)
+static int32_t LinuxSdioReleaseIrq(struct SdioDevice *dev)
 {
-    struct sdio_func *func = Hi35xxLinuxSdioGetFunc(dev);
+    struct sdio_func *func = LinuxSdioGetFunc(dev);
 
     if (func == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioReleaseIrq: func is NULL.");
+        HDF_LOGE("LinuxSdioReleaseIrq: func is NULL.");
         return HDF_ERR_INVALID_OBJECT;
     }
     return sdio_release_irq(func);
 }
 
-static struct sdio_func *Hi35xxLinuxSdioSearchFunc(uint32_t funcNum, uint16_t vendorId, uint16_t deviceId)
+static struct sdio_func *LinuxSdioSearchFunc(uint32_t funcNum, uint16_t vendorId, uint16_t deviceId)
 {
     struct mmc_card *card = NULL;
     struct mmc_host *host = NULL;
@@ -370,7 +370,7 @@ static struct sdio_func *Hi35xxLinuxSdioSearchFunc(uint32_t funcNum, uint16_t ve
     uint32_t i, j;
 
     for (i = 0; i < MMC_SLOT_NUM; i++) {
-        host = himci_get_mmc_host(i);
+        host = GetMmcHost(i);
         if (host == NULL) {
             continue;
         }
@@ -384,57 +384,57 @@ static struct sdio_func *Hi35xxLinuxSdioSearchFunc(uint32_t funcNum, uint16_t ve
                 (func->num == funcNum) &&
                 (func->vendor == vendorId) &&
                 (func->device == deviceId)) {
-                HDF_LOGD("Hi35xxLinuxSdioSearchFunc: find func!");
+                HDF_LOGD("LinuxSdioSearchFunc: find func!");
                 return func;
             }
         }
     }
 
-    HDF_LOGE("Hi35xxLinuxSdioSearchFunc: get sdio func fail!");
+    HDF_LOGE("LinuxSdioSearchFunc: get sdio func fail!");
     return NULL;
 }
 
-static int32_t Hi35xxLinuxSdioFindFunc(struct SdioDevice *dev, struct SdioFunctionConfig *configData)
+static int32_t LinuxSdioFindFunc(struct SdioDevice *dev, struct SdioFunctionConfig *configData)
 {
     if (dev == NULL || configData == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioFindFunc: dev or configData is NULL.");
+        HDF_LOGE("LinuxSdioFindFunc: dev or configData is NULL.");
         return HDF_ERR_INVALID_OBJECT;
     }
 
-    dev->sd.mmc.priv = Hi35xxLinuxSdioSearchFunc(configData->funcNr, configData->vendorId, configData->deviceId);
+    dev->sd.mmc.priv = LinuxSdioSearchFunc(configData->funcNr, configData->vendorId, configData->deviceId);
     if (dev->sd.mmc.priv == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioFindFunc: Hi35xxLinuxSdioSearchFunc fail.");
+        HDF_LOGE("LinuxSdioFindFunc: LinuxSdioSearchFunc fail.");
         return HDF_ERR_NOT_SUPPORT;
     }
     return HDF_SUCCESS;
 }
 
 static struct SdioDeviceOps g_sdioDeviceOps = {
-    .incrAddrReadBytes = Hi35xxLinuxSdioIncrAddrReadBytes,
-    .incrAddrWriteBytes = Hi35xxLinuxSdioIncrAddrWriteBytes,
-    .fixedAddrReadBytes = Hi35xxLinuxSdioFixedAddrReadBytes,
-    .fixedAddrWriteBytes = Hi35xxLinuxSdioFixedAddrWriteBytes,
-    .func0ReadBytes = Hi35xxLinuxSdioFunc0ReadBytes,
-    .func0WriteBytes = Hi35xxLinuxSdioFunc0WriteBytes,
-    .setBlockSize = Hi35xxLinuxSdioSetBlockSize,
-    .getCommonInfo = Hi35xxLinuxSdioGetCommonInfo,
-    .setCommonInfo = Hi35xxLinuxSdioSetCommonInfo,
-    .flushData = Hi35xxLinuxSdioFlushData,
-    .enableFunc = Hi35xxLinuxSdioEnableFunc,
-    .disableFunc = Hi35xxLinuxSdioDisableFunc,
-    .claimIrq = Hi35xxLinuxSdioClaimIrq,
-    .releaseIrq = Hi35xxLinuxSdioReleaseIrq,
-    .findFunc = Hi35xxLinuxSdioFindFunc,
-    .claimHost = Hi35xxLinuxSdioClaimHost,
-    .releaseHost = Hi35xxLinuxSdioReleaseHost,
+    .incrAddrReadBytes = LinuxSdioIncrAddrReadBytes,
+    .incrAddrWriteBytes = LinuxSdioIncrAddrWriteBytes,
+    .fixedAddrReadBytes = LinuxSdioFixedAddrReadBytes,
+    .fixedAddrWriteBytes = LinuxSdioFixedAddrWriteBytes,
+    .func0ReadBytes = LinuxSdioFunc0ReadBytes,
+    .func0WriteBytes = LinuxSdioFunc0WriteBytes,
+    .setBlockSize = LinuxSdioSetBlockSize,
+    .getCommonInfo = LinuxSdioGetCommonInfo,
+    .setCommonInfo = LinuxSdioSetCommonInfo,
+    .flushData = LinuxSdioFlushData,
+    .enableFunc = LinuxSdioEnableFunc,
+    .disableFunc = LinuxSdioDisableFunc,
+    .claimIrq = LinuxSdioClaimIrq,
+    .releaseIrq = LinuxSdioReleaseIrq,
+    .findFunc = LinuxSdioFindFunc,
+    .claimHost = LinuxSdioClaimHost,
+    .releaseHost = LinuxSdioReleaseHost,
 };
 
-static bool Hi35xxLinuxSdioRescanFinish(struct MmcCntlr *cntlr)
+static bool LinuxSdioRescanFinish(struct MmcCntlr *cntlr)
 {
     struct mmc_host *host = NULL;
     struct mmc_card *card = NULL;
 
-    host = himci_get_mmc_host(cntlr->index);
+    host = GetMmcHost(cntlr->index);
     if (host == NULL) {
         return false;
     }
@@ -449,25 +449,25 @@ static bool Hi35xxLinuxSdioRescanFinish(struct MmcCntlr *cntlr)
     return false;
 }
 
-static int32_t Hi35xxLinuxSdioRescan(struct MmcCntlr *cntlr)
+static int32_t LinuxSdioRescan(struct MmcCntlr *cntlr)
 {
     bool rescanFinish = false;
     uint32_t count = 0;
 
     if (cntlr == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioRescan: cntlr is NULL.");
+        HDF_LOGE("LinuxSdioRescan: cntlr is NULL.");
         return HDF_ERR_INVALID_OBJECT;
     }
 
-    hisi_sdio_rescan(cntlr->index);
+    SdioRescan(cntlr->index);
     while (rescanFinish == false && count < SDIO_RESCAN_WAIT_TIME) {
         OsalMSleep(MS_50);
         count++;
-        rescanFinish = Hi35xxLinuxSdioRescanFinish(cntlr);
+        rescanFinish = LinuxSdioRescanFinish(cntlr);
     }
 
     if (rescanFinish == false) {
-        HDF_LOGE("Hi35xxLinuxSdioRescan: fail!");
+        HDF_LOGE("LinuxSdioRescan: fail!");
         return HDF_FAILURE;
     }
 
@@ -476,10 +476,10 @@ static int32_t Hi35xxLinuxSdioRescan(struct MmcCntlr *cntlr)
 }
 
 struct MmcCntlrOps g_sdioCntlrOps = {
-    .rescanSdioDev = Hi35xxLinuxSdioRescan,
+    .rescanSdioDev = LinuxSdioRescan,
 };
 
-static void Hi35xxLinuxSdioDeleteCntlr(struct MmcCntlr *cntlr)
+static void LinuxSdioDeleteCntlr(struct MmcCntlr *cntlr)
 {
     if (cntlr == NULL) {
         return;
@@ -493,56 +493,55 @@ static void Hi35xxLinuxSdioDeleteCntlr(struct MmcCntlr *cntlr)
     OsalMemFree(cntlr);
 }
 
-static int32_t Hi35xxLinuxSdioCntlrParse(struct MmcCntlr *cntlr, struct HdfDeviceObject *obj)
+static int32_t LinuxSdioCntlrParse(struct MmcCntlr *cntlr, struct HdfDeviceObject *obj)
 {
     const struct DeviceResourceNode *node = NULL;
     struct DeviceResourceIface *drsOps = NULL;
     int32_t ret;
 
     if (obj == NULL || cntlr == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioCntlrParse: input para is NULL.");
+        HDF_LOGE("LinuxSdioCntlrParse: input para is NULL.");
         return HDF_FAILURE;
     }
 
     node = obj->property;
     if (node == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioCntlrParse: drs node is NULL.");
+        HDF_LOGE("LinuxSdioCntlrParse: drs node is NULL.");
         return HDF_FAILURE;
     }
     drsOps = DeviceResourceGetIfaceInstance(HDF_CONFIG_SOURCE);
     if (drsOps == NULL || drsOps->GetUint16 == NULL || drsOps->GetUint32 == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioCntlrParse: invalid drs ops fail!");
+        HDF_LOGE("LinuxSdioCntlrParse: invalid drs ops fail!");
         return HDF_FAILURE;
     }
 
     ret = drsOps->GetUint16(node, "hostId", &(cntlr->index), 0);
     if (ret != HDF_SUCCESS) {
-        HDF_LOGE("Hi35xxLinuxSdioCntlrParse: read hostIndex fail!");
+        HDF_LOGE("LinuxSdioCntlrParse: read hostIndex fail!");
         return ret;
     }
     ret = drsOps->GetUint32(node, "devType", &(cntlr->devType), 0);
     if (ret != HDF_SUCCESS) {
-        HDF_LOGE("Hi35xxLinuxSdioCntlrParse: read devType fail!");
+        HDF_LOGE("LinuxSdioCntlrParse: read devType fail!");
         return ret;
     }
-    HDF_LOGD("Hi35xxLinuxSdioCntlrParse: hostIndex = %d, devType = %d.", cntlr->index, cntlr->devType);
+    HDF_LOGD("LinuxSdioCntlrParse: hostIndex = %d, devType = %d.", cntlr->index, cntlr->devType);
     return HDF_SUCCESS;
 }
 
-static int32_t Hi35xxLinuxSdioBind(struct HdfDeviceObject *obj)
+static int32_t LinuxSdioBind(struct HdfDeviceObject *obj)
 {
     struct MmcCntlr *cntlr = NULL;
     int32_t ret;
 
-    HDF_LOGE("Hi35xxLinuxSdioBind: entry!");
     if (obj == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioBind: Fail, obj is NULL.");
+        HDF_LOGE("LinuxSdioBind: Fail, obj is NULL.");
         return HDF_ERR_INVALID_OBJECT;
     }
 
     cntlr = (struct MmcCntlr *)OsalMemCalloc(sizeof(struct MmcCntlr));
     if (cntlr == NULL) {
-        HDF_LOGE("Hi35xxLinuxSdioBind: no mem for MmcCntlr.");
+        HDF_LOGE("LinuxSdioBind: no mem for MmcCntlr.");
         return HDF_ERR_MALLOC_FAIL;
     }
 
@@ -550,53 +549,53 @@ static int32_t Hi35xxLinuxSdioBind(struct HdfDeviceObject *obj)
     cntlr->hdfDevObj = obj;
     obj->service = &cntlr->service;
     /* init cntlr. */
-    ret = Hi35xxLinuxSdioCntlrParse(cntlr, obj);
+    ret = LinuxSdioCntlrParse(cntlr, obj);
     if (ret != HDF_SUCCESS) {
-        HDF_LOGE("Hi35xxLinuxSdioBind: cntlr parse fail.");
+        HDF_LOGE("LinuxSdioBind: cntlr parse fail.");
         goto _ERR;
     }
 
     ret = MmcCntlrAdd(cntlr);
     if (ret != HDF_SUCCESS) {
-        HDF_LOGE("Hi35xxLinuxSdioBind: cntlr add fail.");
+        HDF_LOGE("LinuxSdioBind: cntlr add fail.");
         goto _ERR;
     }
 
     ret = MmcCntlrAllocDev(cntlr, (enum MmcDevType)cntlr->devType);
     if (ret != HDF_SUCCESS) {
-        HDF_LOGE("Hi35xxLinuxSdioBind: alloc dev fail.");
+        HDF_LOGE("LinuxSdioBind: alloc dev fail.");
         goto _ERR;
     }
     MmcDeviceAddOps(cntlr->curDev, &g_sdioDeviceOps);
-    HDF_LOGD("Hi35xxLinuxSdioBind: Success!");
+    HDF_LOGD("LinuxSdioBind: Success!");
     return HDF_SUCCESS;
 
 _ERR:
-    Hi35xxLinuxSdioDeleteCntlr(cntlr);
-    HDF_LOGE("Hi35xxLinuxSdioBind: Fail!");
+    LinuxSdioDeleteCntlr(cntlr);
+    HDF_LOGE("LinuxSdioBind: Fail!");
     return HDF_FAILURE;
 }
 
-static int32_t Hi35xxLinuxSdioInit(struct HdfDeviceObject *obj)
+static int32_t LinuxSdioInit(struct HdfDeviceObject *obj)
 {
     (void)obj;
-    HDF_LOGD("Hi35xxLinuxSdioInit: Success!");
+    HDF_LOGD("LinuxSdioInit: Success!");
     return HDF_SUCCESS;
 }
 
-static void Hi35xxLinuxSdioRelease(struct HdfDeviceObject *obj)
+static void LinuxSdioRelease(struct HdfDeviceObject *obj)
 {
     if (obj == NULL) {
         return;
     }
-    Hi35xxLinuxSdioDeleteCntlr((struct MmcCntlr *)obj->service);
+    LinuxSdioDeleteCntlr((struct MmcCntlr *)obj->service);
 }
 
 struct HdfDriverEntry g_sdioDriverEntry = {
     .moduleVersion = 1,
-    .Bind = Hi35xxLinuxSdioBind,
-    .Init = Hi35xxLinuxSdioInit,
-    .Release = Hi35xxLinuxSdioRelease,
+    .Bind = LinuxSdioBind,
+    .Init = LinuxSdioInit,
+    .Release = LinuxSdioRelease,
     .moduleName = "HDF_PLATFORM_SDIO",
 };
 HDF_INIT(g_sdioDriverEntry);

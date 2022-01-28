@@ -1,7 +1,7 @@
 /*
  * emmc_adapter.c
  *
- * hi35xx linux emmc driver implement.
+ * linux emmc driver implement.
  *
  * Copyright (c) 2020-2021 Huawei Device Co., Ltd.
  *
@@ -27,45 +27,45 @@
 
 #define HDF_LOG_TAG emmc_adapter_c
 
-struct mmc_host *himci_get_mmc_host(int slot);
+struct mmc_host *GetMmcHost(int32_t slot);
 
-int32_t Hi35xxLinuxEmmcGetCid(struct EmmcDevice *dev, uint8_t *cid, uint32_t size)
+int32_t LinuxEmmcGetCid(struct EmmcDevice *dev, uint8_t *cid, uint32_t size)
 {
     struct mmc_host *mmcHost = NULL;
     struct MmcCntlr *cntlr = NULL;
 
     if (dev == NULL || dev->mmc.cntlr == NULL) {
-        HDF_LOGE("Hi35xxLinuxEmmcGetCid: dev or cntlr is null.");
+        HDF_LOGE("LinuxEmmcGetCid: dev or cntlr is null.");
         return HDF_ERR_INVALID_OBJECT;
     }
     if (cid == NULL || size < EMMC_CID_LEN) {
-        HDF_LOGE("Hi35xxLinuxEmmcGetCid: cid is null or size is invalid.");
+        HDF_LOGE("LinuxEmmcGetCid: cid is null or size is invalid.");
         return HDF_ERR_INVALID_PARAM;
     }
 
     cntlr = dev->mmc.cntlr;
     mmcHost = (struct mmc_host *)cntlr->priv;
     if (mmcHost == NULL) {
-        HDF_LOGE("Hi35xxLinuxEmmcGetCid: mmcHost is NULL!");
+        HDF_LOGE("LinuxEmmcGetCid: mmcHost is NULL!");
         return HDF_ERR_NOT_SUPPORT;
     }
     if (mmcHost->card == NULL) {
-        HDF_LOGE("Hi35xxLinuxEmmcGetCid: card is null.");
+        HDF_LOGE("LinuxEmmcGetCid: card is null.");
         return HDF_ERR_NOT_SUPPORT;
     }
     if (memcpy_s(cid, sizeof(uint8_t) * size, (uint8_t *)(mmcHost->card->raw_cid),
         sizeof(mmcHost->card->raw_cid)) != EOK) {
-        HDF_LOGE("Hi35xxLinuxEmmcGetCid: memcpy_s fail!");
+        HDF_LOGE("LinuxEmmcGetCid: memcpy_s fail!");
         return HDF_FAILURE;
     }
     return HDF_SUCCESS;
 }
 
 static struct EmmcDeviceOps g_emmcMethod = {
-    .getCid = Hi35xxLinuxEmmcGetCid,
+    .getCid = LinuxEmmcGetCid,
 };
 
-static void Hi35xxLinuxEmmcDeleteCntlr(struct MmcCntlr *cntlr)
+static void LinuxEmmcDeleteCntlr(struct MmcCntlr *cntlr)
 {
     if (cntlr == NULL) {
         return;
@@ -79,94 +79,93 @@ static void Hi35xxLinuxEmmcDeleteCntlr(struct MmcCntlr *cntlr)
     OsalMemFree(cntlr);
 }
 
-static int32_t Hi35xxLinuxEmmcCntlrParse(struct MmcCntlr *cntlr, struct HdfDeviceObject *obj)
+static int32_t LinuxEmmcCntlrParse(struct MmcCntlr *cntlr, struct HdfDeviceObject *obj)
 {
     const struct DeviceResourceNode *node = NULL;
     struct DeviceResourceIface *drsOps = NULL;
     int32_t ret;
 
     if (obj == NULL || cntlr == NULL) {
-        HDF_LOGE("Hi35xxLinuxEmmcCntlrParse: input para is NULL.");
+        HDF_LOGE("LinuxEmmcCntlrParse: input para is NULL.");
         return HDF_FAILURE;
     }
 
     node = obj->property;
     if (node == NULL) {
-        HDF_LOGE("Hi35xxLinuxEmmcCntlrParse: drs node is NULL.");
+        HDF_LOGE("LinuxEmmcCntlrParse: drs node is NULL.");
         return HDF_FAILURE;
     }
     drsOps = DeviceResourceGetIfaceInstance(HDF_CONFIG_SOURCE);
     if (drsOps == NULL || drsOps->GetUint16 == NULL || drsOps->GetUint32 == NULL) {
-        HDF_LOGE("Hi35xxLinuxEmmcCntlrParse: invalid drs ops fail!");
+        HDF_LOGE("LinuxEmmcCntlrParse: invalid drs ops fail!");
         return HDF_FAILURE;
     }
 
     ret = drsOps->GetUint16(node, "hostId", &(cntlr->index), 0);
     if (ret != HDF_SUCCESS) {
-        HDF_LOGE("Hi35xxLinuxEmmcCntlrParse: read hostIndex fail!");
+        HDF_LOGE("LinuxEmmcCntlrParse: read hostIndex fail!");
         return ret;
     }
     ret = drsOps->GetUint32(node, "devType", &(cntlr->devType), 0);
     if (ret != HDF_SUCCESS) {
-        HDF_LOGE("Hi35xxLinuxEmmcCntlrParse: read devType fail!");
+        HDF_LOGE("LinuxEmmcCntlrParse: read devType fail!");
         return ret;
     }
     return HDF_SUCCESS;
 }
 
-static int32_t Hi35xxLinuxEmmcBind(struct HdfDeviceObject *obj)
+static int32_t LinuxEmmcBind(struct HdfDeviceObject *obj)
 {
     struct MmcCntlr *cntlr = NULL;
     int32_t ret;
 
-    HDF_LOGE("Hi35xxLinuxEmmcBind: entry!");
     if (obj == NULL) {
-        HDF_LOGE("Hi35xxLinuxEmmcBind: Fail, obj is NULL.");
+        HDF_LOGE("LinuxEmmcBind: Fail, obj is NULL.");
         return HDF_ERR_INVALID_OBJECT;
     }
 
     cntlr = (struct MmcCntlr *)OsalMemCalloc(sizeof(struct MmcCntlr));
     if (cntlr == NULL) {
-        HDF_LOGE("Hi35xxLinuxEmmcBind: no mem for MmcCntlr.");
+        HDF_LOGE("LinuxEmmcBind: no mem for MmcCntlr.");
         return HDF_ERR_MALLOC_FAIL;
     }
 
     cntlr->ops = NULL;
     cntlr->hdfDevObj = obj;
     obj->service = &cntlr->service;
-    ret = Hi35xxLinuxEmmcCntlrParse(cntlr, obj);
+    ret = LinuxEmmcCntlrParse(cntlr, obj);
     if (ret != HDF_SUCCESS) {
-        HDF_LOGE("Hi35xxLinuxEmmcBind: cntlr parse fail.");
+        HDF_LOGE("LinuxEmmcBind: cntlr parse fail.");
         goto _ERR;
     }
-    cntlr->priv = (void *)himci_get_mmc_host((int32_t)cntlr->index);
+    cntlr->priv = (void *)GetMmcHost((int32_t)cntlr->index);
 
     ret = MmcCntlrAdd(cntlr);
     if (ret != HDF_SUCCESS) {
-        HDF_LOGE("Hi35xxLinuxEmmcBind: cntlr add fail.");
+        HDF_LOGE("LinuxEmmcBind: cntlr add fail.");
         goto _ERR;
     }
 
     ret = MmcCntlrAllocDev(cntlr, (enum MmcDevType)cntlr->devType);
     if (ret != HDF_SUCCESS) {
-        HDF_LOGE("Hi35xxLinuxEmmcBind: alloc dev fail.");
+        HDF_LOGE("LinuxEmmcBind: alloc dev fail.");
         goto _ERR;
     }
     MmcDeviceAddOps(cntlr->curDev, &g_emmcMethod);
-    HDF_LOGD("Hi35xxLinuxEmmcBind: Success!");
+    HDF_LOGD("LinuxEmmcBind: Success!");
     return HDF_SUCCESS;
 
 _ERR:
-    Hi35xxLinuxEmmcDeleteCntlr(cntlr);
-    HDF_LOGE("Hi35xxLinuxEmmcBind: Fail!");
+    LinuxEmmcDeleteCntlr(cntlr);
+    HDF_LOGE("LinuxEmmcBind: Fail!");
     return HDF_FAILURE;
 }
 
-static int32_t Hi35xxLinuxEmmcInit(struct HdfDeviceObject *obj)
+static int32_t LinuxEmmcInit(struct HdfDeviceObject *obj)
 {
     (void)obj;
 
-    HDF_LOGD("Hi35xxLinuxEmmcInit: Success!");
+    HDF_LOGD("LinuxEmmcInit: Success!");
     return HDF_SUCCESS;
 }
 
@@ -175,13 +174,13 @@ static void Hi35xxLinuxEmmcRelease(struct HdfDeviceObject *obj)
     if (obj == NULL) {
         return;
     }
-    Hi35xxLinuxEmmcDeleteCntlr((struct MmcCntlr *)obj->service);
+    LinuxEmmcDeleteCntlr((struct MmcCntlr *)obj->service);
 }
 
 struct HdfDriverEntry g_emmcDriverEntry = {
     .moduleVersion = 1,
-    .Bind = Hi35xxLinuxEmmcBind,
-    .Init = Hi35xxLinuxEmmcInit,
+    .Bind = LinuxEmmcBind,
+    .Init = LinuxEmmcInit,
     .Release = Hi35xxLinuxEmmcRelease,
     .moduleName = "HDF_PLATFORM_EMMC",
 };
