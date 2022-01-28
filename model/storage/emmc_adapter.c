@@ -169,7 +169,7 @@ static int32_t LinuxEmmcInit(struct HdfDeviceObject *obj)
     return HDF_SUCCESS;
 }
 
-static void Hi35xxLinuxEmmcRelease(struct HdfDeviceObject *obj)
+static void LinuxEmmcRelease(struct HdfDeviceObject *obj)
 {
     if (obj == NULL) {
         return;
@@ -181,7 +181,7 @@ struct HdfDriverEntry g_emmcDriverEntry = {
     .moduleVersion = 1,
     .Bind = LinuxEmmcBind,
     .Init = LinuxEmmcInit,
-    .Release = Hi35xxLinuxEmmcRelease,
+    .Release = LinuxEmmcRelease,
     .moduleName = "HDF_PLATFORM_EMMC",
 };
 HDF_INIT(g_emmcDriverEntry);
