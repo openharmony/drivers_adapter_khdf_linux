@@ -33,6 +33,6 @@ struct mmc_host *GetMmcHost(int32_t slot)
 
 void SdioRescan(int slot)
 {
-    HDF_LOGE("hi35xx SdioRescan entry");
+    HDF_LOGD("hi35xx SdioRescan entry");
     hisi_sdio_rescan(slot);
 }
