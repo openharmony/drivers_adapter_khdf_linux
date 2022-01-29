@@ -42,6 +42,7 @@ obj-$(CONFIG_DRIVERS_HDF_PLATFORM_PWM) += $(HDF_FRAMWORK_TEST_ROOT)/platform/com
                                           $(HDF_FRAMWORK_TEST_ROOT)/platform/entry/hdf_pwm_entry_test.o
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_RTC) += $(HDF_FRAMWORK_TEST_ROOT)/platform/entry/hdf_rtc_entry_test.o
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_SPI) += $(HDF_FRAMWORK_TEST_ROOT)/platform/common/spi_test.o \
+                                          $(HDF_FRAMWORK_TEST_ROOT)/platform/common/spi_driver_test.o \
                                           $(HDF_FRAMWORK_TEST_ROOT)/platform/entry/hdf_spi_entry_test.o
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_SDIO) += $(HDF_FRAMWORK_TEST_ROOT)/platform/common/sdio_test.o \
                                            $(HDF_FRAMWORK_TEST_ROOT)/platform/entry/hdf_sdio_entry_test.o
