@@ -48,6 +48,10 @@ obj-$(CONFIG_DRIVERS_HDF_SENSOR_MAGNETIC_LSM303) += $(SENSOR_ROOT_DIR)/chipset/m
 
 obj-$(CONFIG_DRIVERS_HDF_SENSOR_GRAVITY) += $(SENSOR_ROOT_DIR)/accel/sensor_gravity_driver.o
 
+obj-$(CONFIG_DRIVERS_HDF_SENSOR_PEDOMETER) += $(SENSOR_ROOT_DIR)/pedometer/sensor_pedometer_driver.o
+
+obj-$(CONFIG_DRIVERS_HDF_SENSOR_PEDOMETER_BMI160) += $(SENSOR_ROOT_DIR)/chipset/pedometer/pedometer_bmi160.o
+
 ccflags-y += -I$(srctree)/drivers/hdf/framework/model/sensor/driver/include \
              -I$(srctree)/drivers/hdf/framework/model/sensor/driver/common/include \
              -I$(srctree)/drivers/hdf/framework/model/sensor/driver/chipset/accel \
@@ -56,6 +60,8 @@ ccflags-y += -I$(srctree)/drivers/hdf/framework/model/sensor/driver/include \
              -I$(srctree)/drivers/hdf/framework/model/sensor/driver/chipset/als \
              -I$(srctree)/drivers/hdf/framework/model/sensor/driver/gyro \
              -I$(srctree)/drivers/hdf/framework/model/sensor/driver/chipset/gyro \
+             -I$(srctree)/drivers/hdf/framework/model/sensor/driver/pedometer \
+             -I$(srctree)/drivers/hdf/framework/model/sensor/driver/chipset/pedometer \
              -I$(srctree)/drivers/hdf/framework/model/sensor/driver/barometer \
              -I$(srctree)/drivers/hdf/framework/model/sensor/driver/chipset/barometer \
              -I$(srctree)/drivers/hdf/framework/model/sensor/driver/hall \
