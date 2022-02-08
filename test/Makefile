@@ -49,6 +49,7 @@ obj-$(CONFIG_DRIVERS_HDF_PLATFORM_EMMC) += $(HDF_FRAMWORK_TEST_ROOT)/platform/co
                                            $(HDF_FRAMWORK_TEST_ROOT)/platform/entry/hdf_emmc_entry_test.o
 
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_UART) += $(HDF_FRAMWORK_TEST_ROOT)/platform/common/uart_test.o \
+                                           $(HDF_FRAMWORK_TEST_ROOT)/platform/common/uart_driver_test.o \
                                            $(HDF_FRAMWORK_TEST_ROOT)/platform/entry/hdf_uart_entry_test.o
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_WATCHDOG) += $(HDF_FRAMWORK_TEST_ROOT)/platform/common/watchdog_test.o \
                                                $(HDF_FRAMWORK_TEST_ROOT)/platform/entry/hdf_watchdog_entry_test.o
