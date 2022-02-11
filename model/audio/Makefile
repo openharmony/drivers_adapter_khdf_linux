@@ -11,13 +11,14 @@
 # GNU General Public License for more details.
 #
 #
-
 KHDF_AUDIO_BASE_ROOT_DIR = ../../../../../..
 KHDF_AUDIO_KHDF_ROOT_DIR = drivers/hdf/khdf
 KHDF_FRAMEWORK_ROOT_DIR = drivers/hdf/framework
 KHDF_AUDIO_ROOT_DIR = ../../../../../framework/model/audio
 KHDF_AUDIO_HI3516DV300_DIR = $(KHDF_AUDIO_BASE_ROOT_DIR)/drivers/peripheral/audio/chipsets/hi3516dv300
 KHDF_AUDIO_HI3516DV300_INC_DIR = drivers/hdf/framework/../peripheral/audio/chipsets/hi3516dv300
+KHDF_AUDIO_RK3568_DIR = $(KHDF_AUDIO_BASE_ROOT_DIR)/device/hihope/rk3568/audio_drivers
+KHDF_AUDIO_RK3568_INC_DIR = drivers/hdf/framework/../../device/hihope/rk3568/audio_drivers
 
 obj-$(CONFIG_DRIVERS_HDF_AUDIO) += \
           $(KHDF_AUDIO_ROOT_DIR)/core/src/audio_core.o \
@@ -47,6 +48,18 @@ obj-$(CONFIG_DRIVERS_HDF_AUDIO_HI3516CODEC) += \
           $(KHDF_AUDIO_HI3516DV300_DIR)/soc/src/hi3516_dma_ops.o \
           $(KHDF_AUDIO_HI3516DV300_DIR)/soc/src/hi3516_dma_adapter.o
 
+obj-$(CONFIG_DRIVERS_HDF_AUDIO_RK3568) += \
+          $(KHDF_AUDIO_RK3568_DIR)/codec/rk809_codec/src/rk809_codec_adapter.o \
+          $(KHDF_AUDIO_RK3568_DIR)/codec/rk809_codec/src/rk809_codec_impl.o \
+          $(KHDF_AUDIO_RK3568_DIR)/codec/rk809_codec/src/rk809_codec_linux_driver.o \
+          $(KHDF_AUDIO_RK3568_DIR)/dsp/src/rk3568_dsp_adapter.o \
+          $(KHDF_AUDIO_RK3568_DIR)/dsp/src/rk3568_dsp_ops.o \
+          $(KHDF_AUDIO_RK3568_DIR)/dai/src/rk3568_dai_adapter.o \
+          $(KHDF_AUDIO_RK3568_DIR)/dai/src/rk3568_dai_ops.o \
+          $(KHDF_AUDIO_RK3568_DIR)/dai/src/rk3568_dai_linux_driver.o \
+          $(KHDF_AUDIO_RK3568_DIR)/soc/src/rk3568_dma_adapter.o \
+          $(KHDF_AUDIO_RK3568_DIR)/soc/src/rk3568_dma_ops.o
+
 ccflags-$(CONFIG_DRIVERS_HDF_AUDIO) += -lm -lc -lgcc -std=gnu99 -Werror \
              -I$(srctree)/$(KHDF_AUDIO_KHDF_ROOT_DIR)/osal/include \
              -I$(srctree)/$(KHDF_FRAMEWORK_ROOT_DIR)/include/core \
@@ -68,3 +81,10 @@ ccflags-$(CONFIG_DRIVERS_HDF_AUDIO_HI3516CODEC) += \
              -I$(srctree)/$(KHDF_AUDIO_HI3516DV300_INC_DIR)/soc/include \
              -I$(srctree)/$(KHDF_AUDIO_HI3516DV300_INC_DIR)/dsp/include \
              -I$(srctree)/$(KHDF_AUDIO_HI3516DV300_INC_DIR)/../tfa9879/accessory/include
+
+ccflags-$(CONFIG_DRIVERS_HDF_AUDIO_RK3568) += \
+             -I$(srctree)/$(KHDF_AUDIO_RK3568_INC_DIR)/soc/include \
+             -I$(srctree)/$(KHDF_AUDIO_RK3568_INC_DIR)/dai/include \
+             -I$(srctree)/$(KHDF_AUDIO_RK3568_INC_DIR)/dsp/include \
+             -I$(srctree)/$(KHDF_AUDIO_RK3568_INC_DIR)/codec/rk809_codec/include \
+             -I$(srctree)/$(KHDF_AUDIO_RK3568_INC_DIR)/include
