@@ -11,3 +11,5 @@ config DRIVERS_HI3881
     depends on DRIVERS_HDF_WIFI
     help
       Answer Y to enable hi3881 wifi chip driver.
+
+source "../../../../device/hihope/drivers/rkwifi/Kconfig"
