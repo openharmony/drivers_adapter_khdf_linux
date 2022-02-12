@@ -17,4 +17,5 @@ include drivers/hdf/khdf/platform/platform.mk
 obj-y  += $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/rtc/rtc_core.o \
           $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/rtc/rtc_if.o \
           $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/rtc/rtc_base.o \
-                                              rtc_adapter.o
+          $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/rtc/rtc_service.o \
+          ./rtc_adapter.o
