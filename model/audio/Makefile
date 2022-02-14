@@ -60,7 +60,7 @@ obj-$(CONFIG_DRIVERS_HDF_AUDIO_RK3568) += \
           $(KHDF_AUDIO_RK3568_DIR)/soc/src/rk3568_dma_adapter.o \
           $(KHDF_AUDIO_RK3568_DIR)/soc/src/rk3568_dma_ops.o
 
-ccflags-$(CONFIG_DRIVERS_HDF_AUDIO) += -lm -lc -lgcc -std=gnu99 -Werror \
+ccflags-$(CONFIG_DRIVERS_HDF_AUDIO) += -lm -lc -lgcc -std=gnu99 \
              -I$(srctree)/$(KHDF_AUDIO_KHDF_ROOT_DIR)/osal/include \
              -I$(srctree)/$(KHDF_FRAMEWORK_ROOT_DIR)/include/core \
              -I$(srctree)/$(KHDF_FRAMEWORK_ROOT_DIR)/include/utils \
