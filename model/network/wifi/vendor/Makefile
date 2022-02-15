@@ -30,5 +30,7 @@ ccflags-$(CONFIG_DRIVERS_HDF_WIFI) += \
 
 obj-$(CONFIG_DRIVERS_HI3881) += hi3881/
 
+ifneq ($(CONFIG_AP6XXX_WIFI6_HDF),)
 RKWIFI_PATH := $(HDF_VENDOR_PREFIX)/device/hihope/drivers/rkwifi
 obj-$(CONFIG_AP6XXX_WIFI6_HDF) += $(RKWIFI_PATH)/
+endif
