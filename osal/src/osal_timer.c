@@ -39,6 +39,7 @@ struct osal_ktimer {
 	uint32_t msec;
 	struct OsalMutex mutex;
 	OsalTimerMode mode;
+	bool stop_flag;
 };
 
 static void osal_timer_callback(struct timer_list *arg)
@@ -46,6 +47,7 @@ static void osal_timer_callback(struct timer_list *arg)
 	struct osal_ktimer *ktimer = NULL;
 	uint32_t msec;
 	OsalTimerMode mode;
+	bool stop_flag = false;
 
 	if (arg == NULL) {
 		HDF_LOGI("%s timer is stopped", __func__);
@@ -55,12 +57,15 @@ static void osal_timer_callback(struct timer_list *arg)
 	ktimer = from_timer(ktimer, arg, timer);
 
 	OsalMutexTimedLock(&ktimer->mutex, HDF_WAIT_FOREVER);
-	msec = ktimer->msec;
 	mode = ktimer->mode;
+	stop_flag = ktimer->stop_flag;
 	OsalMutexUnlock(&ktimer->mutex);
 
-	if (msec != 0) {
+	if (!stop_flag) {
 		ktimer->func(ktimer->arg);
+		OsalMutexTimedLock(&ktimer->mutex, HDF_WAIT_FOREVER);
+		msec = ktimer->msec;
+		OsalMutexUnlock(&ktimer->mutex);
 		if (mode == OSAL_TIMER_LOOP) {
 			ktimer->timer.expires = jiffies + msecs_to_jiffies(msec);
 			mod_timer(&ktimer->timer, ktimer->timer.expires);
@@ -92,6 +97,7 @@ int32_t OsalTimerCreate(OsalTimer *timer, uint32_t interval, OsalTimerFunc func,
 	ktimer->arg = arg;
 	ktimer->func = func;
 	ktimer->msec = interval;
+	ktimer->stop_flag = false;
 	OsalMutexInit(&ktimer->mutex);
 	timer->realTimer = (void *)ktimer;
 
@@ -164,7 +170,7 @@ int32_t OsalTimerDelete(OsalTimer *timer)
 
 	ktimer = (struct osal_ktimer *)timer->realTimer;
 	OsalMutexTimedLock(&ktimer->mutex, HDF_WAIT_FOREVER);
-	ktimer->msec = 0;
+	ktimer->stop_flag = true;
 	OsalMutexUnlock(&ktimer->mutex);
 
 	if (ktimer->mode == OSAL_TIMER_ONCE)
