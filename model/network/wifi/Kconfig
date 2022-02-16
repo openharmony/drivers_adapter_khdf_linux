@@ -11,3 +11,21 @@ config DRIVERS_HI3881
     depends on DRIVERS_HDF_WIFI
     help
       Answer Y to enable hi3881 wifi chip driver.
+
+
+config DRIVERS_HDF_NETDEV_EXT
+    bool "Get Linux net device from HDF"
+    default n
+    help
+      Get Linux net device from HDF
+
+config AP6XXX_WIFI6_HDF
+    tristate "support ap6xxx wifi6(80211ax) HDF"
+    depends on DRIVERS_HDF_WIFI
+        select CFG80211
+        select MAC80211
+        select DRIVERS_HDF_NETDEV_EXT
+    help
+      This driver supports wifi6 for ap6xxx HDF chipset.
+      This driver uses the kernel's wireless extensions subsystem.
+      If you choose to build a module, it'll be called dhd. Say M if unsure.
