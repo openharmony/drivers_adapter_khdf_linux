@@ -22,6 +22,8 @@ obj-$(CONFIG_DRIVERS_HDF_SENSOR_ACCEL) += $(SENSOR_ROOT_DIR)/accel/sensor_accel_
 
 obj-$(CONFIG_DRIVERS_HDF_SENSOR_ACCEL_BMI160) += $(SENSOR_ROOT_DIR)/chipset/accel/accel_bmi160.o
 
+obj-$(CONFIG_DRIVERS_HDF_SENSOR_ACCEL_MXC6655XA) += $(SENSOR_ROOT_DIR)/chipset/accel/accel_mxc6655xa.o
+
 obj-$(CONFIG_DRIVERS_HDF_SENSOR_ALS) += $(SENSOR_ROOT_DIR)/als/sensor_als_driver.o
 
 obj-$(CONFIG_DRIVERS_HDF_SENSOR_ALS_BH1745) += $(SENSOR_ROOT_DIR)/chipset/als/als_bh1745.o
