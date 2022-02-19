@@ -26,6 +26,7 @@ ccflags-$(CONFIG_DRIVERS_HDF_TEST) += -I$(srctree)/drivers/hdf/framework/include
     -I$(srctree)/$(HDF_FRAMEWORK_TEST_ROOT)/manager \
     -I$(srctree)/$(HDF_FRAMEWORK_TEST_ROOT)/osal \
     -I$(srctree)/drivers/hdf/khdf/test/adapter/osal/include \
+    -I$(srctree)/drivers/hdf/khdf/include/core \
     -I$(srctree)/$(HDF_FRAMEWORK_TEST_ROOT)/osal \
     -I$(srctree)/$(HDF_FRAMEWORK_TEST_ROOT)/wifi \
     -I$(srctree)/$(HDF_FRAMEWORK_TEST_ROOT)/model/network/wifi/unittest/netdevice \

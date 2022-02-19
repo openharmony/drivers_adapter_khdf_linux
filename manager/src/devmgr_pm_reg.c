@@ -18,6 +18,7 @@
 
 #include <linux/notifier.h>
 #include <linux/suspend.h>
+
 #include "devmgr_service.h"
 #include "hdf_base.h"
 #include "hdf_log.h"
@@ -86,4 +87,3 @@ int DevMgrPmRegister(void)
     return ret;
 }
 EXPORT_SYMBOL(DevMgrPmRegister);
-
