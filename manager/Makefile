@@ -64,6 +64,8 @@ obj-y += \
         $(HDF_FRAMEWORK_SRC_DIR)/framework/core/adapter/vnode/src/hdf_vnode_adapter.o \
         ./src/devmgr_load.o \
         ./src/devmgr_pm_reg.o \
+        ./src/sym_export.o \
+        ./src/hdf_kevent.o \
         $(SEC_FUNCTION_OBJECTS)
 
 ccflags-y += \
