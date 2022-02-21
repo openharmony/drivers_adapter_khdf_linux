@@ -64,3 +64,4 @@ bool deal_format(const char *fmt, char *dest, size_t size)
 	}
 	return true;
 }
+EXPORT_SYMBOL(deal_format);
