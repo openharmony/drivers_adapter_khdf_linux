@@ -28,6 +28,12 @@ config DRIVERS_HDF_SENSOR_ACCEL_BMI160
     depends on DRIVERS_HDF_SENSOR_ACCEL
     help
       Answer Y to enable HDF accel bmi160 sensor driver.
+config DRIVERS_HDF_SENSOR_ACCEL_MXC6655XA
+    bool "Enable HDF accel mxc6655xa sensor driver"
+    default n
+    depends on DRIVERS_HDF_SENSOR_ACCEL
+    help
+      Answer Y to enable HDF accel mxc6655xa sensor driver.
 config DRIVERS_HDF_SENSOR_ALS
     bool "Enable HDF als sensor driver"
     default n
