@@ -14,7 +14,15 @@ HDF_FRAMEWOEK_AUDIO_ADM_PATH = drivers/hdf/framework/model/audio
 HDF_CODEC_DRIVER_TEST_ROOT = ../../../../peripheral/audio/chipsets/unittest
 
 obj-y  += $(HDF_FRAMWORK_TEST_ROOT)/common/hdf_main_test.o \
+          $(HDF_FRAMWORK_TEST_ROOT)/osal/osal_test_entry.o \
+          $(HDF_FRAMWORK_TEST_ROOT)/osal/osal_all_test.o \
+          $(HDF_FRAMWORK_TEST_ROOT)/osal/osal_list_test.o \
+          $(HDF_FRAMWORK_TEST_ROOT)/osal/osal_file_test.o \
+          $(HDF_FRAMWORK_TEST_ROOT)/osal/osal_work_test.o \
+          $(HDF_FRAMWORK_TEST_ROOT)/osal/osal_get_case_test.o \
           $(HDF_FRAMWORK_TEST_ROOT)/manager/sample_driver_test.o \
+          $(HDF_FRAMWORK_TEST_ROOT)/utils/hcs_parser/unittest/hcs_config_test.o \
+          $(HDF_FRAMWORK_TEST_ROOT)/utils/hcs_parser/unittest/hcs_parser_test.o \
           $(HDF_FRAMWORK_TEST_ROOT)/pm/hdf_pm_driver_test.o
 
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM) += $(HDF_FRAMWORK_TEST_ROOT)/platform/common/platform_device_test.o \
