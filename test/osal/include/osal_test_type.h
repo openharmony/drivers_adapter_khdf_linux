@@ -15,7 +15,7 @@
 #ifndef OSAL_TEST_TYPE_H
 #define OSAL_TEST_TYPE_H
 
-#include <asm/uaccess.h>
 #include <linux/fs.h>
+#include <asm/uaccess.h>
 
 #endif /* OSAL_TEST_TYPE_H */
