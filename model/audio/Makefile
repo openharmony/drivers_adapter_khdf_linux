@@ -70,6 +70,7 @@ ccflags-$(CONFIG_DRIVERS_HDF_AUDIO) += -lm -lc -lgcc -std=gnu99 -Werror\
              -I$(srctree)/$(KHDF_FRAMEWORK_ROOT_DIR)/include/audio \
              -I$(srctree)/$(KHDF_FRAMEWORK_ROOT_DIR)/ability/sbuf/include \
              -I$(srctree)/$(KHDF_FRAMEWORK_ROOT_DIR)/core/common/include/host \
+             -I$(srctree)/$(KHDF_FRAMEWORK_ROOT_DIR)/core/host/include \
              -I$(srctree)/$(KHDF_FRAMEWORK_ROOT_DIR)/model/audio/core/include \
              -I$(srctree)/$(KHDF_FRAMEWORK_ROOT_DIR)/model/audio/sapm/include \
              -I$(srctree)/$(KHDF_FRAMEWORK_ROOT_DIR)/model/audio/dispatch/include \
