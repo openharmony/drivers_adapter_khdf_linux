@@ -134,6 +134,7 @@ static int LinuxI2cProbe(struct device *dev, void *data)
     cntlr = (struct I2cCntlr *)OsalMemCalloc(sizeof(*cntlr));
     if (cntlr == NULL) {
         HDF_LOGE("%s: malloc cntlr fail!", __func__);
+        i2c_put_adapter(adapter);
         return HDF_ERR_MALLOC_FAIL;
     }
 
@@ -143,6 +144,8 @@ static int LinuxI2cProbe(struct device *dev, void *data)
     ret = I2cCntlrAdd(cntlr);
     if (ret != HDF_SUCCESS) {
         i2c_put_adapter(adapter);
+        OsalMemFree(cntlr);
+        cntlr = NULL;
         HDF_LOGE("%s: add controller fail:%d", __func__, ret);
         return ret;
     }
