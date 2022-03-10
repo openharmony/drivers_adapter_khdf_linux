@@ -43,7 +43,7 @@ This repository stores the code and compilation scripts for the OpenHarmony driv
 
 [drivers\_adapter](https://gitee.com/openharmony/drivers_adapter/blob/master/README.md)
 
-drivers\_adapter\_khdf\_linux
+[drivers\_adapter\_khdf\_linux](https://gitee.com/openharmony/drivers_adapter_khdf_linux/blob/master/README.md)
 
 [drivers\_peripheral](https://gitee.com/openharmony/drivers_peripheral/blob/master/README.md)
 
