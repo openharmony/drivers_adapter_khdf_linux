@@ -43,7 +43,7 @@
 
 [drivers\_adapter](https://gitee.com/openharmony/drivers_adapter/blob/master/README_zh.md)
 
-drivers\_adapter\_khdf\_linux
+[drivers\_adapter\_khdf\_linux](https://gitee.com/openharmony/drivers_adapter_khdf_linux/blob/master/README_zh.md)
 
 [drivers\_peripheral](https://gitee.com/openharmony/drivers_peripheral/blob/master/README_zh.md)
 
