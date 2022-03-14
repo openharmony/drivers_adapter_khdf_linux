@@ -36,7 +36,7 @@ int32_t OsalFileOpen(OsalFile *file, const char *path, int flags, uint32_t right
 
 	fp = filp_open(path, flags, rights);
 	if (IS_ERR_OR_NULL(fp)) {
-		HDF_LOGE("%s open file fail %d %d", __func__, flags, rights);
+		HDF_LOGE("%s open file fail %d %u", __func__, flags, rights);
 		return HDF_FAILURE;
 	}
 
@@ -64,7 +64,7 @@ ssize_t OsalFileWrite(OsalFile *file, const void *string, uint32_t length)
 	ret = vfs_write(fp, string, length, &pos);
 	set_fs(org_fs);
 	if (ret < 0) {
-		HDF_LOGE("%s write file length %d fail %d", __func__, length, ret);
+		HDF_LOGE("%s write file length %u fail %d", __func__, length, ret);
 		return HDF_FAILURE;
 	}
 
@@ -105,7 +105,7 @@ ssize_t OsalFileRead(OsalFile *file, void *buf, uint32_t length)
 	ret = vfs_read(fp, buf, length, &pos);
 	set_fs(org_fs);
 	if (ret < 0) {
-		HDF_LOGE("%s read file length %d fail %d", __func__, length, ret);
+		HDF_LOGE("%s read file length %u fail %d", __func__, length, ret);
 		return HDF_FAILURE;
 	}
 

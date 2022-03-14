@@ -83,7 +83,7 @@ static int HdfClassInit(void)
 
     ret = class_register(&g_hdfClass);
     if (ret) {
-        HDF_LOGE("fail to register hdf class");
+        HDF_LOGE("failed to register hdf class");
         return ret;
     }
     HDF_LOGI("register hdf class success");
