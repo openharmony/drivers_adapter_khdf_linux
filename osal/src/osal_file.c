@@ -49,7 +49,6 @@ ssize_t OsalFileWrite(OsalFile *file, const void *string, uint32_t length)
 {
 	ssize_t ret;
 	loff_t pos;
-	mm_segment_t org_fs;
 	struct file *fp = NULL;
 
 	if (file == NULL || IS_ERR_OR_NULL(file->realFile) || string == NULL) {
@@ -58,11 +57,7 @@ ssize_t OsalFileWrite(OsalFile *file, const void *string, uint32_t length)
 	}
 	fp = (struct file *)file->realFile;
 	pos = fp->f_pos;
-	org_fs = get_fs();
-	set_fs(KERNEL_DS);
-
-	ret = vfs_write(fp, string, length, &pos);
-	set_fs(org_fs);
+	ret = kernel_write(fp, string, length, &pos);
 	if (ret < 0) {
 		HDF_LOGE("%s write file length %u fail %d", __func__, length, ret);
 		return HDF_FAILURE;
@@ -89,7 +84,6 @@ EXPORT_SYMBOL(OsalFileClose);
 ssize_t OsalFileRead(OsalFile *file, void *buf, uint32_t length)
 {
 	ssize_t ret;
-	mm_segment_t org_fs;
 	loff_t pos;
 	struct file *fp = NULL;
 
@@ -98,12 +92,8 @@ ssize_t OsalFileRead(OsalFile *file, void *buf, uint32_t length)
 		return HDF_ERR_INVALID_PARAM;
 	}
 	fp = (struct file *)file->realFile;
-	org_fs = get_fs();
-	set_fs(KERNEL_DS);
 	pos = fp->f_pos;
-
-	ret = vfs_read(fp, buf, length, &pos);
-	set_fs(org_fs);
+	ret = kernel_read(fp, buf, length, &pos);
 	if (ret < 0) {
 		HDF_LOGE("%s read file length %u fail %d", __func__, length, ret);
 		return HDF_FAILURE;
