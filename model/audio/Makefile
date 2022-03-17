@@ -60,6 +60,12 @@ obj-$(CONFIG_DRIVERS_HDF_AUDIO_RK3568) += \
           $(KHDF_AUDIO_RK3568_DIR)/soc/src/rk3568_dma_adapter.o \
           $(KHDF_AUDIO_RK3568_DIR)/soc/src/rk3568_dma_ops.o
 
+obj-$(CONFIG_DRIVERS_HDF_AUDIO_ANA_HEADSET) += \
+          $(KHDF_AUDIO_RK3568_DIR)/headset_monitor/src/analog_headset_base.o \
+          $(KHDF_AUDIO_RK3568_DIR)/headset_monitor/src/analog_headset_core.o \
+          $(KHDF_AUDIO_RK3568_DIR)/headset_monitor/src/analog_headset_gpio.o \
+          $(KHDF_AUDIO_RK3568_DIR)/headset_monitor/src/analog_headset_adc.o
+
 ccflags-$(CONFIG_DRIVERS_HDF_AUDIO) += -lm -lc -lgcc -std=gnu99 -Werror\
              -I$(srctree)/$(KHDF_AUDIO_KHDF_ROOT_DIR)/osal/include \
              -I$(srctree)/$(KHDF_FRAMEWORK_ROOT_DIR)/include/core \
@@ -89,3 +95,8 @@ ccflags-$(CONFIG_DRIVERS_HDF_AUDIO_RK3568) += \
              -I$(srctree)/$(KHDF_AUDIO_RK3568_INC_DIR)/dsp/include \
              -I$(srctree)/$(KHDF_AUDIO_RK3568_INC_DIR)/codec/rk809_codec/include \
              -I$(srctree)/$(KHDF_AUDIO_RK3568_INC_DIR)/include
+
+ccflags-$(CONFIG_DRIVERS_HDF_AUDIO_ANA_HEADSET) += \
+             -I$(srctree)/$(KHDF_FRAMEWORK_ROOT_DIR)/model/input/driver \
+             -I$(srctree)/drivers/hdf/evdev \
+             -I$(srctree)/$(KHDF_AUDIO_RK3568_INC_DIR)/headset_monitor/include
