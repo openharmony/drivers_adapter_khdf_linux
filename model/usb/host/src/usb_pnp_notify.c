@@ -56,27 +56,31 @@ static struct UsbPnpDeviceInfo *UsbPnpNotifyCreateInfo(void)
     struct UsbPnpDeviceInfo *infoTemp = NULL;
     unsigned char *ptr = NULL;
     static int32_t idNum = 0;
+    int32_t ret;
 
     ptr = OsalMemCalloc(sizeof(struct UsbPnpDeviceInfo));
     if (ptr == NULL) {
         HDF_LOGE("%s:%d OsalMemAlloc faile ", __func__, __LINE__);
         return NULL;
-    } else {
-        infoTemp = (struct UsbPnpDeviceInfo *)ptr;
-
-        if (idNum++ >= INT32_MAX) {
-            idNum = 0;
-        }
-        infoTemp->id = idNum;
-        OsalMutexInit(&infoTemp->lock);
-        infoTemp->status = USB_PNP_DEVICE_INIT_STATUS;
-        DListHeadInit(&infoTemp->list);
-        memset_s(infoTemp->interfaceRemoveStatus, USB_PNP_INFO_MAX_INTERFACES,
-            0, sizeof(infoTemp->interfaceRemoveStatus));
-        DListInsertTail(&infoTemp->list, &g_usbPnpInfoListHead);
-
-        return infoTemp;
     }
+    infoTemp = (struct UsbPnpDeviceInfo *)ptr;
+
+    if (idNum++ >= INT32_MAX) {
+        idNum = 0;
+    }
+    infoTemp->id = idNum;
+    OsalMutexInit(&infoTemp->lock);
+    infoTemp->status = USB_PNP_DEVICE_INIT_STATUS;
+    DListHeadInit(&infoTemp->list);
+    ret = memset_s(infoTemp->interfaceRemoveStatus, USB_PNP_INFO_MAX_INTERFACES, 0, sizeof(infoTemp->interfaceRemoveStatus));
+    if (ret != HDF_SUCCESS) {
+        HDF_LOGE("%{public}s:%{public}d memset_s failed", __func__, __LINE__);
+        OsalMemFree(ptr);
+        return NULL;
+    }
+
+    DListInsertTail(&infoTemp->list, &g_usbPnpInfoListHead);
+    return infoTemp;
 }
 
 static struct UsbPnpDeviceInfo *UsbPnpNotifyFindInfo(struct UsbInfoQueryPara queryPara)
@@ -191,9 +195,8 @@ static int32_t UsbPnpNotifyAddInitInfo(struct UsbPnpDeviceInfo *deviceInfo, unio
     for (i = 0; i < deviceInfo->info.numInfos; i++) {
         if ((infoData.usbDev->actconfig->interface[i] == NULL) ||
             (infoData.usbDev->actconfig->interface[i]->cur_altsetting == NULL)) {
-            HDF_LOGE("%s interface[%d]=%p or interface[%d]->cur_altsetting=%p is NULL",
-                __func__, i, infoData.usbDev->actconfig->interface[i], i,
-                infoData.usbDev->actconfig->interface[i]->cur_altsetting);
+            HDF_LOGE("%{public}s interface[%{public}d] or interface[%{public}d]->cur_altsetting is NULL",
+                __func__, i, i);
             ret = HDF_ERR_INVALID_PARAM;
             goto OUT;
         }
