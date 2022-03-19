@@ -532,6 +532,11 @@ static int32_t GadgetPnpNotifyHdfSendEvent(const struct HdfDeviceObject *deviceO
 static int32_t UsbPnpNotifyFirstReport(struct usb_device *usbDev, void *data)
 {
     int32_t ret;
+    if (data == NULL) {
+        HDF_LOGE("%{pubilc}s:%{pubilc}d data is NULL", __func__, __LINE__);
+        return HDF_FAILURE;
+    }
+    
     struct HdfDeviceIoClient *client = (struct HdfDeviceIoClient *)data;
 
     ret = UsbPnpNotifyHdfSendEvent(client->device, usbDev);
