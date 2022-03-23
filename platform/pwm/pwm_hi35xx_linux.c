@@ -140,22 +140,26 @@ static int PwmProbe(struct platform_device *pdev)
     r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
     chip->base = devm_ioremap_resource(&pdev->dev, r);
     if (IS_ERR(chip->base)) {
+        devm_kfree(&pdev->dev, chip);
         return PTR_ERR(chip->base);
     }
     chip->reg = (struct HiPwmRegs *)chip->base;
     chip->clk = devm_clk_get(&pdev->dev, NULL);
     if (IS_ERR(chip->clk)) {
         dev_err(&pdev->dev, "failed to get clock\n");
+        devm_kfree(&pdev->dev, chip);
         return PTR_ERR(chip->clk);
     }
     ret = clk_prepare_enable(chip->clk);
     if (ret < 0) {
         dev_err(&pdev->dev, "failed to enable clock\n");
+        devm_kfree(&pdev->dev, chip);
         return ret;
     }
     ret = pwmchip_add(&chip->chip);
     if (ret < 0) {
         dev_err(&pdev->dev, "failed to add PWM chip\n");
+        devm_kfree(&pdev->dev, chip);
         return ret;
     }
 
