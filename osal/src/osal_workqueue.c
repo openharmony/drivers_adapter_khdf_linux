@@ -166,7 +166,7 @@ bool HdfAddWork(HdfWorkQueue *queue, HdfWork *work)
 }
 EXPORT_SYMBOL(HdfAddWork);
 
-bool HdfAddDelayedWork(HdfWorkQueue *queue, HdfWork *work, unsigned long ms)
+bool HdfAddDelayedWork(HdfWorkQueue *queue, HdfWork *work, uint32_t ms)
 {
 	if (queue == NULL || queue->realWorkQueue == NULL || work == NULL || work->realWork == NULL) {
 		HDF_LOGE("%s invalid para", __func__);
@@ -174,7 +174,7 @@ bool HdfAddDelayedWork(HdfWorkQueue *queue, HdfWork *work, unsigned long ms)
 	}
 
 	return queue_delayed_work(queue->realWorkQueue, &((struct WorkWrapper *)work->realWork)->work,
-		msecs_to_jiffies(ms));
+		msecs_to_jiffies((unsigned long)ms));
 }
 EXPORT_SYMBOL(HdfAddDelayedWork);
 
