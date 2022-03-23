@@ -26,12 +26,12 @@
 extern "C" {
 #endif /* __cplusplus */
 
-static inline size_t CopyToUser (void __user *to, const void *from, size_t len)
+static inline size_t CopyToUser(void __user *to, const void *from, size_t len)
 {
     return (size_t)copy_to_user(to, from, (unsigned long)len);
 }
 
-static inline size_t CopyFromUser (void *to, const void __user *from, size_t len)
+static inline size_t CopyFromUser(void *to, const void __user *from, size_t len)
 {
     return (size_t)copy_from_user(to, from, (unsigned long)len);
 }

@@ -33,7 +33,7 @@ typedef enum {
 } OsalTimerMode;
 
 struct osal_ktimer {
-	unsigned long arg;
+	uintptr_t arg;
 	struct timer_list timer;
 	OsalTimerFunc func;
 	uint32_t msec;
