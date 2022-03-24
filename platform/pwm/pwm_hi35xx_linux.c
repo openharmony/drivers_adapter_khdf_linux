@@ -35,7 +35,7 @@ struct Hi35xxPwmChip {
     struct clk *clk;
 };
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0)
 static int Hi35xxPwmApply(struct pwm_chip *chip, struct pwm_device *pwm, const struct pwm_state *state)
 #else
 static int Hi35xxPwmApply(struct pwm_chip *chip, struct pwm_device *pwm, struct pwm_state *state)

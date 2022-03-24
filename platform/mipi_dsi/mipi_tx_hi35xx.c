@@ -37,6 +37,7 @@ extern "C" {
 #endif /* End of #ifdef __cplusplus */
 
 #define HDF_LOG_TAG mipi_tx_hi35xx
+#define INT_MAX_VALUE 0x7fffffff
 
 volatile  MipiTxRegsTypeTag *g_mipiTxRegsVa = NULL;
 unsigned int g_mipiTxIrqNum = MIPI_TX_IRQ;
@@ -128,6 +129,7 @@ static void MipiTxDrvGetPhyPllSet1Set5(unsigned int phyDataRate,
 {
     int dataRateClk;
     int pllRef;
+    uint64_t int_multiplication;
 
     dataRateClk = (phyDataRate + MIPI_TX_REF_CLK - 1) / MIPI_TX_REF_CLK;
 
@@ -142,6 +144,11 @@ static void MipiTxDrvGetPhyPllSet1Set5(unsigned int phyDataRate,
         pllRef = 16;                  /* 16: pll set */
     } else {
         pllRef = 1;
+    }
+    int_multiplication = dataRateClk * pllRef;
+    if (int_multiplication > INT_MAX_VALUE) {
+        HDF_LOGE("%s: exceeds the maximum value of type int32_t.", __func__);
+        return;
     }
     if ((dataRateClk * pllRef) % 2) { /* 2: pll */
         *pllSet1 = 0x10;
@@ -699,7 +706,7 @@ static int32_t LinuxCopyToKernel(void *dest, uint32_t max, const void *src, uint
     int32_t ret;
 
     if (access_ok(
-#if LINUX_VERSION_CODE < KERNEL_VERSION(5,6,0)
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 6, 0)
         VERIFY_READ,
 #endif
         src, count)) { /* user space */
@@ -906,7 +913,7 @@ static int MipiTxDrvGetCmdInfo(GetCmdInfoTag *getCmdInfo)
         goto fail0;
     }
     if (access_ok(
-#if LINUX_VERSION_CODE < KERNEL_VERSION(5,6,0)
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 6, 0)
         VERIFY_WRITE,
 #endif
         getCmdInfo->getData, getCmdInfo->getDataSize)) { /* user space */
