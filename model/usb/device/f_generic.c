@@ -1500,6 +1500,7 @@ static long usbfn_ioctl(struct file *file, unsigned int cmd, unsigned long value
 
             ret = memcpy_s(ffs->dev_name, MAX_NAMELEN, newfn.name, newfn.nameLen);
             if (ret != EOK) {
+                ffs_data_put(ffs);
                 HDF_LOGE("%{public}s:%{public}d memcpy_s failed", __func__, __LINE__);
                 return ret;
             }
@@ -1510,6 +1511,7 @@ static long usbfn_ioctl(struct file *file, unsigned int cmd, unsigned long value
             }
 
             if (sprintf_s(nameEp0, MAX_NAMELEN, "%s.ep%u", ffs->dev_name, 0) < 0) {
+                ffs_data_put(ffs);
                 return -EFAULT;
             }
             ffs_dev = ffs_acquire_dev(newfn.name);
@@ -1520,21 +1522,22 @@ static long usbfn_ioctl(struct file *file, unsigned int cmd, unsigned long value
             ffs->private_data = ffs_dev;
 
             ret = alloc_chrdev_region(&g_dev, 0, MAX_EP_DEV, nameEp0);
-            if (ret < 0)
-            {
+            if (ret < 0) {
+                ffs_release_dev(ffs);
+                ffs_data_put(ffs);
                 return -EBUSY;
             }
             cdev_init(&ffs->cdev, &ffs_ep0_operations);
             ffs->devno = MKDEV(MAJOR(g_dev), 0);
             ret = cdev_add(&ffs->cdev, ffs->devno, 1);
-            if (ret)
-            {
+            if (ret) {
+                ffs_release_dev(ffs);
+                ffs_data_put(ffs);
                 return -EBUSY;
             }
 
             ffs->fn_device = device_create(ffs_class, NULL, ffs->devno, NULL, nameEp0);
-            if (IS_ERR(ffs->fn_device))
-            {
+            if (IS_ERR(ffs->fn_device)) {
                 cdev_del(&ffs->cdev);
                 ffs_release_dev(ffs);
                 ffs_data_put(ffs);
