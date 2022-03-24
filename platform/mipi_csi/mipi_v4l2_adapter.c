@@ -512,3 +512,4 @@ struct HdfDriverEntry g_mipiCsiLinuxDriverEntry = {
     .moduleName = "linux_mipi_csi_adapter",
 };
 HDF_INIT(g_mipiCsiLinuxDriverEntry);
+

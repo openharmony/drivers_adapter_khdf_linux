@@ -152,7 +152,7 @@ static struct watchdog_device *WdtCoreDataToWdd(void *wdCoreData)
      * }
      */ 
     struct WdtCoreDataHead {
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,14,182)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 182)
         struct device dev;
 #else
         struct kref kref;

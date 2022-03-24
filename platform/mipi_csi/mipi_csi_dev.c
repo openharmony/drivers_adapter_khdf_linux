@@ -296,7 +296,7 @@ static long MipiRxCompatIoctl(struct file *filep, unsigned int cmd, unsigned lon
 #endif
 
 #ifdef CONFIG_HI_PROC_SHOW_SUPPORT
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0)
 static int32_t ProcRegister(const char *name, uint8_t id, unsigned short mode, const struct proc_ops *ops)
 #else
 static int32_t ProcRegister(const char *name, uint8_t id, unsigned short mode, const struct file_operations *ops)
@@ -1110,7 +1110,7 @@ static int MipiCsiDevProcOpen(struct inode *inode, struct file *file)
 }
 
 // ProcFileOperations and file_operations are used in different os.
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0)
 static const struct proc_ops g_procMipiCsiDevOps = {
     .proc_open = MipiCsiDevProcOpen,
     .proc_read = seq_read,
