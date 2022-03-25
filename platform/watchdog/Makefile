@@ -15,6 +15,5 @@
 include drivers/hdf/khdf/platform/platform.mk
 
 obj-y  += $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/watchdog/watchdog_core.o \
-          $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/watchdog/watchdog_if.o \
-          watchdog_adapter.o
+          $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/watchdog/watchdog_if.o
 
