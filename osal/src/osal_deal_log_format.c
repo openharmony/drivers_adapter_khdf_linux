@@ -23,6 +23,7 @@
 static const char *g_property[NUMBER] = {"%{private}", "%{public}"};
 static size_t g_property_len[NUMBER] = {10, 9};
 
+/* remove "{private}" and "{public}" from fmt and copy to dest */
 bool deal_format(const char *fmt, char *dest, size_t size)
 {
 	const char *ptr = fmt;
@@ -31,7 +32,7 @@ bool deal_format(const char *fmt, char *dest, size_t size)
 	size_t index = 0;
 	size_t i;
 
-	if (fmt == NULL || dest == NULL || size == 0) {
+	if (fmt == NULL || dest == NULL || size == 0 || strlen(fmt) >= (size - 1)) {
 		printk("%s invalid para", __func__);
 		return false;
 	}
@@ -40,6 +41,7 @@ bool deal_format(const char *fmt, char *dest, size_t size)
 		if (*ptr_cur == '%') {
 			for (i = 0; i < NUMBER; i++) {
 				if (strncmp(ptr_cur, g_property[i], g_property_len[i]) == 0) {
+					/* add 1 is for to copy char '%' */
 					ret = strncpy_s(&dest[index], size - index, ptr, ptr_cur - ptr + 1);
 					if (ret != EOK) {
 						printk("%s strncpy_s error %d", __func__, ret);
