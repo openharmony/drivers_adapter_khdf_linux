@@ -66,7 +66,7 @@ int32_t OsalSemWait(struct OsalSem *sem, uint32_t millisec)
 			if (ret == -ETIME) {
 				return HDF_ERR_TIMEOUT;
 			} else {
-				HDF_LOGE("%s time_out %d %d", __func__, millisec, ret);
+				HDF_LOGE("%s time_out %u %d", __func__, millisec, ret);
 				return HDF_FAILURE;
 			}
 		}
