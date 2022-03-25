@@ -16,5 +16,4 @@ include drivers/hdf/khdf/platform/platform.mk
 
 obj-y  += $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/uart/uart_core.o \
           $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/uart/uart_if.o \
-          $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/uart/uart_service.o \
-          uart_adapter.o
+          $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/uart/uart_service.o
