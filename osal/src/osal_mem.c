@@ -48,7 +48,7 @@ static void *osal_mem_alloc(size_t size, uint32_t *type)
 	char *base = NULL;
 	const uint32_t mng_size = sizeof(struct mem_block);
 	if (size > (SIZE_MAX - mng_size)) {
-		HDF_LOGE("%s invalid param %d", __func__, size);
+		HDF_LOGE("%s invalid param %zu", __func__, size);
 		return NULL;
 	}
 
@@ -121,7 +121,7 @@ void *OsalMemAllocAlign(size_t alignment, size_t size)
 
 	if (size == 0 || (alignment == 0) || ((alignment & (alignment - 1)) != 0) ||
 		((alignment % sizeof(void *)) != 0) || size > (SIZE_MAX - alignment)) {
-		HDF_LOGE("%s invalid param align:%d,size:%d", __func__, alignment, size);
+		HDF_LOGE("%s invalid param align:%zu,size:%zu", __func__, alignment, size);
 		return NULL;
 	}
 
