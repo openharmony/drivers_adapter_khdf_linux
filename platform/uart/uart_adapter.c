@@ -32,19 +32,20 @@
 
 #define HDF_LOG_TAG hdf_uart_adapter
 #define UART_NAME_LEN 20
+#define UART_PATHNAME_LEN (UART_NAME_LEN + 15)
 
 static char g_driverName[UART_NAME_LEN];
 
 static int32_t UartAdapterInit(struct UartHost *host)
 {
-    char name[UART_NAME_LEN] = {0};
+    char name[UART_PATHNAME_LEN] = {0};
     struct file *fp = NULL;
     mm_segment_t oldfs;
 
     if (host == NULL) {
         return HDF_ERR_INVALID_OBJECT;
     }
-    if (sprintf_s(name, UART_NAME_LEN - 1, "/dev/%s%d", g_driverName, host->num) < 0) {
+    if (sprintf_s(name, UART_PATHNAME_LEN - 1, "/dev/%s%d", g_driverName, host->num) < 0) {
         return HDF_FAILURE;
     }
     oldfs = get_fs();
@@ -497,7 +498,11 @@ static int32_t HdfUartInit(struct HdfDeviceObject *obj)
         return HDF_FAILURE;
     }
     g_driverName[UART_NAME_LEN - 1] = 0;
-    ret = memcpy_s(g_driverName, UART_NAME_LEN - 1, drName, strlen(drName));
+    if (strlen(drName) > (UART_NAME_LEN - 1)) {
+        HDF_LOGE("%s: Illegal length of drName", __func__);
+        return HDF_FAILURE;
+    }
+    ret = memcpy_s(g_driverName, UART_NAME_LEN, drName, strlen(drName));
     if (ret != EOK) {
         return HDF_FAILURE;
     }
