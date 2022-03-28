@@ -620,7 +620,7 @@ done_mutex:
 
 static int ffs_ep0_open(struct inode *inode, struct file *file)
 {
-    struct ffs_data *ffs  = container_of(inode->i_cdev,struct ffs_data,cdev);
+    struct ffs_data *ffs  = container_of(inode->i_cdev, struct ffs_data, cdev);
     ENTER();
 
     if (unlikely(ffs->state == FFS_CLOSING))
@@ -665,7 +665,7 @@ static ssize_t ffs_ep0_iorw(struct file *file, struct ffs_io_data *io_data)
             goto error;
 
         if (io_data->timeout > 0) {
-            ret = wait_for_completion_interruptible_timeout(&ffs->ep0req_completion,io_data->timeout);
+            ret = wait_for_completion_interruptible_timeout(&ffs->ep0req_completion, io_data->timeout);
             if (ret < 0) {
                 /*
                  * To avoid race condition with ffs_epfile_io_complete,
@@ -711,7 +711,7 @@ static ssize_t ffs_ep0_iorw(struct file *file, struct ffs_io_data *io_data)
 
         req->context  = io_data;
         req->complete = ffs_ep0_async_io_complete;
-        list_add(&req->list,&ffs->ep0req->list);
+        list_add(&req->list, &ffs->ep0req->list);
         ret = usb_ep_queue(ffs->gadget->ep0, req, GFP_ATOMIC);
         if (unlikely(ret)) {
             usb_ep_free_request(ffs->gadget->ep0, req);
@@ -1014,7 +1014,7 @@ static void ffs_epfile_async_io_complete(struct usb_ep *_ep, struct usb_request 
 
 static int ffs_epfile_open(struct inode *inode, struct file *file)
 {
-    struct ffs_epfile *epfile  = container_of(inode->i_cdev,struct ffs_epfile,cdev);
+    struct ffs_epfile *epfile  = container_of(inode->i_cdev, struct ffs_epfile, cdev);
     ENTER();
     if (WARN_ON(epfile->ffs->state != FFS_ACTIVE))
         return -ENODEV;
@@ -1169,7 +1169,7 @@ static ssize_t ffs_epfile_iorw(struct file *file, struct ffs_io_data *io_data)
 
         spin_unlock_irq(&epfile->ffs->eps_lock);
         if (io_data->timeout > 0) {
-            ret = wait_for_completion_interruptible_timeout(&done,io_data->timeout);
+            ret = wait_for_completion_interruptible_timeout(&done, io_data->timeout);
             if (ret < 0) {
                 /*
                  * To avoid race condition with ffs_epfile_io_complete,
@@ -1215,7 +1215,7 @@ static ssize_t ffs_epfile_iorw(struct file *file, struct ffs_io_data *io_data)
 
         req->context  = io_data;
         req->complete = ffs_epfile_async_io_complete;
-        list_add(&req->list,&ep->req->list);
+        list_add(&req->list, &ep->req->list);
         ret = usb_ep_queue(ep->ep, req, GFP_ATOMIC);
         if (unlikely(ret)) {
             usb_ep_free_request(ep->ep, req);
@@ -1319,7 +1319,7 @@ static long ffs_epfile_ioctl(struct file *file, unsigned code, unsigned long val
             spin_unlock_irq(&epfile->ffs->eps_lock);
             return -EFAULT;
         }
-        ret = copy_from_user(&myIoData,(void __user *)value, sizeof(struct IoData));
+        ret = copy_from_user(&myIoData, (void __user *)value, sizeof(struct IoData));
         if (unlikely(ret)) {
             spin_unlock_irq(&epfile->ffs->eps_lock);
             return -EFAULT;
@@ -2415,7 +2415,7 @@ static int __ffs_data_got_descs(struct ffs_data *ffs,
         os_descs_count = get_unaligned_le32(data);
         data += 4;
         len -= 4;
-    };
+    }
 
     /* Read descriptors */
     raw_descs = data;
