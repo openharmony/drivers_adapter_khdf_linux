@@ -37,7 +37,7 @@ function copy_external_compents()
     do
         dst_dir=${cp_list[$(expr $i + 1)]}/${cp_list[$i]##*/}
         mkdir -p $dst_dir
-        cp -arfL ${cp_list[$i]}/* $dst_dir/
+        [ -d ${cp_list[$i]}/ ] && cp -arfL ${cp_list[$i]}/* $dst_dir/
     done
 }
 
