@@ -118,7 +118,7 @@ static int32_t RegisterDevice(const char *name, uint8_t id, unsigned short mode,
     return HDF_SUCCESS;
 }
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0)
 static int32_t ProcRegister(const char *name, uint8_t id, unsigned short mode, const struct proc_ops *ops)
 #else
 static int32_t ProcRegister(const char *name, uint8_t id, unsigned short mode, const struct file_operations *ops)
@@ -326,7 +326,7 @@ static int32_t MipiDsiDevSetCfg(struct MipiDsiCntlr *cntlr, struct MipiCfg *arg)
     }
 
     if (access_ok(
-#if LINUX_VERSION_CODE < KERNEL_VERSION(5,6,0)
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 6, 0)
         VERIFY_READ,
 #endif
         arg, size)) { /* user space */
@@ -377,7 +377,7 @@ int32_t MipiDsiDevSetCmd(struct MipiDsiCntlr *cntlr, struct DsiCmdDesc *arg)
     }
 
     if (access_ok(
-#if LINUX_VERSION_CODE < KERNEL_VERSION(5,6,0)
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 6, 0)
         VERIFY_READ,
 #endif
         arg, size)) { /* user space */
@@ -406,7 +406,7 @@ int32_t MipiDsiDevSetCmd(struct MipiDsiCntlr *cntlr, struct DsiCmdDesc *arg)
 int32_t MipiDsiDevCmdCopyFromUser(GetDsiCmdDescTag *arg, GetDsiCmdDescTag *temp, uint32_t *size)
 {
     if (access_ok(
-#if LINUX_VERSION_CODE < KERNEL_VERSION(5,6,0)
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 6, 0)
         VERIFY_READ,
 #endif
         arg, *size)) { /* user space */
@@ -426,7 +426,7 @@ int32_t MipiDsiDevCmdCopyFromUser(GetDsiCmdDescTag *arg, GetDsiCmdDescTag *temp,
 int32_t MipiDsiDevCmdCopyToUser(GetDsiCmdDescTag *arg, GetDsiCmdDescTag *temp, uint32_t *size)
 {
     if (access_ok(
-#if LINUX_VERSION_CODE < KERNEL_VERSION(5,6,0)
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 6, 0)
         VERIFY_WRITE,
 #endif
         arg, *size)) { /* user space */
@@ -622,7 +622,7 @@ static int MipiDsiDevProcOpen(struct inode *inode, struct file *file)
     return single_open(file, MipiDsiDevProcShow, NULL);
 }
 
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5, 6, 0)
 static struct proc_ops g_procMipiDsiDevOps = {
     .proc_open = MipiDsiDevProcOpen,
     .proc_read = seq_read,
