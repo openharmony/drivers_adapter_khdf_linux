@@ -54,7 +54,7 @@ struct UsbPnpNotifyMatchInfoTable *g_testUsbPnpInfo = NULL;
 static struct UsbPnpDeviceInfo *UsbPnpNotifyCreateInfo(void)
 {
     struct UsbPnpDeviceInfo *infoTemp = NULL;
-    static int32_t idNum = 0;
+    static int32_t idNum = 1;
     int32_t ret;
 
     infoTemp = (struct UsbPnpDeviceInfo *)OsalMemCalloc(sizeof(struct UsbPnpDeviceInfo));
@@ -63,14 +63,16 @@ static struct UsbPnpDeviceInfo *UsbPnpNotifyCreateInfo(void)
         return NULL;
     }
 
-    if (idNum++ == INT32_MAX) {
-        idNum = 0;
+    if (idNum == INT32_MAX) {
+        idNum = 1;
     }
     infoTemp->id = idNum;
     OsalMutexInit(&infoTemp->lock);
     infoTemp->status = USB_PNP_DEVICE_INIT_STATUS;
     DListHeadInit(&infoTemp->list);
     DListInsertTail(&infoTemp->list, &g_usbPnpInfoListHead);
+    idNum++;
+
     return infoTemp;
 }
 
