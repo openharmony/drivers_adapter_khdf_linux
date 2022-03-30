@@ -99,3 +99,11 @@ config DRIVERS_HDF_PLATFORM_REGULATOR
     depends on DRIVERS_HDF_PLATFORM
     help
       Answer Y to enable HDF platform regulator driver.
+
+config DRIVERS_HDF_PLATFORM_ADC
+    bool "Enable HDF platform adc driver"
+    default n
+    depends on DRIVERS_HDF_PLATFORM
+    help
+      Answer Y to enable HDF platform adc driver.
+
