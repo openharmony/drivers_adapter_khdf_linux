@@ -140,7 +140,7 @@ static int32_t LinuxEmmcBind(struct HdfDeviceObject *obj)
     }
     cntlr->priv = (void *)GetMmcHost((int32_t)cntlr->index);
 
-    ret = MmcCntlrAdd(cntlr);
+    ret = MmcCntlrAdd(cntlr, false);
     if (ret != HDF_SUCCESS) {
         HDF_LOGE("LinuxEmmcBind: cntlr add fail.");
         goto _ERR;
