@@ -218,7 +218,7 @@ static int32_t LinuxSdioGetCommonInfo(struct SdioDevice *dev,
         return HDF_ERR_INVALID_PARAM;
     }
     if (infoType != SDIO_FUNC_INFO) {
-        HDF_LOGE("LinuxSdioGetCommonInfo: cur type %d is not support.", infoType);
+        HDF_LOGE("LinuxSdioGetCommonInfo: cur type %u is not support.", infoType);
         return HDF_ERR_NOT_SUPPORT;
     }
 
@@ -254,7 +254,7 @@ static int32_t LinuxSdioSetCommonInfo(struct SdioDevice *dev,
         return HDF_ERR_INVALID_PARAM;
     }
     if (infoType != SDIO_FUNC_INFO) {
-        HDF_LOGE("LinuxSdioSetCommonInfo: cur type %d is not support.", infoType);
+        HDF_LOGE("LinuxSdioSetCommonInfo: cur type %u is not support.", infoType);
         return HDF_ERR_NOT_SUPPORT;
     }
 
