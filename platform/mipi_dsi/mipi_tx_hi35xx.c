@@ -1107,7 +1107,7 @@ static int MipiTxSetComboDevCfg(const ComboDevCfgTag *devCfg)
         HDF_LOGE("%s: mipi_tx check combo_dev config failed!", __func__);
         return ret;
     }
-    /* set controler config */
+    /* set controller config */
     MipiTxDrvSetControllerCfg(devCfg);
     /* set phy config */
     MipiTxDrvSetPhyCfg(devCfg);
@@ -1211,11 +1211,11 @@ static int MipiTxCheckGetCmdInfo(const GetCmdInfoTag *getCmdInfo)
         return HDF_FAILURE;
     }
     if (getCmdInfo->devno != 0) {
-        HDF_LOGE("%s: mipi_tx dev devno %d err!", __func__, getCmdInfo->devno);
+        HDF_LOGE("%s: mipi_tx dev devno %u err!", __func__, getCmdInfo->devno);
         return HDF_ERR_INVALID_PARAM;
     }
     if ((getCmdInfo->getDataSize == 0) || (getCmdInfo->getDataSize > MIPI_TX_GET_DATA_SIZE)) {
-        HDF_LOGE("%s: mipi_tx dev getDataSize %d err!", __func__, getCmdInfo->getDataSize);
+        HDF_LOGE("%s: mipi_tx dev getDataSize %hu err!", __func__, getCmdInfo->getDataSize);
         return HDF_ERR_INVALID_PARAM;
     }
     if (getCmdInfo->getData == NULL) {
