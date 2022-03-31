@@ -107,6 +107,7 @@ static int32_t UartAdapterRead(struct UartHost *host, uint8_t *data, uint32_t si
     set_fs(oldfs);
     return tmp;
 }
+
 static int32_t UartAdapterWrite(struct UartHost *host, uint8_t *data, uint32_t size)
 {
     loff_t pos = 0;

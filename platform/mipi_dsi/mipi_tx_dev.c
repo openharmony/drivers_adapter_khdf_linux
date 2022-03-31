@@ -191,7 +191,7 @@ static void ProcUnregister(const char *name, uint8_t id)
         return;
     }
     if (id != 0) {
-        ret = snprintf_s(procName, NAME_LEN + 1, NAME_LEN, "%s%u", name, id);
+        ret = snprintf_s(procName, NAME_LEN + 1, NAME_LEN, "%s%hhu", name, id);
     } else {
         ret = snprintf_s(procName, NAME_LEN + 1, NAME_LEN, "%s", name);
     }
@@ -232,7 +232,7 @@ static void SemaUp(struct semaphore *sem)
 static uint8_t GetId()
 {
     if (g_curId >= MAX_CNTLR_CNT) {
-        HDF_LOGE("%s: failed g_curId = %u.", __func__, g_curId);
+        HDF_LOGE("%s: failed g_curId = %hhu.", __func__, g_curId);
         return 0;
     }
 
