@@ -555,7 +555,7 @@ static int32_t LinuxSdioBind(struct HdfDeviceObject *obj)
         goto _ERR;
     }
 
-    ret = MmcCntlrAdd(cntlr);
+    ret = MmcCntlrAdd(cntlr, false);
     if (ret != HDF_SUCCESS) {
         HDF_LOGE("LinuxSdioBind: cntlr add fail.");
         goto _ERR;
