@@ -19,11 +19,16 @@ obj-y += \
          $(DISPLAY_ROOT_DIR)/hdf_disp.o \
          $(DISPLAY_ROOT_DIR)/backlight/hdf_bl.o
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 10, 0))
+ifeq ($(CONFIG_ARCH_ROCKCHIP), y)
+obj-y += $(DISPLAY_ROOT_DIR)/hdf_drm_panel.o
+endif
+#endif
+
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_PWM) += \
          $(DISPLAY_ROOT_DIR)/backlight/pwm_bl.o
 
 obj-$(CONFIG_ARCH_SPRD) += \
-         $(DISPLAY_ROOT_DIR)/hdf_drm_panel.o \
          $(DISPLAY_ROOT_DIR)/panel/ili9881c_boe.o
 
 obj-$(CONFIG_ARCH_HI3516DV300) += \
@@ -36,6 +41,8 @@ obj-$(CONFIG_DRIVERS_HDF_LCD_ICN9700) += \
          $(DISPLAY_ROOT_DIR)/panel/mipi_icn9700.o
 obj-$(CONFIG_DRIVERS_HDF_LCD_ST7789) += \
          $(DISPLAY_ROOT_DIR)/panel/ssp_st7789.o
+obj-$(CONFIG_ARCH_ROCKCHIP) += \
+        $(DISPLAY_ROOT_DIR)/panel/ili9881_st_5p5.o
 
 ccflags-y += -lm -lc -lgcc \
             -I$(srctree)/drivers/hdf/framework/model/display/driver \
