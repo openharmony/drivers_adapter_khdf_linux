@@ -92,7 +92,6 @@ static struct HdfSBuf *PrepareEvent(
 
     sysEvent.eventClass = class;
     sysEvent.eventid = eventId;
-    sysEvent.content = content;
     sysEvent.syncToken = 0;
 
     if (sync) {
