@@ -24,6 +24,7 @@
 #include "osal_io.h"
 #include "osal_mem.h"
 #include "osal_time.h"
+#include "platform_errno.h"
 #include "spi_core.h"
 #include "spi_if.h"
 
@@ -121,18 +122,12 @@ static int32_t SpiAdatperGetCfg(struct SpiCntlr *cntlr, struct SpiCfg *cfg)
     return HDF_SUCCESS;
 }
 
-static int32_t SpiAdatperTransfer(struct SpiCntlr *cntlr, struct SpiMsg *msg, uint32_t count)
+static int32_t SpiAdatperTransferOneMsg(struct SpiCntlr *cntlr, struct SpiMsg *msg)
 {
     int32_t ret;
-    uint32_t i;
     struct spi_message xfer;
     struct SpiDev *dev = NULL;
     struct spi_transfer *transfer = NULL;
-
-    if (cntlr == NULL || msg == NULL || count == 0) {
-        HDF_LOGE("%s: invalid parameter", __func__);
-        return HDF_ERR_INVALID_PARAM;
-    }
 
     dev = SpiFindDeviceByCsNum(cntlr, cntlr->curCs);
     if (dev == NULL || dev->priv == NULL) {
@@ -140,29 +135,44 @@ static int32_t SpiAdatperTransfer(struct SpiCntlr *cntlr, struct SpiMsg *msg, ui
         return HDF_FAILURE;
     }
 
-    transfer = kcalloc(count, sizeof(*transfer), GFP_KERNEL);
+    transfer = kcalloc(1, sizeof(*transfer), GFP_KERNEL);
     if (transfer == NULL) {
         HDF_LOGE("%s: transfer alloc memory failed", __func__);
         return HDF_ERR_MALLOC_FAIL;
     }
 
     spi_message_init(&xfer);
-    for (i = 0; i < count; i++) {
-        transfer[i].tx_buf = msg[i].wbuf;
-        transfer[i].rx_buf = msg[i].rbuf;
-        transfer[i].len = msg[i].len;
-        if (msg[i].speed != 0)
-            transfer[i].speed_hz = msg[i].speed;
-        if (msg[i].csChange != 0)
-            transfer[i].cs_change = msg[i].csChange;
-        if (msg[i].delayUs != 0)
-            transfer[i].delay_usecs = msg[i].delayUs;
-        spi_message_add_tail(&transfer[i], &xfer);
-    }
+    transfer->tx_buf = msg->wbuf;
+    transfer->rx_buf = msg->rbuf;
+    transfer->len = msg->len;
+    transfer->speed_hz = msg->speed;
+    transfer->cs_change = msg->keepCs; // yes! cs_change will keep the last cs active ...
+    transfer->delay_usecs = msg->delayUs;
+    spi_message_add_tail(transfer, &xfer);
 
     ret = spi_sync(dev->priv, &xfer);
     kfree(transfer);
     return ret;
+}
+
+static int32_t SpiAdatperTransfer(struct SpiCntlr *cntlr, struct SpiMsg *msgs, uint32_t count)
+{
+    int32_t ret;
+    uint32_t i;
+
+    if (cntlr == NULL || msgs == NULL || count == 0) {
+        HDF_LOGE("%s: invalid parameter", __func__);
+        return HDF_ERR_INVALID_PARAM;
+    }
+
+    for (i = 0; i < count; i++) {
+        ret = SpiAdatperTransferOneMsg(cntlr, &msgs[i]);
+        if (ret != 0) {
+            HDF_LOGE("%s: transfer one failed:%d", __func__, ret);
+            return HDF_PLT_ERR_OS_API;
+        }
+    }
+    return HDF_SUCCESS;
 }
 
 static const char *GetSpiDevName(const struct device *dev)
