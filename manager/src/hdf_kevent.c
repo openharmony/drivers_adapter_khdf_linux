@@ -22,9 +22,11 @@
 #include <linux/notifier.h>
 #include <linux/suspend.h>
 
+#include "devmgr_service_clnt.h"
 #include "hdf_device_desc.h"
 #include "hdf_dlist.h"
 #include "hdf_log.h"
+#include "hdf_power_state.h"
 #include "hdf_sbuf.h"
 #include "osal_mem.h"
 #include "osal_mutex.h"
@@ -179,11 +181,42 @@ int32_t HdfSysEventSend(uint64_t eventClass, uint32_t event, const char *content
     return SendKevent(keventmodule, eventClass, event, content, sync);
 }
 
+static int32_t KernalSpacePmNotify(int32_t powerEvent)
+{
+    uint32_t pmStatus = POWER_STATE_MAX;
+    struct DevmgrServiceClnt *devmgrClnt = NULL;
+
+    switch (powerEvent) {
+        case KEVENT_POWER_SUSPEND:
+            pmStatus = POWER_STATE_SUSPEND;
+            break;
+        case KEVENT_POWER_DISPLAY_OFF:
+            pmStatus = POWER_STATE_DOZE_SUSPEND;
+            break;
+        case KEVENT_POWER_RESUME:
+            pmStatus = POWER_STATE_RESUME;
+            break;
+        case KEVENT_POWER_DISPLAY_ON:
+            pmStatus = POWER_STATE_DOZE_RESUME;
+            break;
+        default:
+            return HDF_ERR_INVALID_PARAM;
+    }
+
+    devmgrClnt = DevmgrServiceClntGetInstance();
+    if (devmgrClnt == NULL || devmgrClnt->devMgrSvcIf == NULL) {
+        return HDF_FAILURE;
+    }
+
+    return devmgrClnt->devMgrSvcIf->PowerStateChange(devmgrClnt->devMgrSvcIf, pmStatus);
+}
+
 static int32_t KeventPmNotifierFn(struct notifier_block *nb, unsigned long action, void *dummy)
 {
     struct HdfKeventModule *keventModule = NULL;
     int32_t powerEvent;
     bool sync = false;
+    int ret = 0;
 
     keventModule = CONTAINER_OF(nb, struct HdfKeventModule, keventPmNotifier);
     HDF_LOGI("%s:action=%d", __func__, action);
@@ -201,7 +234,12 @@ static int32_t KeventPmNotifierFn(struct notifier_block *nb, unsigned long actio
             return 0;
     }
 
-    return SendKevent(keventModule, HDF_SYSEVENT_CLASS_POWER, powerEvent, NULL, sync);
+    ret = SendKevent(keventModule, HDF_SYSEVENT_CLASS_POWER, powerEvent, NULL, sync);
+    if (ret != HDF_SUCCESS) {
+        HDF_LOGE("%s: failed to notify userspace pm status");
+    }
+
+    return KernalSpacePmNotify(powerEvent);
 }
 
 static int32_t KeventFbNotifierFn(struct notifier_block *nb, unsigned long event, void *data)
@@ -211,6 +249,7 @@ static int32_t KeventFbNotifierFn(struct notifier_block *nb, unsigned long event
     struct HdfKeventModule *keventModule = NULL;
     int32_t powerEvent;
     bool sync = false;
+    int ret = 0;
 
     if (event != FB_EVENT_BLANK) {
         return 0;
@@ -236,7 +275,12 @@ static int32_t KeventFbNotifierFn(struct notifier_block *nb, unsigned long event
             break;
     }
 
-    return SendKevent(keventModule, HDF_SYSEVENT_CLASS_POWER, powerEvent, NULL, sync);
+    ret = SendKevent(keventModule, HDF_SYSEVENT_CLASS_POWER, powerEvent, NULL, sync);
+    if (ret != HDF_SUCCESS) {
+        HDF_LOGE("%s: failed to notify userspace pm status");
+    }
+
+    return KernalSpacePmNotify(powerEvent);
 }
 
 void CompleteKevent(struct HdfKeventModule *keventModule, struct HdfSBuf *tokenBuffer)
@@ -263,8 +307,8 @@ void CompleteKevent(struct HdfKeventModule *keventModule, struct HdfSBuf *tokenB
 static int32_t HdfKeventIoServiceDispatch(
     struct HdfDeviceIoClient *client, int id, struct HdfSBuf *data, struct HdfSBuf *reply)
 {
-    (void)reply;
     struct HdfKeventModule *keventModule;
+    (void)reply;
 
     keventModule = (struct HdfKeventModule *)client->device->priv;
     if (keventModule == NULL) {
@@ -352,6 +396,11 @@ static void HdfKeventDriverRelease(struct HdfDeviceObject *object)
 
 static int32_t HdfKeventDriverBind(struct HdfDeviceObject *dev)
 {
+    static struct IDeviceIoService keventService = {
+        .Open = HdfKeventDriverOpen,
+        .Dispatch = HdfKeventIoServiceDispatch,
+        .Release = HdfKeventDriverClose,
+    };
     struct HdfKeventModule *keventModule = NULL;
     if (dev == NULL) {
         return HDF_ERR_INVALID_PARAM;
@@ -376,12 +425,6 @@ static int32_t HdfKeventDriverBind(struct HdfDeviceObject *dev)
     DListHeadInit(&keventModule->clientList);
     keventModule->devObj = dev;
     dev->priv = keventModule;
-
-    static struct IDeviceIoService keventService = {
-        .Open = HdfKeventDriverOpen,
-        .Dispatch = HdfKeventIoServiceDispatch,
-        .Release = HdfKeventDriverClose,
-    };
     dev->service = &keventService;
 
     return HDF_SUCCESS;
