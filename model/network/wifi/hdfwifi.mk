@@ -14,7 +14,6 @@
 
 HDF_WIFI_FRAMEWORKS_ROOT = $(HDF_DIR_PREFIX)/framework/model/network/wifi
 HDF_WIFI_KHDF_FRAMEWORKS_ROOT = $(HDF_DIR_PREFIX)/adapter/khdf/linux/model/network/wifi
-HDF_WIFI_VENDOR_ROOT = $(HDF_VENDOR_PREFIX)/device/soc/hisilicon/common/platform/wifi/hi3881v100
 HDF_FRAMEWORKS_INC := \
    -I$(srctree)/drivers/hdf/framework/core/common/include/host \
    -I$(srctree)/drivers/hdf/framework/core/host/include \
@@ -54,7 +53,7 @@ HDF_WIFI_ADAPTER_INC := \
    -I$(srctree)/drivers/hdf/khdf/network/include
 
 HDF_WIFI_VENDOR_INC := \
-   -I$(srctree)/drivers/hdf/wifi/hi3881v100/adapter
+   -I$(srctree)/drivers/hdf/wifi
 
 SECURE_LIB_INC := \
    -I$(srctree)/bounds_checking_function/include

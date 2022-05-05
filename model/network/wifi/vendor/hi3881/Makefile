@@ -21,6 +21,7 @@ include drivers/hdf/khdf/model/network/wifi/hdfwifi.mk
 INC_TOP_PATH := drivers/hdf/wifi/hi3881v100/
 VENDOR_WIFI_PATH := device/soc/hisilicon/common/platform/wifi/hi3881v100
 WIFI_DRIVER_DIR := driver
+HDF_WIFI_VENDOR_ROOT = $(HDF_VENDOR_PREFIX)/device/soc/hisilicon/common/platform/wifi/hi3881v100
 
 ##################path of compile file :start###############
 #####wifi#####
@@ -38,7 +39,7 @@ ccflags-$(CONFIG_DRIVERS_HDF_WIFI) += \
     $(HDF_FRAMEWORKS_INC) \
     $(HDF_WIFI_FRAMEWORKS_INC) \
     $(HDF_WIFI_ADAPTER_INC) \
-    $(HDF_WIFI_VENDOR_INC) \
+    $(HDF_WIFI_VENDOR_INC)/hi3881v100/adapter \
    -I$(srctree)/$(INC_TOP_PATH)/$(WIFI_DRIVER_DIR)/linuxkpi/include \
     $(SECURE_LIB_INC)
 
@@ -51,6 +52,7 @@ HI1131_HOST_CFLAGS += -Wall
 HI1131_HOST_CFLAGS += $(HI1131_WIFI_CFLAGS)
 
 obj-$(CONFIG_DRIVERS_HI3881) += $(MODULE_NAME).o
+$(MODULE_NAME)-objs := $(HDF_WIFI_VENDOR_ROOT)/adapter/hdf_wlan_sdio_adapt.o
 
 ####################################### platform module start #########################################
 oal-objs := oal_util.o oal_net.o oal_main.o oal_mem.o
@@ -115,6 +117,6 @@ hcc-objs  := $(addprefix $(HCC_PATH),$(hcc-objs))
 wifi-objs += $(mac-objs) $(hmac-objs) $(wal-objs) $(hcc-objs)
 ####################################### wifi module end #########################################
 
-$(MODULE_NAME)-objs := $(wifi-objs) $(plat-objs)
+$(MODULE_NAME)-objs += $(wifi-objs) $(plat-objs)
 
 ccflags-$(CONFIG_DRIVERS_HI3881) += $(HI1131_HOST_CFLAGS)
