@@ -1,4 +1,4 @@
-# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Copyright (c) 2021-2022 Huawei Device Co., Ltd.
 #
 # This software is licensed under the terms of the GNU General Public
 # License version 2, as published by the Free Software Foundation, and
@@ -31,6 +31,10 @@ obj-$(CONFIG_DRIVERS_HDF_PLATFORM) += $(HDF_FRAMWORK_TEST_ROOT)/platform/common/
                                       $(HDF_FRAMWORK_TEST_ROOT)/platform/common/platform_manager_test.o \
                                       $(HDF_FRAMWORK_TEST_ROOT)/platform/common/platform_queue_test.o \
                                       $(HDF_FRAMWORK_TEST_ROOT)/platform/entry/hdf_platform_core_entry_test.o
+
+ifeq ($(CONFIG_DRIVERS_HDF_PLATFORM_TRACE), y)
+obj-$(CONFIG_DRIVERS_HDF_PLATFORM) += $(HDF_FRAMWORK_TEST_ROOT)/platform/common/platform_trace_test.o
+endif
 
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_GPIO) += $(HDF_FRAMWORK_TEST_ROOT)/platform/common/gpio_test.o \
 	                                   $(HDF_FRAMWORK_TEST_ROOT)/platform/common/gpio_driver_test.o \
