@@ -191,7 +191,7 @@ struct ffs_io_data {
     uint32_t read;
     uint32_t len;
     uint32_t timeout;
-    uint32_t buf;
+    uint64_t buf;
     uint32_t actual;
     int      status;
     struct tasklet_struct task;
@@ -239,11 +239,11 @@ static char *ffs_devnode(struct device *dev, umode_t *mode)
 }
 
 /* Control file aka ep0 *****************************************************/
-static struct ffs_memory *generic_find_ep0_memory_area(struct ffs_data *ffs, uint32_t buf, uint32_t len)
+static struct ffs_memory *generic_find_ep0_memory_area(struct ffs_data *ffs, uint64_t buf, uint32_t len)
 {
     struct ffs_memory *ffsm = NULL;
     struct ffs_memory *iter = NULL;
-    uint32_t buf_start = buf;
+    uint64_t buf_start = buf;
     unsigned long flags;
 
     spin_lock_irqsave(&ffs->mem_lock, flags);
@@ -928,7 +928,7 @@ static int ffs_ep0_mmap(struct file *file, struct vm_area_struct *vma)
         vma->vm_end - vma->vm_start, vma->vm_page_prot)) {
         goto error_free_ffsm;
     }
-    ffsm->mem      = (uintptr_t)virt_mem;
+    ffsm->mem      = (uint64_t)virt_mem;
     ffsm->size     = size;
     ffsm->vm_start = vma->vm_start;
     INIT_LIST_HEAD(&ffsm->memlist);
@@ -959,10 +959,10 @@ static const struct file_operations ffs_ep0_operations = {
 };
 
 /* "Normal" endpoints operations ********************************************/
-static struct ffs_memory *generic_find_memory_area(struct ffs_epfile *epfile, uint32_t buf, uint32_t len)
+static struct ffs_memory *generic_find_memory_area(struct ffs_epfile *epfile, uint64_t buf, uint32_t len)
 {
     struct ffs_memory *ffsm = NULL, *iter = NULL;
-    unsigned long buf_start = (unsigned long)buf;
+    uint64_t buf_start = buf;
 
     list_for_each_entry(iter, &epfile->memory_list, memlist) {
         if (buf_start >= iter->vm_start &&
@@ -1059,7 +1059,7 @@ static int ffs_epfile_mmap(struct file *file, struct vm_area_struct *vma)
     {
         goto error_free_ffsm;
     }
-    ffsm->mem = (uintptr_t)virt_mem;
+    ffsm->mem = (uint64_t)virt_mem;
     ffsm->size = size;
     ffsm->vm_start = vma->vm_start;
     INIT_LIST_HEAD(&ffsm->memlist);
