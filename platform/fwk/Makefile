@@ -21,4 +21,9 @@ obj-y  += $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/fwk/platform_common.o \
 	  $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/fwk/platform_queue.o \
 	  $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/fwk/platform_dumper.o
 
+ifeq ($(CONFIG_DRIVERS_HDF_PLATFORM_TRACE), y)
+obj-y  += $(HDF_PLATFORM_FRAMEWORKS_ROOT)/src/fwk/platform_trace_transfer.o \
+	  ./platform_trace.o
+endif
+
 obj-y  += ./plat_common.o
