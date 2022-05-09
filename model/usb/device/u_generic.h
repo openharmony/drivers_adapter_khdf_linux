@@ -48,25 +48,25 @@ struct IoData {
 	uint32_t read;
 	uint32_t len;
 	uint32_t timeout;
-	uint32_t buf;
+	uint64_t buf;
 };
 
 struct UsbFnReqEvent {
-	uint32_t buf;
+	uint64_t buf;
 	uint32_t actual;
 	int      status;
 };
 
 struct ffs_memory{
-  unsigned long mem;
-  uint32_t vm_start;
+  uint64_t mem;
+  uint64_t vm_start;
   uint32_t size;
   struct list_head memlist;
 };
 
 struct generic_memory{
   uint32_t size;
-  uint32_t buf;
+  uint64_t buf;
 };
 
 
