@@ -33,6 +33,10 @@ obj-$(CONFIG_DRIVERS_HDF_PLATFORM) += $(HDF_FRAMWORK_TEST_ROOT)/platform/common/
                                       $(HDF_FRAMWORK_TEST_ROOT)/platform/common/platform_dumper_test.o \
                                       $(HDF_FRAMWORK_TEST_ROOT)/platform/entry/hdf_platform_core_entry_test.o
 
+ifeq ($(CONFIG_DRIVERS_HDF_PLATFORM_TRACE), y)
+obj-$(CONFIG_DRIVERS_HDF_PLATFORM) += $(HDF_FRAMWORK_TEST_ROOT)/platform/common/platform_trace_test.o
+endif
+
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM_GPIO) += $(HDF_FRAMWORK_TEST_ROOT)/platform/common/gpio_test.o \
 	                                   $(HDF_FRAMWORK_TEST_ROOT)/platform/common/gpio_driver_test.o \
                                            $(HDF_FRAMWORK_TEST_ROOT)/platform/entry/hdf_gpio_entry_test.o

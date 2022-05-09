@@ -107,3 +107,9 @@ config DRIVERS_HDF_PLATFORM_ADC
     help
       Answer Y to enable HDF platform adc driver.
 
+config DRIVERS_HDF_PLATFORM_TRACE
+    bool "Enable HDF platform trace driver"
+    default n
+    depends on DRIVERS_HDF_PLATFORM
+    help
+      Answer Y to enable HDF platform trace driver.
