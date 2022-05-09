@@ -17,8 +17,8 @@ KHDF_FRAMEWORK_ROOT_DIR = drivers/hdf/framework
 KHDF_AUDIO_ROOT_DIR = ../../../../../framework/model/audio
 KHDF_AUDIO_HI3516DV300_DIR = $(KHDF_AUDIO_BASE_ROOT_DIR)/drivers/peripheral/audio/chipsets/hi3516dv300
 KHDF_AUDIO_HI3516DV300_INC_DIR = drivers/hdf/framework/../peripheral/audio/chipsets/hi3516dv300
-KHDF_AUDIO_RK3568_DIR = $(KHDF_AUDIO_BASE_ROOT_DIR)/device/board/hihope/rk3568/audio_drivers
-KHDF_AUDIO_RK3568_INC_DIR = drivers/hdf/framework/../../device/board/hihope/rk3568/audio_drivers
+KHDF_AUDIO_RK3568_DIR = $(KHDF_AUDIO_BASE_ROOT_DIR)/device/board/hihope/$(DEVICE_NAME)/audio_drivers
+KHDF_AUDIO_RK3568_INC_DIR = drivers/hdf/framework/../../device/board/hihope/$(DEVICE_NAME)/audio_drivers
 
 obj-$(CONFIG_DRIVERS_HDF_AUDIO) += \
           $(KHDF_AUDIO_ROOT_DIR)/core/src/audio_core.o \
