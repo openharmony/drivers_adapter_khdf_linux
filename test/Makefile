@@ -31,7 +31,7 @@ obj-$(CONFIG_DRIVERS_HDF_PLATFORM) += $(HDF_FRAMWORK_TEST_ROOT)/platform/common/
                                       $(HDF_FRAMWORK_TEST_ROOT)/platform/common/platform_manager_test.o \
                                       $(HDF_FRAMWORK_TEST_ROOT)/platform/common/platform_queue_test.o \
                                       $(HDF_FRAMWORK_TEST_ROOT)/platform/common/platform_dumper_test.o \
-                                      $(HDF_FRAMWORK_TEST_ROOT)/platform/entry/hdf_platform_core_entry_test.o
+                                      $(HDF_FRAMWORK_TEST_ROOT)/platform/entry/hdf_platform_entry_test.o
 
 ifeq ($(CONFIG_DRIVERS_HDF_PLATFORM_TRACE), y)
 obj-$(CONFIG_DRIVERS_HDF_PLATFORM) += $(HDF_FRAMWORK_TEST_ROOT)/platform/common/platform_trace_test.o
