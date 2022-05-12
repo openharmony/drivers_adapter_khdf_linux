@@ -34,6 +34,18 @@ config DRIVERS_HDF_SENSOR_ACCEL_MXC6655XA
     depends on DRIVERS_HDF_SENSOR_ACCEL
     help
       Answer Y to enable HDF accel mxc6655xa sensor driver.
+config DRIVERS_HDF_SENSOR_PPG
+    bool "Enable HDF ppg sensor driver"
+    default n
+    depends on DRIVERS_HDF_SENSOR
+    help
+      Answer Y to enable HDF ppg sensor driver.
+config DRIVERS_HDF_SENSOR_PPG_CS1262
+    bool "Enable HDF ppg ppg cs1262 sensor driver"
+    default n
+    depends on DRIVERS_HDF_SENSOR_PPG
+    help
+      Answer Y to enable HDF ppg ppg cs1262 sensor driver.
 config DRIVERS_HDF_SENSOR_ALS
     bool "Enable HDF als sensor driver"
     default n
