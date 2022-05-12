@@ -24,6 +24,13 @@ obj-$(CONFIG_DRIVERS_HDF_SENSOR_ACCEL_BMI160) += $(SENSOR_ROOT_DIR)/chipset/acce
 
 obj-$(CONFIG_DRIVERS_HDF_SENSOR_ACCEL_MXC6655XA) += $(SENSOR_ROOT_DIR)/chipset/accel/accel_mxc6655xa.o
 
+obj-$(CONFIG_DRIVERS_HDF_SENSOR_PPG) += $(SENSOR_ROOT_DIR)/ppg/sensor_ppg_driver.o \
+                $(SENSOR_ROOT_DIR)/ppg/sensor_ppg_config.o
+
+obj-$(CONFIG_DRIVERS_HDF_SENSOR_PPG_CS1262) += $(SENSOR_ROOT_DIR)/chipset/ppg/ppg_cs1262_spi.o \
+                $(SENSOR_ROOT_DIR)/chipset/ppg/ppg_cs1262.o \
+                $(SENSOR_ROOT_DIR)/chipset/ppg/ppg_cs1262_fw.o
+
 obj-$(CONFIG_DRIVERS_HDF_SENSOR_ALS) += $(SENSOR_ROOT_DIR)/als/sensor_als_driver.o
 
 obj-$(CONFIG_DRIVERS_HDF_SENSOR_ALS_BH1745) += $(SENSOR_ROOT_DIR)/chipset/als/als_bh1745.o
@@ -58,6 +65,8 @@ ccflags-y += -I$(srctree)/drivers/hdf/framework/model/sensor/driver/include \
              -I$(srctree)/drivers/hdf/framework/model/sensor/driver/common/include \
              -I$(srctree)/drivers/hdf/framework/model/sensor/driver/chipset/accel \
              -I$(srctree)/drivers/hdf/framework/model/sensor/driver/accel \
+             -I$(srctree)/drivers/hdf/framework/model/sensor/driver/chipset/ppg \
+             -I$(srctree)/drivers/hdf/framework/model/sensor/driver/ppg \
              -I$(srctree)/drivers/hdf/framework/model/sensor/driver/als \
              -I$(srctree)/drivers/hdf/framework/model/sensor/driver/chipset/als \
              -I$(srctree)/drivers/hdf/framework/model/sensor/driver/gyro \
