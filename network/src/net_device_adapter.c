@@ -56,7 +56,7 @@ static netdev_tx_t NetDevXmit(struct sk_buff *skb, struct net_device *dev)
     priv = (struct FullNetDevicePriv *)netdev_priv(dev);
     netDev = priv->impl->netDevice;
 
-    skb->dev = (struct net_device *)netDev;
+    skb->dev = dev;
     netDevIf = netDev->netDeviceIf;
     if (netDevIf != NULL && netDevIf->xmit != NULL) {
         netDevIf->xmit(netDev, skb);
