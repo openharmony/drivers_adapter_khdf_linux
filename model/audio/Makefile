@@ -15,8 +15,8 @@ KHDF_AUDIO_BASE_ROOT_DIR = ../../../../../..
 KHDF_AUDIO_KHDF_ROOT_DIR = drivers/hdf/khdf
 KHDF_FRAMEWORK_ROOT_DIR = drivers/hdf/framework
 KHDF_AUDIO_ROOT_DIR = ../../../../../framework/model/audio
-KHDF_AUDIO_HI3516DV300_DIR = $(KHDF_AUDIO_BASE_ROOT_DIR)/drivers/peripheral/audio/chipsets/hi3516dv300
-KHDF_AUDIO_HI3516DV300_INC_DIR = drivers/hdf/framework/../peripheral/audio/chipsets/hi3516dv300
+KHDF_AUDIO_HI3516DV300_DIR = $(KHDF_AUDIO_BASE_ROOT_DIR)/device/board/hisilicon/hispark_taurus/audio_drivers
+KHDF_AUDIO_HI3516DV300_INC_DIR = drivers/hdf/framework/../../device/board/hisilicon/hispark_taurus/audio_drivers
 KHDF_AUDIO_RK3568_DIR = $(KHDF_AUDIO_BASE_ROOT_DIR)/device/board/hihope/$(DEVICE_NAME)/audio_drivers
 KHDF_AUDIO_RK3568_INC_DIR = drivers/hdf/framework/../../device/board/hihope/$(DEVICE_NAME)/audio_drivers
 
@@ -24,7 +24,6 @@ obj-$(CONFIG_DRIVERS_HDF_AUDIO) += \
           $(KHDF_AUDIO_ROOT_DIR)/core/src/audio_core.o \
           $(KHDF_AUDIO_ROOT_DIR)/core/src/audio_host.o \
           $(KHDF_AUDIO_ROOT_DIR)/core/src/audio_parse.o \
-          $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_accessory_base.o \
           $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_codec_base.o \
           $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_dsp_base.o \
           $(KHDF_AUDIO_ROOT_DIR)/common/src/audio_dai_base.o \
@@ -35,11 +34,11 @@ obj-$(CONFIG_DRIVERS_HDF_AUDIO) += \
           $(KHDF_AUDIO_ROOT_DIR)/dispatch/src/audio_control_dispatch.o
 
 obj-$(CONFIG_DRIVERS_HDF_AUDIO_HI3516CODEC) += \
-          $(KHDF_AUDIO_HI3516DV300_DIR)/../tfa9879/accessory/src/tfa9879_accessory_adapter.o \
-          $(KHDF_AUDIO_HI3516DV300_DIR)/../tfa9879/accessory/src/tfa9879_accessory_impl.o \
-          $(KHDF_AUDIO_HI3516DV300_DIR)/codec/src/hi3516_codec_adapter.o \
-          $(KHDF_AUDIO_HI3516DV300_DIR)/codec/src/hi3516_codec_impl.o \
-          $(KHDF_AUDIO_HI3516DV300_DIR)/codec/src/hi3516_codec_ops.o \
+          $(KHDF_AUDIO_HI3516DV300_DIR)/codec/tfa9879/src/tfa9879_codec_adapter.o \
+          $(KHDF_AUDIO_HI3516DV300_DIR)/codec/tfa9879/src/tfa9879_codec_ops.o \
+          $(KHDF_AUDIO_HI3516DV300_DIR)/codec/hi3516/src/hi3516_codec_adapter.o \
+          $(KHDF_AUDIO_HI3516DV300_DIR)/codec/hi3516/src/hi3516_codec_impl.o \
+          $(KHDF_AUDIO_HI3516DV300_DIR)/codec/hi3516/src/hi3516_codec_ops.o \
           $(KHDF_AUDIO_HI3516DV300_DIR)/dsp/src/dsp_adapter.o \
           $(KHDF_AUDIO_HI3516DV300_DIR)/dsp/src/dsp_ops.o \
           $(KHDF_AUDIO_HI3516DV300_DIR)/soc/src/hi3516_dai_adapter.o \
@@ -84,10 +83,10 @@ ccflags-$(CONFIG_DRIVERS_HDF_AUDIO) += -lm -lc -lgcc -std=gnu99 -Werror\
              -I$(srctree)/bounds_checking_function/include
 
 ccflags-$(CONFIG_DRIVERS_HDF_AUDIO_HI3516CODEC) += \
-             -I$(srctree)/$(KHDF_AUDIO_HI3516DV300_INC_DIR)/codec/include \
+             -I$(srctree)/$(KHDF_AUDIO_HI3516DV300_INC_DIR)/codec/hi3516/include \
              -I$(srctree)/$(KHDF_AUDIO_HI3516DV300_INC_DIR)/soc/include \
              -I$(srctree)/$(KHDF_AUDIO_HI3516DV300_INC_DIR)/dsp/include \
-             -I$(srctree)/$(KHDF_AUDIO_HI3516DV300_INC_DIR)/../tfa9879/accessory/include
+             -I$(srctree)/$(KHDF_AUDIO_HI3516DV300_INC_DIR)/codec/tfa9879/include
 
 ccflags-$(CONFIG_DRIVERS_HDF_AUDIO_RK3568) += \
              -I$(srctree)/$(KHDF_AUDIO_RK3568_INC_DIR)/soc/include \
