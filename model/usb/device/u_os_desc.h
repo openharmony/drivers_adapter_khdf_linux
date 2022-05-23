@@ -16,6 +16,7 @@
 #include <asm/unaligned.h>
 #include <linux/nls.h>
 #include "securec.h"
+#include "hdf_log.h"
 
 #define USB_EXT_PROP_DW_SIZE			0
 #define USB_EXT_PROP_DW_PROPERTY_DATA_TYPE	4
@@ -97,8 +98,12 @@ static inline int usb_ext_prop_put_name(u8 *buf, const char *name, int pnl)
 static inline void usb_ext_prop_put_binary(u8 *buf, int pnl, const u8 *data,
 					   int data_len)
 {
+	int32_t ret;
 	put_unaligned_le32(data_len, usb_ext_prop_data_len_ptr(buf, pnl));
-	memcpy_s(usb_ext_prop_data_ptr(buf, pnl), data_len, data, data_len);
+	ret = memcpy_s(usb_ext_prop_data_ptr(buf, pnl), data_len, data, data_len);
+	if (ret != EOK) {
+            HDF_LOGE("%{public}s: %{public}d memcpy_s failed", __func__, __LINE__);
+	}
 }
 
 static inline int usb_ext_prop_put_unicode(u8 *buf, int pnl, const char *string,
