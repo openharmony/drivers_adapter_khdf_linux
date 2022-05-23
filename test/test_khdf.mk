@@ -78,7 +78,7 @@ ccflags-$(CONFIG_DRIVERS_HDF_TEST) += -I$(srctree)/drivers/hdf/framework/include
     -I$(srctree)/$(HDF_AUDIO_ADM_TEST_INC_DIR)/common/include \
     -I$(srctree)/$(HDF_AUDIO_ADM_TEST_INC_DIR)/../../include/audio \
     -I$(srctree)/$(HDF_AUDIO_ADM_TEST_INC_DIR)/../../test/unittest/model/audio/include \
-    -I$(srctree)/$(HDF_AUDIO_DRIVER_TEST_INC_DIR)/model/hi3516dv300/include \
+    -I$(srctree)/$(HDF_AUDIO_DRIVER_TEST_INC_DIR)/include \
     -I$(srctree)/$(HDF_AUDIO_DRIVER_TEST_INC_DIR)/../codec/hi3516/include \
     -I$(srctree)/$(HDF_AUDIO_DRIVER_TEST_INC_DIR)/../soc/include \
     -I$(srctree)/$(HDF_AUDIO_DRIVER_TEST_INC_DIR)/../include
