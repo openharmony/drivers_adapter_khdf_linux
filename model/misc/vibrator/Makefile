@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2021 Huawei Device Co., Ltd.
+# Copyright (c) 2022 Huawei Device Co., Ltd.
 #
 # This software is licensed under the terms of the GNU General Public
 # License version 2, as published by the Free Software Foundation, and
@@ -13,16 +13,17 @@
 #
 
 VIBRATOR_ROOT_DIR = ../../../../../../framework/model/misc/vibrator/driver
+VIBRATOR_ROOT_CHIPSET = ../../../../../../peripheral/misc/vibrator
 
 obj-$(CONFIG_DRIVERS_HDF_VIBRATOR) += \
                $(VIBRATOR_ROOT_DIR)/src/vibrator_driver.o \
                $(VIBRATOR_ROOT_DIR)/src/vibrator_haptic.o
 obj-$(CONFIG_DRIVERS_HDF_VIBRATOR_LINEAR) += \
-              $(VIBRATOR_ROOT_DIR)/chipset/vibrator_linear_driver.o
+              $(VIBRATOR_ROOT_CHIPSET)/chipset/vibrator_linear_driver.o
 
 
 ccflags-y +=-I$(srctree)/drivers/hdf/framework/model/misc/vibrator/driver/include \
-            -I$(srctree)/drivers/hdf/framework/model/misc/vibrator/driver/chipset \
+            -I$(srctree)/drivers/hdf/peripheral/misc/vibrator/chipset \
             -I$(srctree)/drivers/hdf/framework/include/core \
             -I$(srctree)/drivers/hdf/framework/core/common/include/host \
             -I$(srctree)/drivers/hdf/framework/include/utils \
