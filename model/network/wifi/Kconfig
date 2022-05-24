@@ -5,6 +5,20 @@ config DRIVERS_HDF_WIFI
     help
       Answer Y to enable HDF wifi.
 
+config DRIVERS_HDF_WLAN_SDIO
+    bool "Enable HDF wlan sdio bus"
+    default n
+    depends on DRIVERS_HDF_WIFI
+    help
+      Answer Y to support HDF wlan sdio bus
+
+config DRIVERS_HDF_WLAN_USB
+    bool "Enable HDF wlan usb bus"
+    default n
+    depends on DRIVERS_HDF_WIFI
+    help
+      Answer Y to support HDF wlan usb bus
+
 config DRIVERS_HI3881
     bool "Enable hi3881"
     default n
@@ -12,19 +26,27 @@ config DRIVERS_HI3881
     help
       Answer Y to enable hi3881 wifi chip driver.
 
-
 config DRIVERS_HDF_NETDEV_EXT
     bool "Get Linux net device from HDF"
     default n
     help
       Get Linux net device from HDF
 
+config DRIVERS_RTL8723DU
+    bool "Enable Realtek 8723D USB WiFi(rtl8723du)"
+    default n
+    depends on DRIVERS_HDF_WIFI
+    select DRIVERS_HDF_WLAN_USB
+    select DRIVERS_HDF_NETDEV_EXT
+    help
+      Answer Y to enable rtl8723du wifi chip driver.
+
 config AP6XXX_WIFI6_HDF
     tristate "support ap6xxx wifi6(80211ax) HDF"
     depends on DRIVERS_HDF_WIFI
-        select CFG80211
-        select MAC80211
-        select DRIVERS_HDF_NETDEV_EXT
+    select CFG80211
+    select MAC80211
+    select DRIVERS_HDF_NETDEV_EXT
     help
       This driver supports wifi6 for ap6xxx HDF chipset.
       This driver uses the kernel's wireless extensions subsystem.
