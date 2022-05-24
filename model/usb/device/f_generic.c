@@ -28,6 +28,7 @@
 #include "u_f.h"
 #include "u_os_desc.h"
 #include "configfs.h"
+#include "hdf_log.h"
 
 #define FUNCTIONFS_MAGIC	0xa647361 /* Chosen by a honest dice roll ;) */
 
@@ -2805,6 +2806,7 @@ static int __ffs_func_bind_do_os_desc(enum ffs_os_desc_type type,
 {
 	struct ffs_function *func = priv;
 	u8 length = 0;
+	int ret;
 
 	switch (type) {
 	case FFS_OS_DESC_EXT_COMPAT: {
@@ -2813,10 +2815,15 @@ static int __ffs_func_bind_do_os_desc(enum ffs_os_desc_type type,
 
 		t = &func->function.os_desc_table[desc->bFirstInterfaceNumber];
 		t->if_id = func->interfaces_nums[desc->bFirstInterfaceNumber];
-		memcpy_s(t->os_desc->ext_compat_id, ARRAY_SIZE(desc->CompatibleID) +
+		ret = memcpy_s(t->os_desc->ext_compat_id, ARRAY_SIZE(desc->CompatibleID) +
 		       ARRAY_SIZE(desc->SubCompatibleID), &desc->CompatibleID,
 		       ARRAY_SIZE(desc->CompatibleID) +
 		       ARRAY_SIZE(desc->SubCompatibleID));
+		if (ret != EOK) {
+                      HDF_LOGE("%{public}s:%{public}d memcpy_s failed", __func__, __LINE__);
+                      return ret;
+		}
+
 		length = sizeof(*desc);
 	}
 		break;
@@ -2846,9 +2853,14 @@ static int __ffs_func_bind_do_os_desc(enum ffs_os_desc_type type,
 		ext_prop_data = func->ffs->ms_os_descs_ext_prop_data_avail;
 		func->ffs->ms_os_descs_ext_prop_data_avail +=
 			ext_prop->data_len;
-		memcpy_s(ext_prop_data, ext_prop->data_len,
+		ret = memcpy_s(ext_prop_data, ext_prop->data_len,
 		       usb_ext_prop_data_ptr(data, ext_prop->name_len),
 		       ext_prop->data_len);
+		if (ret != EOK) {
+                      HDF_LOGE("%{public}s:%{public}d memcpy_s failed", __func__, __LINE__);
+                      return ret;
+		}
+
 		/* unicode data reported to the host as "WCHAR"s */
 		switch (ext_prop->type) {
 		case USB_EXT_PROP_UNICODE:
@@ -2860,8 +2872,13 @@ static int __ffs_func_bind_do_os_desc(enum ffs_os_desc_type type,
 		}
 		ext_prop->data = ext_prop_data;
 
-		memcpy_s(ext_prop_name, ext_prop->name_len, usb_ext_prop_name_ptr(data),
+		ret = memcpy_s(ext_prop_name, ext_prop->name_len, usb_ext_prop_name_ptr(data),
 		       ext_prop->name_len);
+		if (ret != EOK) {
+                      HDF_LOGE("%{public}s:%{public}d memcpy_s failed", __func__, __LINE__);
+                      return ret;
+		}
+
 		/* property name reported to the host as "WCHAR"s */
 		ext_prop->name_len *= 2;
 		ext_prop->name = ext_prop_name;
