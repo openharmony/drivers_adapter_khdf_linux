@@ -15,18 +15,26 @@
 ├── utils                #linux内核下编译配置解析代码的编译脚本
 ├── manager              #linux内核下启动适配启动HDF框架代码
 ├── model                #驱动模型适配linux代码
+│   ├── audio            #音频驱动模型
 │   ├── display          #显示驱动模型
 │   ├── input            #输入驱动模型
+│   ├── misc             #杂项驱动模型，包括dsoftbus、light、vibrator
 │   ├── network          #wifi驱动模型
 │   └── sensor           #传感器驱动模型
+│   └── storage          #存储驱动模型
+│   └── usb              #USB驱动模型
 ├── network              #适配linux内核网络代码
 ├── osal                 #适配linux内核的posix接口
 ├── platform             #平台设备接口适配linux内核代码
+│   ├── adc              #adc接口
 │   ├── emmc             #emmc操作接口
 │   ├── gpio             #gpio接口
 │   ├── i2c              #i2c接口
+│   ├── mipi_csi         #mipi csi接口
 │   ├── mipi_dsi         #mipi dsi接口
+│   ├── mmc              #mmc接口
 │   ├── pwm              #pwm接口
+│   ├── regulator        #regulator接口
 │   ├── rtc              #rtc接口
 │   ├── sdio             #sdio接口
 │   ├── spi              #spi接口
