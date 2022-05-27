@@ -15,18 +15,26 @@ This repository stores the code and compilation scripts for the OpenHarmony driv
 ├── utils                # Compilation scripts for building and configuring the parsing code
 ├── manager              # Code for starting and adapting to the HDF
 ├── model                # Code for adapting to Linux
+│   ├── audio            # Audio driver model
 │   ├── display          # Display driver model
 │   ├── input            # Input driver model
+│   ├── misc             # Misc driver model, including dsoftbus, light, vibrator
 │   ├── network          # WLAN driver model
 │   ├── sensor           # Sensor driver model
+│   ├── storage          # Storage driver model
+│   ├── usb              # USB driver model
 ├── network              # Code for adapting to the Linux kernel network
 ├── osal                 # POSIX APIs for adapting to the Linux kernel
 ├── platform             # Code for adapting the platform APIs to the Linux kernel
+│   ├── adc              # ADC APIs
 │   ├── emmc             # EMMC APIs
 │   ├── gpio             # GPIO APIs
 │   ├── i2c              # I2C APIs
+│   ├── mipi_csi         # MIPI CSI APIs
 │   ├── mipi_dsi         # MIPI DSI APIs
+│   ├── mmc              # MMC APIs
 │   ├── pwm              # PWM APIs
+│   ├── regulator        # Regulator APIs
 │   ├── rtc              # RTC APIs
 │   ├── sdio             # SDIO APIs
 │   ├── spi              # SPI APIs
