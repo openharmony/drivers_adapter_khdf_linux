@@ -338,13 +338,11 @@ static int32_t MipiDsiDevSetCfg(struct MipiDsiCntlr *cntlr, struct MipiCfg *arg)
             HDF_LOGE("%s: [CopyFromUser] failed.", __func__);
             return HDF_FAILURE;
         }
-    } else { /* kernel space */
-        if (memcpy_s(temp, size, arg, size) != EOK) {
-            OsalMemFree(temp);
-            temp = NULL;
-            HDF_LOGE("%s: [memcpy_s] failed.", __func__);
-            return HDF_FAILURE;
-        }
+    } else {
+        OsalMemFree(temp);
+        temp = NULL;
+        HDF_LOGE("%s: illegal user space address.", __func__);
+        return HDF_FAILURE;
     }
 
     ret = MipiDsiCntlrSetCfg(cntlr, temp);
@@ -388,13 +386,11 @@ int32_t MipiDsiDevSetCmd(struct MipiDsiCntlr *cntlr, struct DsiCmdDesc *arg)
             HDF_LOGE("%s: [CopyFromUser] failed.", __func__);
             return HDF_FAILURE;
         }
-    } else { /* kernel space */
-        if (memcpy_s(temp, size, arg, size) != EOK) {
-            OsalMemFree(temp);
-            temp = NULL;
-            HDF_LOGE("%s: [memcpy_s] failed.", __func__);
-            return HDF_FAILURE;
-        }
+    } else {
+        OsalMemFree(temp);
+        temp = NULL;
+        HDF_LOGE("%s: illegal user space address.", __func__);
+        return HDF_FAILURE;
     }
 
     ret = MipiDsiCntlrTx(cntlr, temp);
@@ -428,11 +424,9 @@ int32_t MipiDsiDevGetCmd(struct MipiDsiCntlr *cntlr, GetDsiCmdDescTag *arg)
             HDF_LOGE("%s: [CopyFromUser] failed.", __func__);
             goto fail0;
         }
-    } else { /* kernel space */
-        if (memcpy_s(temp, size, arg, size) != EOK) {
-            HDF_LOGE("%s: [memcpy_s] failed.", __func__);
-            goto fail0;
-        }
+    } else {
+        HDF_LOGE("%s: illegal user space address.", __func__);
+        goto fail0;
     }
     ret = MipiDsiCntlrRx(cntlr, &temp->readCmd, temp->readLen, temp->out);
     if (ret != HDF_SUCCESS) {
@@ -448,11 +442,9 @@ int32_t MipiDsiDevGetCmd(struct MipiDsiCntlr *cntlr, GetDsiCmdDescTag *arg)
             HDF_LOGE("%s: [CopyToUser] failed.", __func__);
             goto fail0;
         }
-    } else { /* kernel space */
-        if (memcpy_s(arg, size, temp, size) != EOK) {
-            HDF_LOGE("%s: [memcpy_s] failed.", __func__);
-            goto fail0;
-        }
+    } else {
+        HDF_LOGE("%s: illegal user space address.", __func__);
+        goto fail0;
     }
     OsalMemFree(temp);
     temp = NULL;
