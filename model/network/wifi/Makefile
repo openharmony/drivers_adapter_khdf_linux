@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2020-2021 Huawei Device Co., Ltd.
+# Copyright (c) 2020-2022 Huawei Device Co., Ltd.
 #
 # This software is licensed under the terms of the GNU General Public
 # License version 2, as published by the Free Software Foundation, and
@@ -56,7 +56,9 @@ $(MODULE_NAME)-objs := $(HDF_WIFI_FRAMEWORKS_ROOT)/$(WAP_PATH)/ap.o \
                        $(HDF_WIFI_FRAMEWORKS_ROOT)/$(PLATFORM_PATH)/hdf_wlan_reset_manager.o \
                        $(HDF_WIFI_FRAMEWORKS_ROOT)/$(PLATFORM_PATH)/hdf_wlan_utils.o \
                        $(HDF_WIFI_FRAMEWORKS_ROOT)/$(IBUS_PATH)/hdf_ibus_intf.o \
-                       $(HDF_WIFI_FRAMEWORKS_ROOT)/$(IBUS_PATH)/hdf_sdio_intf.o \
+
+$(MODULE_NAME)-$(CONFIG_DRIVERS_HDF_WLAN_SDIO) += $(HDF_WIFI_FRAMEWORKS_ROOT)/$(IBUS_PATH)/hdf_sdio_intf.o
+$(MODULE_NAME)-$(CONFIG_DRIVERS_HDF_WLAN_USB) += $(HDF_WIFI_FRAMEWORKS_ROOT)/$(IBUS_PATH)/hdf_usb_intf.o
 
 ccflags-$(CONFIG_DRIVERS_HDF_WIFI) += \
     $(HDF_FRAMEWORKS_INC) \
