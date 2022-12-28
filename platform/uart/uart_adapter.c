@@ -61,7 +61,6 @@ static int32_t UartAdapterInit(struct UartHost *host)
 }
 static int32_t UartAdapterDeInit(struct UartHost *host)
 {
-    int32_t ret = HDF_SUCCESS;
     struct file *fp = NULL;
     mm_segment_t oldfs;
 
@@ -72,10 +71,11 @@ static int32_t UartAdapterDeInit(struct UartHost *host)
     oldfs = get_fs();
     set_fs(KERNEL_DS);
     if (!IS_ERR(fp) && fp) {
-        ret = filp_close(fp, NULL);
+        filp_close(fp, NULL);
     }
     set_fs(oldfs);
-    return ret;
+    host->priv = NULL;
+    return HDF_SUCCESS;
 }
 static int32_t UartAdapterRead(struct UartHost *host, uint8_t *data, uint32_t size)
 {
@@ -86,13 +86,11 @@ static int32_t UartAdapterRead(struct UartHost *host, uint8_t *data, uint32_t si
     mm_segment_t oldfs;
     uint32_t tmp = 0;
 
-    if (host == NULL) {
+    if (host == NULL || host->priv == NULL || data == NULL || size == 0) {
         return HDF_ERR_INVALID_OBJECT;
     }
+
     fp = (struct file *)host->priv;
-    if (data == NULL || size == 0) {
-        return HDF_ERR_INVALID_PARAM;
-    }
     oldfs = get_fs();
     set_fs(KERNEL_DS);
     while (size >= tmp) {
@@ -114,13 +112,11 @@ static int32_t UartAdapterWrite(struct UartHost *host, uint8_t *data, uint32_t s
     char __user *p = (__force char __user *)data;
     mm_segment_t oldfs;
 
-    if (host == NULL) {
+    if (host == NULL || host->priv == NULL || data == NULL || size == 0) {
         return HDF_ERR_INVALID_OBJECT;
     }
+
     fp = (struct file *)host->priv;
-    if (data == NULL || size == 0) {
-        return HDF_ERR_INVALID_PARAM;
-    }
     oldfs = get_fs();
     set_fs(KERNEL_DS);
     ret = vfs_write(fp, p, size, &pos);
@@ -138,6 +134,10 @@ static int UartAdapterIoctlInner(struct file *fp, unsigned cmd, unsigned long ar
     int ret = HDF_FAILURE;
     mm_segment_t oldfs;
 
+    if (fp == NULL) {
+        HDF_LOGE("UartAdapterIoctlInner fp null");
+        return HDF_FAILURE;
+    }
     oldfs = get_fs();
     set_fs(KERNEL_DS);
     if (fp->f_op->unlocked_ioctl) {
